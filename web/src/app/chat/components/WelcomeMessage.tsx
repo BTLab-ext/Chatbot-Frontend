@@ -29,20 +29,12 @@ export default function WelcomeMessage() {
     >
       <div className="flex items-center">
         {isDefaultAgent ? (
-          <div
-            data-testid="onyx-logo"
-            className="flex flex-row items-center gap-spacing-paragraph"
-          >
-            <Logo size="default" />
-            <Text headingH2>{greeting}</Text>
+          <div data-testid="onyx-logo">
+          <Logo size="large" />
           </div>
         ) : (
-          <div
-            data-testid="assistant-name-display"
-            className="flex flex-row items-center justify-center gap-padding-button"
-          >
-            <AgentIcon agent={currentAgent} />
-            <Text headingH2>{currentAgent.name}</Text>
+          <div data-testid="onyx-logo">
+          <Logo size="large" />
           </div>
         )}
       </div>

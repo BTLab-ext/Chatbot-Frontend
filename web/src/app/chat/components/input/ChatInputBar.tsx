@@ -556,7 +556,6 @@ function ChatInputBarInner({
               />
             </div>
             <IconButton
-              id="onyx-chat-input-send-button"
               icon={chatState === "input" ? SvgArrowUp : SvgStop}
               disabled={chatState === "input" && !message}
               onClick={() => {
