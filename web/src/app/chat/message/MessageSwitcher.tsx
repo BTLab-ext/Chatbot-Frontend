@@ -1,5 +1,5 @@
 import IconButton from "@/refresh-components/buttons/IconButton";
-import Text from "@/refresh-components/Text";
+import Text from "@/refresh-components/texts/Text";
 import SvgChevronLeft from "@/icons/chevron-left";
 import SvgChevronRight from "@/icons/chevron-right";
 
@@ -30,7 +30,10 @@ export default function MessageSwitcher({
   const next = handle(totalPages, handleNext);
 
   return (
-    <div className="flex flex-row items-center gap-spacing-inline">
+    <div
+      className="flex flex-row items-center gap-spacing-inline"
+      data-testid="MessageSwitcher/container"
+    >
       <IconButton
         icon={SvgChevronLeft}
         onClick={previous}

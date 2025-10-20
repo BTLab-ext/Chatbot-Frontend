@@ -8,8 +8,8 @@ import { errorHandlingFetcher } from "@/lib/fetcher";
 import { checkUserIsNoAuthUser, logout } from "@/lib/user";
 import { useUser } from "@/components/user/UserProvider";
 import { Avatar } from "@/components/ui/avatar";
-import Text from "@/refresh-components/Text";
-import NavigationTab from "@/refresh-components/buttons/NavigationTab";
+import Text from "@/refresh-components/texts/Text";
+import MenuButton from "@/refresh-components/buttons/MenuButton";
 import {
   Popover,
   PopoverContent,
@@ -20,10 +20,11 @@ import SvgSettings from "@/icons/settings";
 import SvgLogOut from "@/icons/log-out";
 import SvgBell from "@/icons/bell";
 import SvgX from "@/icons/x";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import SvgUser from "@/icons/user";
 import { cn } from "@/lib/utils";
 import { useModalContext } from "@/components/context/ModalContext";
+import SidebarTab from "@/refresh-components/buttons/SidebarTab";
 
 function getUsernameFromEmail(email?: string): string {
   if (!email) return ANONYMOUS_USER_NAME;
@@ -50,26 +51,32 @@ function SettingsPopover({
     errorHandlingFetcher
   );
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const showAdminPanel = (!user || isAdmin) && !removeAdminPanelLink;
   const showCuratorPanel = user && isCurator;
   const showLogout =
     user && !checkUserIsNoAuthUser(user.id) && !LOGOUT_DISABLED;
 
-  async function handleLogout() {
-    const isSuccess = await logout();
+  const handleLogout = () => {
+    logout().then((response) => {
+      if (!response?.ok) {
+        alert("Failed to logout");
+        return;
+      }
 
-    if (!isSuccess) {
-      alert("Failed to logout");
-      return;
-    }
+      const currentUrl = `${pathname}${
+        searchParams?.toString() ? `?${searchParams.toString()}` : ""
+      }`;
 
-    router.push(
-      `/auth/login?next=${encodeURIComponent(
-        window.location.pathname + window.location.search
-      )}`
-    );
-  }
+      const encodedRedirect = encodeURIComponent(currentUrl);
+
+      router.push(
+        `/auth/login?disableAutoRedirect=true&next=${encodedRedirect}`
+      );
+    });
+  };
 
   return (
     <>
@@ -83,51 +90,49 @@ function SettingsPopover({
           //   </NavigationTab>
           // )),
           showAdminPanel && (
-            <NavigationTab
+            <MenuButton
               key="admin-panel"
               href="/admin/indexing/status"
               icon={SvgSettings}
             >
-              Admin Panel
-            </NavigationTab>
+              Admin Einstellungen
+            </MenuButton>
           ),
           showCuratorPanel && (
-            <NavigationTab
+            <MenuButton
               key="curator-panel"
               href="/admin/indexing/status"
               icon={SvgSettings}
             >
-              Curator Panel
-            </NavigationTab>
+              Kurator Übersicht
+            </MenuButton>
           ),
-          <NavigationTab
-            key="user-settings"
-            icon={SvgUser}
-            onClick={onUserSettingsClick}
-          >
-            User Settings
-          </NavigationTab>,
-          <NavigationTab
+          <div key="user-settings" data-testid="Settings/user-settings">
+            <MenuButton icon={SvgUser} onClick={onUserSettingsClick}>
+              Benutzereinstellungen
+            </MenuButton>
+          </div>,
+          <MenuButton
             key="notifications"
             icon={SvgBell}
             onClick={onNotificationsClick}
           >
-            {`Notifications ${
+            {`Benachrichtigungen ${
               notifications && notifications.length > 0
                 ? `(${notifications.length})`
                 : ""
             }`}
-          </NavigationTab>,
+          </MenuButton>,
           null,
           showLogout && (
-            <NavigationTab
+            <MenuButton
               key="log-out"
               icon={SvgLogOut}
               danger
               onClick={handleLogout}
             >
-              Log out
-            </NavigationTab>
+              Ausloggen
+            </MenuButton>
           ),
         ]}
       </PopoverMenu>
@@ -148,7 +153,7 @@ function NotificationsPopover({ onClose }: NotificationsPopoverProps) {
   return (
     <div className="w-[20rem] h-[30rem] flex flex-col">
       <div className="flex flex-row justify-between items-center p-spacing-paragraph">
-        <Text headingH2>Notifications</Text>
+        <Text headingH2>Benachrichtigungen</Text>
         <SvgX
           className="stroke-text-05 w-[1.2rem] h-[1.2rem] hover:stroke-text-04 cursor-pointer"
           onClick={onClose}
@@ -158,7 +163,7 @@ function NotificationsPopover({ onClose }: NotificationsPopoverProps) {
       <div className="flex-1 overflow-y-auto overflow-x-hidden p-spacing-paragraph flex flex-col gap-spacing-interline items-center">
         {!notifications || notifications.length === 0 ? (
           <div className="w-full h-full flex flex-col justify-center items-center">
-            <Text>No notifications</Text>
+            <Text>Keine Benachrichtigungen</Text>
           </div>
         ) : (
           <div className="w-full flex flex-col gap-spacing-interline">
@@ -190,53 +195,50 @@ export default function Settings({
   const username = getUsernameFromEmail(user?.email);
 
   return (
-    <>
-      <Popover
-        open={!!popupState}
-        onOpenChange={(state) =>
-          state ? setPopupState("Settings") : setPopupState(undefined)
-        }
-      >
-        <PopoverTrigger asChild>
-          <div className="flex flex-col w-full h-full">
-            <NavigationTab
-              className="!w-full"
-              icon={({ className }) => (
-                <Avatar
-                  className={cn(
-                    "flex items-center justify-center bg-background-neutral-inverted-00",
-                    className
-                  )}
-                >
-                  <Text inverted secondaryBody>
-                    {username[0]?.toUpperCase()}
-                  </Text>
-                </Avatar>
-              )}
-              active={!!popupState}
-              folded={folded}
-              highlight
-            >
-              {username}
-            </NavigationTab>
-          </div>
-        </PopoverTrigger>
-        <PopoverContent align="end" side="right">
-          {popupState === "Settings" && (
-            <SettingsPopover
-              removeAdminPanelLink={removeAdminPanelLink}
-              onUserSettingsClick={() => {
-                setPopupState(undefined);
-                setShowUserSettingsModal(true);
-              }}
-              onNotificationsClick={() => setPopupState("Notifications")}
-            />
-          )}
-          {popupState === "Notifications" && (
-            <NotificationsPopover onClose={() => setPopupState("Settings")} />
-          )}
-        </PopoverContent>
-      </Popover>
-    </>
+    <Popover
+      open={!!popupState}
+      onOpenChange={(state) =>
+        state ? setPopupState("Settings") : setPopupState(undefined)
+      }
+    >
+      <PopoverTrigger asChild>
+        <div id="onyx-user-dropdown">
+          <SidebarTab
+            leftIcon={({ className }) => (
+              <Avatar
+                className={cn(
+                  "flex items-center justify-center bg-background-neutral-inverted-00",
+                  className,
+                  "w-5 h-5"
+                )}
+              >
+                <Text inverted secondaryBody>
+                  {username[0]?.toUpperCase()}
+                </Text>
+              </Avatar>
+            )}
+            active={!!popupState}
+            folded={folded}
+          >
+            {username}
+          </SidebarTab>
+        </div>
+      </PopoverTrigger>
+      <PopoverContent align="end" side="right">
+        {popupState === "Settings" && (
+          <SettingsPopover
+            removeAdminPanelLink={removeAdminPanelLink}
+            onUserSettingsClick={() => {
+              setPopupState(undefined);
+              setShowUserSettingsModal(true);
+            }}
+            onNotificationsClick={() => setPopupState("Notifications")}
+          />
+        )}
+        {popupState === "Notifications" && (
+          <NotificationsPopover onClose={() => setPopupState("Settings")} />
+        )}
+      </PopoverContent>
+    </Popover>
   );
 }

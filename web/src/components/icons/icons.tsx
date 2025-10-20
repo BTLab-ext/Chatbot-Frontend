@@ -34,7 +34,6 @@ import {
 } from "react-icons/fi";
 import { SiBookstack } from "react-icons/si";
 import { StaticImageData } from "next/image";
-import lfstLogo from "../../../public/Vek_Logo_BAI.svg";   //Look for line 1333
 import outlinePNG from "../../../public/Outline.png";
 import jiraSVG from "../../../public/Jira.svg";
 import confluenceSVG from "../../../public/Confluence.svg";
@@ -123,27 +122,6 @@ export const OpenAIISVG = ({
   </svg>
 );
 
-export const BayLogo = ({
-  width = 48,
-  height = 24,
-  className = defaultTailwindCSS,
-  src,
-}: {
-  width?: number;
-  height?: number;
-  className?: string;
-  src: string | StaticImageData;
-}) => (
-  <Image
-    style={{ width: `${width}px`, height: `${height}px` }}
-    className={className}
-    src={src}
-    alt="Logo"
-    width={width}
-    height={height}
-  />
-);
-
 export const LogoIcon = ({
   size = 16,
   className = defaultTailwindCSS,
@@ -154,6 +132,8 @@ export const LogoIcon = ({
     className={`w-[${size}px] h-[${size}px] ` + className}
     src={src}
     alt="Logo"
+    width="96"
+    height="96"
   />
 );
 
@@ -1102,19 +1082,9 @@ export const ChatIcon = ({
 };
 
 export const OnyxSparkleIcon = ({
-  size = 32, //original 16
+  size = 16,
   className = defaultTailwindCSS,
 }: IconProps) => {
-
-  /*
-  return (
-    <LogoIcon
-      size={size + 4}
-      className={`${className} -m-0.5`}
-      src = {lfstLogo}
-      />
-  );
-  */
   return (
     <svg
       width={size}
@@ -1356,17 +1326,6 @@ export const OCIStorageIcon = ({
     size={size + 4}
     className={`${className} -m-0.5`}
     src={OCIStorageSVG}
-  />
-);
-
-export const bayLogo = ({
-  size = 32,
-  className = defaultTailwindCSS,
-}: IconProps) => (
-  <LogoIcon
-    size={size + 4}
-    className={`${className} -m-0.5`}
-    src={lfstLogo}
   />
 );
 
@@ -3193,44 +3152,13 @@ export const PinnedIcon = ({
     </svg>
   );
 };
-
 export const OnyxLogoTypeIcon = ({
-  size = 32, //original 16
-  className = defaultTailwindCSS,
-}: {
-  size?: number;
-  className?: string;
-}) => {
-  return (
-    <BayLogo
-      src ={lfstLogo}
-      width = {size}
-      height = {size/2}
-      />
-  );
-};
-
-/*
-export const OnyxLogoTypeIcon = ({
-  size = 32, //original 16
+  size = 16,
   className = defaultTailwindCSS,
 }: IconProps) => {
   const aspectRatio = 2640 / 733; // Calculate the aspect ratio of the original SVG
   const height = size / aspectRatio; // Calculate the height based on the aspect ratio
-  return (
-    <LogoIcon
-      size={size + 4}
-      className={`${className} -m-0.5 h-[10px]`} // Adjust height to fit better
-      src = {lfstLogo}
-      />
-  );
 
-};
-
-*/
-
-
-  /*
   return (
     <svg
       version="1.1"
@@ -3278,40 +3206,14 @@ export const OnyxLogoTypeIcon = ({
       />
     </svg>
   );
-*/
-
-export const OnyxIcon = ({
-  size = 32, //original 16
-  className = defaultTailwindCSS,
-}: {
-  size?: number;
-  className?: string;
-}) => {
-  return (
-    <BayLogo
-      src ={lfstLogo}
-      width = {size}
-      height = {size/2}
-      />
-  );
 };
 
-/*
 export const OnyxIcon = ({
-  size = 32, //original 16
+  size = 16,
   className = defaultTailwindCSS,
 }: IconProps) => {
   return (
-    <LogoIcon
-      size={size + 4}
-      className={`${className} -m-0.5 h-[10px]`} // Adjust height to fit better
-      src = {lfstLogo}
-      />
-  );
-};
-*/
-/*
-<svg
+    <svg
       style={{ width: `${size}px`, height: `${size}px` }}
       className={`w-[${size}px] h-[${size}px] ` + className}
       viewBox="0 0 56 56"
@@ -3325,9 +3227,8 @@ export const OnyxIcon = ({
         fill="currentColor"
       />
     </svg>
-*/
-
-
+  );
+};
 
 export const QuestionMarkIcon = ({
   size = 16,

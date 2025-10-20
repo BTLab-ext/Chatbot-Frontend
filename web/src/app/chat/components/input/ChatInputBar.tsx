@@ -34,7 +34,10 @@ import SvgStop from "@/icons/stop";
 import FilePicker from "@/app/chat/components/files/FilePicker";
 import { ActionToggle } from "@/app/chat/components/input/ActionManagement";
 import SelectButton from "@/refresh-components/buttons/SelectButton";
-import { getIconForAction } from "../../services/actionUtils";
+import {
+  getIconForAction,
+  hasSearchToolsAvailable,
+} from "../../services/actionUtils";
 
 const MAX_INPUT_HEIGHT = 200;
 
@@ -301,6 +304,11 @@ function ChatInputBarInner({
     availableContextTokens,
   ]);
 
+  // Check if the assistant has search tools available (internal search or web search)
+  const showDeepResearch = useMemo(() => {
+    return hasSearchToolsAvailable(selectedAssistant.tools);
+  }, [selectedAssistant.tools]);
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (showPrompts && (e.key === "Tab" || e.key == "Enter")) {
       e.preventDefault();
@@ -412,13 +420,7 @@ function ChatInputBarInner({
           style={{ scrollbarWidth: "thin" }}
           role="textarea"
           aria-multiline
-          placeholder={
-            selectedAssistant.id === 0
-              ? `How can ${
-                  settings?.enterpriseSettings?.application_name || "ChatBai"
-                } help you today`
-              : `How can ${selectedAssistant.name} help you today`
-          }
+          placeholder={ "Wie kann ChatBai Ihnen heute helfen?" }
           value={message}
           onKeyDown={(event) => {
             if (
@@ -508,15 +510,17 @@ function ChatInputBarInner({
                 availableSources={memoizedAvailableSources}
               />
             )}
-            <SelectButton
-              leftIcon={SvgHourglass}
-              active={deepResearchEnabled}
-              onClick={toggleDeepResearch}
-              folded
-              action
-            >
-              Deep Research
-            </SelectButton>
+            {showDeepResearch && (
+              <SelectButton
+                leftIcon={SvgHourglass}
+                active={deepResearchEnabled}
+                onClick={toggleDeepResearch}
+                folded
+                action
+              >
+                Deep Research
+              </SelectButton>
+            )}
 
             {forcedToolIds.length > 0 &&
               forcedToolIds.map((toolId) => {
@@ -545,8 +549,14 @@ function ChatInputBarInner({
           </div>
 
           <div className="flex flex-row items-center gap-spacing-inline">
-            <LLMPopover llmManager={llmManager} requiresImageGeneration />
+            <div data-testid="ChatInputBar/llm-popover-trigger">
+              <LLMPopover
+                llmManager={llmManager}
+                requiresImageGeneration={false}
+              />
+            </div>
             <IconButton
+              id="onyx-chat-input-send-button"
               icon={chatState === "input" ? SvgArrowUp : SvgStop}
               disabled={chatState === "input" && !message}
               onClick={() => {
