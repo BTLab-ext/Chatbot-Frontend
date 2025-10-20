@@ -9,7 +9,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import Text from "@/refresh-components/texts/Text";
+import Text from "@/refresh-components/Text";
 
 const buttonClasses = (active: boolean | undefined) =>
   ({
@@ -74,7 +74,7 @@ const iconClasses = (active: boolean | undefined) =>
   }) as const;
 
 export interface IconButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  extends React.HTMLAttributes<HTMLButtonElement> {
   // Button states:
   active?: boolean;
   disabled?: boolean;

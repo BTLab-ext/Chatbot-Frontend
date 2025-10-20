@@ -26,7 +26,7 @@ const ForgotPasswordPage: React.FC = () => {
     <AuthFlowContainer>
       <div className="flex flex-col w-full justify-center">
         <div className="flex">
-          <Title className="mb-2 mx-auto font-bold">Passwort vergessen</Title>
+          <Title className="mb-2 mx-auto font-bold">Forgot Password</Title>
         </div>
         {isWorking && <Spinner />}
         {popup}
@@ -43,13 +43,13 @@ const ForgotPasswordPage: React.FC = () => {
               await forgotPassword(values.email);
               setPopup({
                 type: "success",
-                message: "E-Mail zum Passwort zurücksetzen versendet. Bitte überprüfen Sie Ihr Postfach.",
+                message: "Password reset email sent. Please check your inbox.",
               });
             } catch (error) {
               const errorMessage =
                 error instanceof Error
                   ? error.message
-                  : "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.";
+                  : "An error occurred. Please try again.";
               setPopup({
                 type: "error",
                 message: errorMessage,
@@ -74,7 +74,7 @@ const ForgotPasswordPage: React.FC = () => {
                   disabled={isSubmitting}
                   className="mx-auto w-full"
                 >
-                  Passwort zurücksetzen
+                  Reset Password
                 </Button>
               </div>
             </Form>
@@ -83,7 +83,7 @@ const ForgotPasswordPage: React.FC = () => {
         <div className="flex">
           <Text className="mt-4 mx-auto">
             <Link href="/auth/login" className="text-link font-medium">
-              Zurück zum Login
+              Back to Login
             </Link>
           </Text>
         </div>

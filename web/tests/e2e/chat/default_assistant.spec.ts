@@ -1,16 +1,17 @@
-import { GREETING_MESSAGES } from "@/lib/chat/greetingMessages";
 import { test, expect } from "@chromatic-com/playwright";
-import { loginAsRandomUser } from "@tests/e2e/utils/auth";
+import { loginAsRandomUser } from "../utils/auth";
 import {
+  navigateToAssistantInHistorySidebar,
   sendMessage,
   startNewChat,
   verifyAssistantIsChosen,
-} from "@tests/e2e/utils/chatActions";
+} from "../utils/chatActions";
 import {
+  GREETING_MESSAGES,
   TOOL_IDS,
-  openActionManagement,
   waitForUnifiedGreeting,
-} from "@tests/e2e/utils/tools";
+  openActionManagement,
+} from "../utils/tools";
 
 // Tool-related test selectors now imported from shared utils
 
@@ -30,8 +31,10 @@ test.describe("Default Assistant Tests", () => {
       page,
     }) => {
       // Look for greeting message - should be one from the predefined list
-      const greeting = await waitForUnifiedGreeting(page);
-      expect(GREETING_MESSAGES).toContain(greeting.trim());
+      const greetingText = await waitForUnifiedGreeting(page);
+
+      // Verify the greeting is from the predefined list
+      expect(GREETING_MESSAGES).toContain(greetingText?.trim());
     });
 
     test("greeting message should remain consistent during session", async ({
@@ -57,15 +60,14 @@ test.describe("Default Assistant Tests", () => {
     }) => {
       // First verify greeting appears for default assistant
       const greetingElement = await page.waitForSelector(
-        '[data-testid="onyx-logo"]',
+        '[data-testid="greeting-message"]',
         { timeout: 5000 }
       );
       expect(greetingElement).toBeTruthy();
 
       // Create a custom assistant to test non-default behavior
-      await page.getByTestId("AppSidebar/more-agents").click();
+      await page.getByRole("button", { name: "Explore Assistants" }).click();
       await page.getByRole("button", { name: "Create", exact: true }).click();
-      await page.waitForTimeout(2000);
       await page.getByTestId("name").fill("Custom Test Assistant");
       await page.getByTestId("description").fill("Test Description");
       await page.getByTestId("system_prompt").fill("Test Instructions");
@@ -75,7 +77,7 @@ test.describe("Default Assistant Tests", () => {
       await verifyAssistantIsChosen(page, "Custom Test Assistant");
 
       // Greeting should NOT appear for custom assistant
-      const customGreeting = await page.$('[data-testid="onyx-logo"]');
+      const customGreeting = await page.$('[data-testid="greeting-message"]');
       expect(customGreeting).toBeNull();
     });
   });
@@ -100,9 +102,8 @@ test.describe("Default Assistant Tests", () => {
       page,
     }) => {
       // Create a custom assistant
-      await page.getByTestId("AppSidebar/more-agents").click();
+      await page.getByRole("button", { name: "Explore Assistants" }).click();
       await page.getByRole("button", { name: "Create", exact: true }).click();
-      await page.waitForTimeout(2000);
       await page.getByTestId("name").fill("Custom Assistant");
       await page.getByTestId("description").fill("Test Description");
       await page.getByTestId("system_prompt").fill("Test Instructions");
@@ -144,9 +145,8 @@ test.describe("Default Assistant Tests", () => {
       page,
     }) => {
       // Create a custom assistant with starter messages
-      await page.getByTestId("AppSidebar/more-agents").click();
+      await page.getByRole("button", { name: "Explore Assistants" }).click();
       await page.getByRole("button", { name: "Create", exact: true }).click();
-      await page.waitForTimeout(2000);
       await page.getByTestId("name").fill("Test Assistant with Starters");
       await page.getByTestId("description").fill("Test Description");
       await page.getByTestId("system_prompt").fill("Test Instructions");
@@ -188,7 +188,7 @@ test.describe("Default Assistant Tests", () => {
       page,
     }) => {
       // Open assistant selector
-      await page.getByTestId("AppSidebar/more-agents").click();
+      await page.getByRole("button", { name: "Explore Assistants" }).click();
 
       // Wait for modal or assistant list to appear
       // The selector might be in a modal or dropdown
@@ -217,9 +217,8 @@ test.describe("Default Assistant Tests", () => {
       page,
     }) => {
       // Create a custom assistant
-      await page.getByTestId("AppSidebar/more-agents").click();
+      await page.getByRole("button", { name: "Explore Assistants" }).click();
       await page.getByRole("button", { name: "Create", exact: true }).click();
-      await page.waitForTimeout(2000);
       await page.getByTestId("name").fill("Switch Test Assistant");
       await page.getByTestId("description").fill("Test Description");
       await page.getByTestId("system_prompt").fill("Test Instructions");
@@ -248,12 +247,11 @@ test.describe("Default Assistant Tests", () => {
       expect(actionToggle).toBeTruthy();
     });
 
-    test("should show web-search + image-generation tools options when clicked", async ({
+    test("should show all three tool options when clicked", async ({
       page,
     }) => {
-      // Will NOT show the `internal-search` option since that will be excluded when there are no connectors connected.
-      // (Since we removed pre-seeded docs, we will have NO connectors connected on a fresh install; therefore, `internal-search` will not be available.)
       await openActionManagement(page);
+      expect(await page.$(TOOL_IDS.searchOption)).toBeTruthy();
       expect(await page.$(TOOL_IDS.webSearchOption)).toBeTruthy();
       expect(await page.$(TOOL_IDS.imageGenerationOption)).toBeTruthy();
     });
@@ -267,32 +265,28 @@ test.describe("Default Assistant Tests", () => {
         timeout: 5000,
       });
 
-      // Find a checkbox/toggle within the image-generation tool option
-      const imageGenerationToolOption = await page.$(
-        TOOL_IDS.imageGenerationOption
-      );
-      expect(imageGenerationToolOption).toBeTruthy();
+      // Find a checkbox/toggle within the search tool option
+      const searchToolOption = await page.$(TOOL_IDS.searchOption);
+      expect(searchToolOption).toBeTruthy();
 
       // Look for a checkbox or switch within the tool option
-      const imageGenerationToggle = await imageGenerationToolOption?.$(
-        TOOL_IDS.toggleInput
-      );
+      const searchToggle = await searchToolOption?.$(TOOL_IDS.toggleInput);
 
-      if (imageGenerationToggle) {
-        const initialState = await imageGenerationToggle.isChecked();
-        await imageGenerationToggle.click();
+      if (searchToggle) {
+        const initialState = await searchToggle.isChecked();
+        await searchToggle.click();
 
         // Verify state changed
-        const newState = await imageGenerationToggle.isChecked();
+        const newState = await searchToggle.isChecked();
         expect(newState).toBe(!initialState);
 
         // Toggle it back
-        await imageGenerationToggle.click();
-        const finalState = await imageGenerationToggle.isChecked();
+        await searchToggle.click();
+        const finalState = await searchToggle.isChecked();
         expect(finalState).toBe(initialState);
       } else {
         // If no toggle found, just click the option itself
-        await imageGenerationToolOption?.click();
+        await searchToolOption?.click();
         // Check if the option has some visual state change
         // This is a fallback behavior if toggles work differently
       }
@@ -309,23 +303,19 @@ test.describe("Default Assistant Tests", () => {
         timeout: 5000,
       });
 
-      // Find the internet image-generation tool option and its toggle
-      const imageGenerationToolOption = await page.$(
-        TOOL_IDS.imageGenerationOption
-      );
-      expect(imageGenerationToolOption).toBeTruthy();
+      // Find the internet search tool option and its toggle
+      const webSearchOption = await page.$(TOOL_IDS.webSearchOption);
+      expect(webSearchOption).toBeTruthy();
 
-      const imageGenerationToggle = await imageGenerationToolOption?.$(
-        TOOL_IDS.toggleInput
-      );
+      const webSearchToggle = await webSearchOption?.$(TOOL_IDS.toggleInput);
 
       let toggledState = false;
-      if (imageGenerationToggle) {
-        await imageGenerationToggle.click();
-        toggledState = await imageGenerationToggle.isChecked();
+      if (webSearchToggle) {
+        await webSearchToggle.click();
+        toggledState = await webSearchToggle.isChecked();
       } else {
         // Click the option itself if no toggle found
-        await imageGenerationToolOption?.click();
+        await webSearchOption?.click();
         // Assume toggled if clicked
         toggledState = true;
       }
@@ -341,15 +331,13 @@ test.describe("Default Assistant Tests", () => {
       });
 
       // Check if state persisted
-      const imageGenerationToolOptionAfterReload = await page.$(
-        TOOL_IDS.imageGenerationOption
+      const webSearchOptionAfterReload = await page.$(TOOL_IDS.webSearchOption);
+      const webSearchToggleAfterReload = await webSearchOptionAfterReload?.$(
+        TOOL_IDS.toggleInput
       );
-      const imageGenerationToggleAfterReload =
-        await imageGenerationToolOptionAfterReload?.$(TOOL_IDS.toggleInput);
 
-      if (imageGenerationToggleAfterReload) {
-        const stateAfterReload =
-          await imageGenerationToggleAfterReload.isChecked();
+      if (webSearchToggleAfterReload) {
+        const stateAfterReload = await webSearchToggleAfterReload.isChecked();
         expect(stateAfterReload).toBe(toggledState);
       }
     });
@@ -368,7 +356,7 @@ test.describe("End-to-End Default Assistant Flow", () => {
 
     // Verify greeting message appears
     const greetingElement = await page.waitForSelector(
-      '[data-testid="onyx-logo"]',
+      '[data-testid="greeting-message"]',
       { timeout: 5000 }
     );
     expect(greetingElement).toBeTruthy();
@@ -401,7 +389,7 @@ test.describe("End-to-End Default Assistant Flow", () => {
 
     // Verify we're back to default assistant with greeting
     const newGreeting = await page.waitForSelector(
-      '[data-testid="onyx-logo"]',
+      '[data-testid="greeting-message"]',
       { timeout: 5000 }
     );
     expect(newGreeting).toBeTruthy();

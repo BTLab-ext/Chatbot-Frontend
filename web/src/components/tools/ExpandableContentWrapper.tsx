@@ -27,11 +27,11 @@ export interface ContentComponentProps {
   expanded?: boolean;
 }
 
-export default function ExpandableContentWrapper({
+const ExpandableContentWrapper: React.FC<ExpandableContentWrapperProps> = ({
   fileDescriptor,
   close,
   ContentComponent,
-}: ExpandableContentWrapperProps) {
+}) => {
   const [expanded, setExpanded] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [fadeIn, setFadeIn] = useState(false);
@@ -65,9 +65,9 @@ export default function ExpandableContentWrapper({
     <div
       className={`${
         !expanded ? "w-message-sm" : "w-full"
-      } !rounded !rounded-lg overflow-y-hidden h-full`}
+      } !rounded !rounded-lg overflow-y-hidden border h-full border-border`}
     >
-      <CardHeader className="w-full py-4 bg-background-tint-02 top-0">
+      <CardHeader className="w-full py-4 border-b border-border bg-white z-[10] top-0">
         <div className="flex justify-between items-center">
           <CardTitle className="text-ellipsis line-clamp-1 text-xl font-semibold text-text-700 pr-4">
             {fileDescriptor.name || "Untitled"}
@@ -132,4 +132,6 @@ export default function ExpandableContentWrapper({
       {!expanded && Content}
     </>
   );
-}
+};
+
+export default ExpandableContentWrapper;

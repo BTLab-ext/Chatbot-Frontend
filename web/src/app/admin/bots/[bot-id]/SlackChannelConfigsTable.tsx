@@ -16,27 +16,22 @@ import Link from "next/link";
 import { useState } from "react";
 import { deleteSlackChannelConfig, isPersonaASlackBotPersona } from "./lib";
 import { Card } from "@/components/ui/card";
-import Button from "@/refresh-components/buttons/Button";
-import SvgSettings from "@/icons/settings";
-import CreateButton from "@/refresh-components/buttons/CreateButton";
-import IconButton from "@/refresh-components/buttons/IconButton";
-import SvgTrash from "@/icons/trash";
+import { Button } from "@/components/ui/button";
+import { FiPlusSquare, FiSettings } from "react-icons/fi";
 
 const numToDisplay = 50;
 
-export interface SlackChannelConfigsTableProps {
-  slackBotId: number;
-  slackChannelConfigs: SlackChannelConfig[];
-  refresh: () => void;
-  setPopup: (popupSpec: PopupSpec | null) => void;
-}
-
-export default function SlackChannelConfigsTable({
+export function SlackChannelConfigsTable({
   slackBotId,
   slackChannelConfigs,
   refresh,
   setPopup,
-}: SlackChannelConfigsTableProps) {
+}: {
+  slackBotId: number;
+  slackChannelConfigs: SlackChannelConfig[];
+  refresh: () => void;
+  setPopup: (popupSpec: PopupSpec | null) => void;
+}) {
   const [page, setPage] = useState(1);
 
   const defaultConfig = slackChannelConfigs.find((config) => config.is_default);
@@ -48,17 +43,20 @@ export default function SlackChannelConfigsTable({
     <div className="space-y-8">
       <div className="flex justify-between items-center mb-6">
         <Button
+          variant="outline"
           onClick={() => {
             window.location.href = `/admin/bots/${slackBotId}/channels/${defaultConfig?.id}`;
           }}
-          secondary
-          leftIcon={SvgSettings}
         >
+          <FiSettings />
           Edit Default Configuration
         </Button>
-        <CreateButton href={`/admin/bots/${slackBotId}/channels/new`} secondary>
-          New Channel Configuration
-        </CreateButton>
+        <Link href={`/admin/bots/${slackBotId}/channels/new`}>
+          <Button variant="outline">
+            <FiPlusSquare />
+            New Channel Configuration
+          </Button>
+        </Link>
       </div>
 
       <div>
@@ -122,7 +120,10 @@ export default function SlackChannelConfigsTable({
                         </div>
                       </TableCell>
                       <TableCell onClick={(e) => e.stopPropagation()}>
-                        <IconButton
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="hover:text-destructive"
                           onClick={async (e) => {
                             e.stopPropagation();
                             const response = await deleteSlackChannelConfig(
@@ -142,9 +143,9 @@ export default function SlackChannelConfigsTable({
                             }
                             refresh();
                           }}
-                          icon={SvgTrash}
-                          internal
-                        />
+                        >
+                          <TrashIcon />
+                        </Button>
                       </TableCell>
                     </TableRow>
                   );

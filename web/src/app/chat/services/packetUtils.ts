@@ -1,3 +1,4 @@
+import { CitationMap } from "../interfaces";
 import {
   CitationDelta,
   MessageDelta,
@@ -18,7 +19,6 @@ export function isToolPacket(
     PacketType.CUSTOM_TOOL_DELTA,
     PacketType.REASONING_START,
     PacketType.REASONING_DELTA,
-    PacketType.FETCH_TOOL_START,
   ];
   if (includeSectionEnd) {
     toolPacketTypes.push(PacketType.SECTION_END);

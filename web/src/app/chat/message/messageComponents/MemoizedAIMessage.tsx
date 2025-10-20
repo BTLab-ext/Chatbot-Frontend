@@ -18,7 +18,6 @@ interface BaseMemoizedAIMessageProps {
   onMessageSelection: (messageId: number) => void;
   llmManager: LlmManager | null;
   projectFiles?: ProjectFile[];
-  researchType?: string | null;
 }
 
 interface InternalMemoizedAIMessageProps extends BaseMemoizedAIMessageProps {
@@ -54,7 +53,6 @@ const _MemoizedAIMessage = React.memo(function _MemoizedAIMessage({
   onMessageSelection,
   llmManager,
   projectFiles,
-  researchType,
 }: InternalMemoizedAIMessageProps) {
   return (
     <AIMessage
@@ -68,7 +66,6 @@ const _MemoizedAIMessage = React.memo(function _MemoizedAIMessage({
         setPresentingDocument,
         regenerate,
         overriddenModel,
-        researchType,
       }}
       nodeId={nodeId}
       llmManager={llmManager}
@@ -94,7 +91,6 @@ export const MemoizedAIMessage = ({
   onMessageSelection,
   llmManager,
   projectFiles,
-  researchType,
 }: MemoizedAIMessageProps) => {
   const regenerate = useMemo(() => {
     if (messageId === undefined) {
@@ -139,7 +135,6 @@ export const MemoizedAIMessage = ({
       onMessageSelection={onMessageSelection}
       llmManager={llmManager}
       projectFiles={projectFiles}
-      researchType={researchType}
     />
   );
 };

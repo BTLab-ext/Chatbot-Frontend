@@ -12,7 +12,7 @@ import { SubQuestionDetail } from "@/app/chat/interfaces";
 import { getFileIconFromFileNameAndLink } from "@/lib/assistantIconUtils";
 import { getSourceDisplayName } from "@/lib/sources";
 import { ValidSources } from "@/lib/types";
-import Text from "@/refresh-components/texts/Text";
+import Text from "@/refresh-components/Text";
 
 const MAX_CITATION_TEXT_LENGTH = 40;
 
@@ -93,7 +93,7 @@ export function Citation({
                   ? question_info.openQuestion(question_info.question)
                   : null;
             }}
-            className="inline-flex items-center cursor-pointer transition-all duration-200 ease-in-out ml-1"
+            className="inline-flex items-center cursor-pointer transition-all duration-200 ease-in-out mr-1"
           >
             <span
               className="flex items-center justify-center p-spacing-inline h-4

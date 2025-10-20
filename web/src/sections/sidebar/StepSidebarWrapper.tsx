@@ -1,8 +1,8 @@
 import { SettingsContext } from "@/components/settings/SettingsProvider";
 import { useContext, ReactNode } from "react";
+import NavigationTab from "@/refresh-components/buttons/NavigationTab";
 import { LogoComponent } from "@/components/logo/FixedLogo";
 import { SvgProps } from "@/icons";
-import SidebarTab from "@/refresh-components/buttons/SidebarTab";
 
 interface StepSidebarProps {
   children: ReactNode;
@@ -30,13 +30,13 @@ export default function StepSidebar({
         <LogoComponent enterpriseSettings={enterpriseSettings} />
       </div>
 
-      <SidebarTab
-        leftIcon={buttonIcon}
+      <NavigationTab
+        icon={buttonIcon}
         className="bg-background-tint-00"
         href={buttonHref}
       >
         {buttonName}
-      </SidebarTab>
+      </NavigationTab>
 
       <div className="h-full flex">
         <div className="w-full px-2">{children}</div>
