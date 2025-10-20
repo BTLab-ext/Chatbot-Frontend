@@ -72,9 +72,9 @@
   --blue-90: #091938;
   --blue-85: #11254e;
   --blue-80: #173268;
-  --blue-60: #3363c3;
-  --blue-50: #286df8;
-  --blue-45: #397bff;
+  --blue-60: #ea8400;/*#3363c3;*/
+  --blue-50: #104067;      /*#286df8;*/
+  --blue-45: #ea8400;/*#397bff;*/
   --blue-40: #508afb;
   --blue-20: #9bbeff;
   --blue-10: #cddfff;
@@ -202,9 +202,9 @@
 /* Brand Colors */
 :root {
   /* Onyx / Ink */
-  --onyx-ink-100: #000000;
-  --onyx-ink-95: #1c1c1c;
-  --onyx-ink-90: #333333;
+  --onyx-ink-100: #ea8400;
+  --onyx-ink-95: #104067; /* originally onyx-ink-95 */
+  --onyx-ink-90: #ea8400;
 
   /* Onyx / Chrome */
   --onyx-chrome-20: #cacaca;

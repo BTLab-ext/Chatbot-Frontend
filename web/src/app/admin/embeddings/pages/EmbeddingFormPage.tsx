@@ -6,7 +6,13 @@ import { EmbeddingModelSelection } from "../EmbeddingModelSelectionForm";
 import { useCallback, useEffect, useMemo, useState, useRef } from "react";
 import Text from "@/components/ui/text";
 import Button from "@/refresh-components/buttons/Button";
-import { WarningCircle, Warning, CaretDownIcon } from "@phosphor-icons/react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  WarningCircle,
+  CaretDown,
+  Warning,
+} from "@phosphor-icons/react";
 import {
   CloudEmbeddingModel,
   EmbeddingProvider,
@@ -257,8 +263,8 @@ export default function EmbeddingForm() {
     }) => {
       return needsReIndex ? (
         <div className="flex mx-auto gap-x-1 ml-auto items-center">
-          <div className="flex items-center h-fit">
-            <Button
+          <div className="flex items-center">
+            <button
               onClick={() => {
                 if (reindexType == ReindexType.INSTANT) {
                   setShowInstantSwitchConfirm(true);
@@ -268,22 +274,56 @@ export default function EmbeddingForm() {
                 }
               }}
               disabled={!isOverallFormValid}
-              action
-              className="rounded-r-none w-32 h-full"
+              className="
+                enabled:cursor-pointer 
+                disabled:bg-accent/50 
+                disabled:cursor-not-allowed 
+                bg-agent 
+                flex 
+                items-center 
+                justify-center
+                text-white 
+                text-sm 
+                font-regular 
+                rounded-l-sm
+                py-2.5 
+                px-3.5
+                transition-colors
+                hover:bg-white/10
+                text-center
+                w-32"
             >
               {reindexType == ReindexType.REINDEX
                 ? "Re-index"
                 : "Instant Switch"}
-            </Button>
+            </button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button
+                <button
                   disabled={!isOverallFormValid}
-                  action
-                  className="rounded-l-none border-l border-white/20 px-1 h-[36px] w-[30px] min-w-[30px]"
+                  className="
+                    enabled:cursor-pointer 
+                    disabled:bg-accent/50 
+                    disabled:cursor-not-allowed 
+                    bg-agent 
+                    flex 
+                    items-center 
+                    justify-center
+                    text-white 
+                    text-sm 
+                    font-regular 
+                    rounded-r-sm
+                    border-l
+                    border-white/20
+                    py-2.5 
+                    px-2
+                    h-[40px]
+                    w-[34px]
+                    transition-colors
+                    hover:bg-white/10"
                 >
-                  <CaretDownIcon className="text-text-inverted-05" />
-                </Button>
+                  <CaretDown className="h-4 w-4" />
+                </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem

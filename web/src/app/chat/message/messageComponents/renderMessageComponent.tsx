@@ -16,7 +16,6 @@ import { SearchToolRenderer } from "./renderers/SearchToolRenderer";
 import { ImageToolRenderer } from "./renderers/ImageToolRenderer";
 import { ReasoningRenderer } from "./renderers/ReasoningRenderer";
 import CustomToolRenderer from "./renderers/CustomToolRenderer";
-import { FetchToolRenderer } from "./renderers/FetchToolRenderer";
 
 // Different types of chat packets using discriminated unions
 export interface GroupedPackets {
@@ -43,10 +42,6 @@ function isCustomToolPacket(packet: Packet) {
   return packet.obj.type === PacketType.CUSTOM_TOOL_START;
 }
 
-function isFetchToolPacket(packet: Packet) {
-  return packet.obj.type === PacketType.FETCH_TOOL_START;
-}
-
 function isReasoningPacket(packet: Packet): packet is ReasoningPacket {
   return (
     packet.obj.type === PacketType.REASONING_START ||
@@ -69,9 +64,6 @@ export function findRenderer(
   }
   if (groupedPackets.packets.some((packet) => isCustomToolPacket(packet))) {
     return CustomToolRenderer;
-  }
-  if (groupedPackets.packets.some((packet) => isFetchToolPacket(packet))) {
-    return FetchToolRenderer;
   }
   if (groupedPackets.packets.some((packet) => isReasoningPacket(packet))) {
     return ReasoningRenderer;

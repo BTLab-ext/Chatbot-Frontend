@@ -5,7 +5,7 @@ import { ThreeDotsLoader } from "@/components/Loading";
 import { useRouter } from "next/navigation";
 import { AdminPageTitle } from "@/components/admin/Title";
 import { errorHandlingFetcher } from "@/lib/fetcher";
-import Text from "@/refresh-components/texts/Text";
+import Text from "@/components/ui/text";
 import useSWR, { mutate } from "swr";
 import { ErrorCallout } from "@/components/ErrorCallout";
 import { OnyxSparkleIcon } from "@/components/icons/icons";
@@ -280,16 +280,18 @@ function ToolToggle({
         <div className="text-sm font-medium flex items-center gap-2">
           <span>{tool.display_name}</span>
           {!tool.is_available && (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <span className="text-xs text-text-400 border border-border rounded px-1 py-0.5 cursor-help">
-                  Not enabled
-                </span>
-              </TooltipTrigger>
-              <TooltipContent>
-                <Text inverted>{notEnabledReason}</Text>
-              </TooltipContent>
-            </Tooltip>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span className="text-xs text-text-400 border border-border rounded px-1 py-0.5 cursor-help">
+                    Not enabled
+                  </span>
+                </TooltipTrigger>
+                <TooltipContent side="top" className="max-w-xs">
+                  {notEnabledReason}
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           )}
         </div>
         <Text className="text-sm text-text-600 mt-1">{tool.description}</Text>

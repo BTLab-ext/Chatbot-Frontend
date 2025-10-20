@@ -7,7 +7,10 @@
   {
     "name": "Connectors - Add Connector",
     "path": "add-connector",
-    "pageTitle": "Add Connector"
+    "pageTitle": "Add Connector",
+    "options": {
+      "subHeaderText": "Popular"
+    }
   },
   {
     "name": "Custom Assistants - Assistants",
@@ -51,7 +54,10 @@
   {
     "name": "Document Management - Feedback",
     "path": "documents/feedback",
-    "pageTitle": "Document Feedback"
+    "pageTitle": "Document Feedback",
+    "options": {
+      "subHeaderText": "Most Liked Documents"
+    }
   },
   {
     "name": "Configuration - LLM",
@@ -76,12 +82,18 @@
   {
     "name": "Configuration - Search Settings",
     "path": "configuration/search",
-    "pageTitle": "Search Settings"
+    "pageTitle": "Search Settings",
+    "options": {
+      "subHeaderText": "Embedding Model"
+    }
   },
   {
     "name": "Custom Assistants - Actions",
     "path": "actions",
-    "pageTitle": "Actions"
+    "pageTitle": "Actions",
+    "options": {
+      "paragraphText": "Actions allow assistants to retrieve information or take actions."
+    }
   },
   {
     "name": "User Management - Token Rate Limits",
@@ -89,7 +101,8 @@
     "pageTitle": "Token Rate Limits",
     "options": {
       "paragraphText": "Token rate limits enable you control how many tokens can be spent in a given time period. With token rate limits, you can:",
-      "buttonName": "Create a Token Rate Limit"
+      "buttonName": "Create a Token Rate Limit",
+      "subHeaderText": "Global Token Rate Limits"
     }
   }
 ]

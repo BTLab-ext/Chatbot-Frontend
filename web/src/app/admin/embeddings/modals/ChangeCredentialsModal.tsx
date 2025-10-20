@@ -5,10 +5,7 @@ import Text from "@/components/ui/text";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/Field";
-import {
-  CloudEmbeddingProvider,
-  getFormattedProviderName,
-} from "../../../../components/embedding/interfaces";
+import { CloudEmbeddingProvider } from "../../../../components/embedding/interfaces";
 import {
   EMBEDDING_PROVIDERS_ADMIN_URL,
   LLM_PROVIDERS_ADMIN_URL,
@@ -170,7 +167,7 @@ export function ChangeCredentialsModal({
     <Modal
       width="max-w-3xl"
       icon={provider.icon}
-      title={`Modify your ${getFormattedProviderName(provider.provider_type)} ${
+      title={`Modify your ${provider.provider_type} ${
         isProxy ? "Configuration" : "key"
       }`}
       onOutsideClick={onCancel}

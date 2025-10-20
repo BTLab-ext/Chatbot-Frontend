@@ -107,10 +107,10 @@ export const MessagesDisplay: React.FC<MessagesDisplayProps> = ({
   );
 
   const handleEditWithMessageId = useCallback(
-    (editedContent: string, msgId: number) => {
+    (editedContent: string, msgId: number | null | undefined) => {
       onSubmit({
         message: editedContent,
-        messageIdToResend: msgId,
+        messageIdToResend: msgId || undefined,
         currentMessageFiles: [],
         useAgentSearch: deepResearchEnabled,
       });
@@ -204,7 +204,6 @@ export const MessagesDisplay: React.FC<MessagesDisplayProps> = ({
                   parentMessage?.childrenNodeIds ?? emptyChildrenIds
                 }
                 onMessageSelection={onMessageSelection}
-                researchType={message.researchType}
               />
             </div>
           );

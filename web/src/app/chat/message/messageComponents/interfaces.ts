@@ -23,7 +23,6 @@ export interface FullChatState {
   // Regenerate functionality
   regenerate?: (modelOverRide: LlmDescriptor) => Promise<void>;
   overriddenModel?: string;
-  researchType?: string | null;
 }
 
 export interface RendererResult {

@@ -19,7 +19,7 @@ import { SourceIcon } from "@/components/SourceIcon";
 import { Connector } from "@/lib/connectors/connectors";
 import { HorizontalFilters } from "@/components/filters/SourceSelector";
 import InputTypeIn from "@/refresh-components/inputs/InputTypeIn";
-import Text from "@/refresh-components/texts/Text";
+import Text from "@/refresh-components/Text";
 
 const DocumentDisplay = ({
   document,

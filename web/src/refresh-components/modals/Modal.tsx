@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import Text from "@/refresh-components/texts/Text";
+import Text from "@/refresh-components/Text";
 import SvgX from "@/icons/x";
 import {
   ModalIds,
@@ -65,13 +65,11 @@ export default function Modal({
       <div className="flex flex-col gap-spacing-interline p-spacing-paragraph">
         <div className="flex flex-row items-center justify-between">
           <Icon className="w-[1.5rem] h-[1.5rem] stroke-text-04" />
-          <div data-testid="Modal/close-modal">
-            <IconButton
-              icon={SvgX}
-              internal
-              onClick={() => toggleModal(id, false)}
-            />
-          </div>
+          <IconButton
+            icon={SvgX}
+            internal
+            onClick={() => toggleModal(id, false)}
+          />
         </div>
         <Text headingH3>{title}</Text>
         {description && (

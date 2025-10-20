@@ -6,21 +6,18 @@ import {
   ValidSources,
 } from "@/lib/types";
 import { SourceIcon } from "@/components/SourceIcon";
-import SvgX from "@/icons/x";
-import SvgSettings from "@/icons/settings";
+import { X, Search, Settings } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { ErrorMessage } from "formik";
-import Text from "@/refresh-components/texts/Text";
-import IconButton from "@/refresh-components/buttons/IconButton";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import InputTypeIn from "@/refresh-components/inputs/InputTypeIn";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
-import Button from "@/refresh-components/buttons/Button";
 
 interface FederatedConnectorSelectorProps {
   name: string;
@@ -202,20 +199,10 @@ const EntityConfigDialog = ({
           )}
 
           <div className="flex justify-end gap-2 pt-4">
-            <Button
-              secondary
-              type="button"
-              onClick={onClose}
-              className="!py-1.5 !px-3"
-            >
+            <Button variant="outline" onClick={onClose}>
               Cancel
             </Button>
-            <Button
-              type="button"
-              onClick={handleSave}
-              disabled={isLoading}
-              className="!py-1.5 !px-3"
-            >
+            <Button onClick={handleSave} disabled={isLoading}>
               Save Configuration
             </Button>
           </div>
@@ -375,41 +362,48 @@ export const FederatedConnectorSelector = ({
     <div className="flex flex-col w-full space-y-2 mb-4">
       {label && <Label className="text-base font-medium">{label}</Label>}
 
-      <Text mainUiMuted text03>
+      <p className="text-xs text-neutral-500 dark:text-neutral-400">
         Documents from selected federated connectors will be searched in
         real-time during queries.
-      </Text>
+      </p>
       <div className="relative">
-        <InputTypeIn
-          ref={inputRef}
-          leftSearchIcon
-          placeholder={effectivePlaceholder}
-          value={searchQuery}
-          disabled={isInputDisabled}
-          onChange={(e) => {
-            setSearchQuery(e.target.value);
-            setOpen(true);
-          }}
-          onKeyDown={handleKeyDown}
-          onFocus={() => {
-            if (!allConnectorsSelected) {
+        <div
+          className={`flex items-center border border-input rounded-md border-neutral-200 dark:border-neutral-700 ${
+            allConnectorsSelected ? "bg-neutral-50 dark:bg-neutral-800" : ""
+          } focus-within:ring-1 focus-within:ring-ring focus-within:border-neutral-400 dark:focus-within:border-neutral-500 transition-colors`}
+        >
+          <Search className="absolute left-3 h-4 w-4 text-neutral-500 dark:text-neutral-400" />
+          <input
+            ref={inputRef}
+            type="text"
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
               setOpen(true);
-            }
-          }}
-          className={
-            allConnectorsSelected
-              ? "rounded-12 bg-background-neutral-01"
-              : "rounded-12"
-          }
-        />
+            }}
+            onFocus={() => {
+              if (!allConnectorsSelected) {
+                setOpen(true);
+              }
+            }}
+            onKeyDown={handleKeyDown}
+            placeholder={effectivePlaceholder}
+            className={`h-9 w-full pl-9 pr-10 py-2 bg-transparent dark:bg-transparent text-sm outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
+              allConnectorsSelected
+                ? "text-neutral-500 dark:text-neutral-400"
+                : ""
+            }`}
+            disabled={isInputDisabled}
+          />
+        </div>
 
         {open && !allConnectorsSelected && (
           <div
             ref={dropdownRef}
-            className="absolute z-50 w-full mt-1 rounded-12 border border-border-02 bg-background-neutral-00 shadow-md default-scrollbar max-h-[300px] overflow-auto"
+            className="absolute z-50 w-full mt-1 rounded-md border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 shadow-md default-scrollbar max-h-[300px] overflow-auto"
           >
             {filteredUnselectedConnectors.length === 0 ? (
-              <div className="py-4 text-center text-xs text-text-03">
+              <div className="py-4 text-center text-xs text-neutral-500 dark:text-neutral-400">
                 {searchQuery
                   ? "No matching federated connectors found"
                   : "No more federated connectors available"}
@@ -419,7 +413,7 @@ export const FederatedConnectorSelector = ({
                 {filteredUnselectedConnectors.map((connector) => (
                   <div
                     key={connector.id}
-                    className="flex items-center justify-between py-2 px-3 cursor-pointer hover:bg-background-neutral-01 text-xs"
+                    className="flex items-center justify-between py-2 px-3 cursor-pointer hover:bg-neutral-50 dark:hover:bg-neutral-800 text-xs"
                     onClick={() => selectConnector(connector.id)}
                   >
                     <div className="flex items-center truncate mr-2">
@@ -454,7 +448,7 @@ export const FederatedConnectorSelector = ({
               return (
                 <div
                   key={connector.id}
-                  className="flex items-center bg-background-neutral-00 rounded-12 border border-border-02 transition-all px-2 py-1 max-w-full group text-xs"
+                  className="flex items-center bg-white dark:bg-neutral-800 rounded-md border border-neutral-300 dark:border-neutral-700 transition-all px-2 py-1 max-w-full group text-xs"
                 >
                   <div className="flex items-center overflow-hidden">
                     <div className="mr-1 flex-shrink-0">
@@ -476,22 +470,21 @@ export const FederatedConnectorSelector = ({
                     )}
                   </div>
                   <div className="flex items-center ml-2 gap-1">
-                    <IconButton
-                      internal
-                      type="button"
-                      tooltip="Configure entities"
-                      aria-label="Configure entities"
+                    <button
+                      className="flex-shrink-0 rounded-full w-4 h-4 flex items-center justify-center bg-neutral-100 dark:bg-neutral-700 text-neutral-500 dark:text-neutral-400 hover:bg-neutral-200 dark:hover:bg-neutral-600 hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors"
                       onClick={() => openConfigDialog(connector.id)}
-                      icon={SvgSettings}
-                    />
-                    <IconButton
-                      internal
-                      type="button"
-                      aria-label="Remove connector"
-                      tooltip="Remove connector"
+                      aria-label="Configure entities"
+                      title="Configure entities"
+                    >
+                      <Settings className="h-2.5 w-2.5" />
+                    </button>
+                    <button
+                      className="flex-shrink-0 rounded-full w-4 h-4 flex items-center justify-center bg-neutral-100 dark:bg-neutral-700 text-neutral-500 dark:text-neutral-400 hover:bg-neutral-200 dark:hover:bg-neutral-600 hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors"
                       onClick={() => removeConnector(connector.id)}
-                      icon={SvgX}
-                    />
+                      aria-label="Remove connector"
+                    >
+                      <X className="h-2.5 w-2.5" />
+                    </button>
                   </div>
                 </div>
               );
@@ -499,7 +492,7 @@ export const FederatedConnectorSelector = ({
           </div>
         </div>
       ) : (
-        <div className="mt-3 p-3 border border-dashed border-border-02 rounded-12 bg-background-neutral-01 text-text-03 text-xs">
+        <div className="mt-3 p-3 border border-dashed border-neutral-300 dark:border-neutral-700 rounded-md bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-xs">
           No federated connectors selected. Search and select connectors above.
         </div>
       )}
@@ -520,7 +513,7 @@ export const FederatedConnectorSelector = ({
         <ErrorMessage
           name={name}
           component="div"
-          className="text-action-danger-05 text-xs mt-1"
+          className="text-red-500 dark:text-red-400 text-xs mt-1"
         />
       )}
     </div>

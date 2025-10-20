@@ -13,7 +13,7 @@ import { useChatContext } from "@/refresh-components/contexts/ChatContext";
 import SvgRefreshCw from "@/icons/refresh-cw";
 import SelectButton from "@/refresh-components/buttons/SelectButton";
 import LineItem from "@/refresh-components/buttons/LineItem";
-import Text from "@/refresh-components/texts/Text";
+import Text from "@/refresh-components/Text";
 
 interface LLMPopoverProps {
   llmManager: LlmManager;
@@ -113,7 +113,7 @@ export default function LLMPopover({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <div data-testid="llm-popover-trigger">{triggerContent}</div>
+        <div>{triggerContent}</div>
       </PopoverTrigger>
       <PopoverContent
         side="top"

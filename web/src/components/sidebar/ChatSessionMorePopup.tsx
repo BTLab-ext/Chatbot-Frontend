@@ -18,7 +18,7 @@ import { useChatContext } from "@/refresh-components/contexts/ChatContext";
 import { useCallback, useState, useMemo } from "react";
 import MoveCustomAgentChatModal from "@/components/modals/MoveCustomAgentChatModal";
 // PopoverMenu already imported above
-import MenuButton from "@/refresh-components/buttons/MenuButton";
+import NavigationTab from "@/refresh-components/buttons/NavigationTab";
 import SvgShare from "@/icons/share";
 import SvgFolderIn from "@/icons/folder-in";
 import SvgTrash from "@/icons/trash";
@@ -26,7 +26,7 @@ import SvgFolder from "@/icons/folder";
 import { cn, noProp } from "@/lib/utils";
 import ConfirmationModal from "@/refresh-components/modals/ConfirmationModal";
 import Button from "@/refresh-components/buttons/Button";
-import { PopoverSearchInput } from "@/sections/sidebar/ChatButton";
+import { PopoverSearchInput } from "@/sections/sidebar/AppSidebar";
 // Constants
 const DEFAULT_PERSONA_ID = 0;
 const LS_HIDE_MOVE_CUSTOM_AGENT_MODAL_KEY = "onyx:hideMoveCustomAgentModal";
@@ -145,41 +145,41 @@ export function ChatSessionMorePopup({
     if (!showMoveOptions) {
       return [
         showShareModal && (
-          <MenuButton
+          <NavigationTab
             key="share"
             icon={SvgShare}
             onClick={noProp(() => showShareModal(chatSession))}
           >
-            Teilen
-          </MenuButton>
+            Share
+          </NavigationTab>
         ),
-        <MenuButton
+        <NavigationTab
           key="move"
           icon={SvgFolderIn}
           onClick={noProp(() => setShowMoveOptions(true))}
         >
-          Ins Projekt verschieben
-        </MenuButton>,
+          Move to Project
+        </NavigationTab>,
         projectId && (
-          <MenuButton
+          <NavigationTab
             key="remove"
             icon={SvgFolder}
             onClick={noProp(() => handleRemoveChatSessionFromProject())}
           >
-            {`Vom ${
-              projects.find((p) => p.id === projectId)?.name ?? " Projekt entfernen"
+            {`Remove from ${
+              projects.find((p) => p.id === projectId)?.name ?? "Project"
             }`}
-          </MenuButton>
+          </NavigationTab>
         ),
         null,
-        <MenuButton
+        <NavigationTab
           key="delete"
           icon={SvgTrash}
           onClick={noProp(() => setIsDeleteModalOpen(true))}
           danger
         >
-          Löschen
-        </MenuButton>,
+          Delete
+        </NavigationTab>,
       ];
     }
     return [
@@ -191,7 +191,7 @@ export function ChatSessionMorePopup({
       ...filteredProjects
         .filter((candidate) => candidate.id !== projectId)
         .map((target) => (
-          <MenuButton
+          <NavigationTab
             key={target.id}
             icon={SvgFolder}
             onClick={noProp(() =>
@@ -199,7 +199,7 @@ export function ChatSessionMorePopup({
             )}
           >
             {target.name}
-          </MenuButton>
+          </NavigationTab>
         )),
     ];
   }, [
@@ -255,11 +255,12 @@ export function ChatSessionMorePopup({
           onClose={() => setIsDeleteModalOpen(false)}
           submit={
             <Button danger onClick={handleConfirmDelete}>
-              Löschen
+              Delete
             </Button>
           }
         >
-          Sind Sie sich sicher, dass Sie diesen Chat löschen wollen? Dies kann nicht mehr rückgängig gemacht werden.
+          Are you sure you want to delete this chat? This action cannot be
+          undone.
         </ConfirmationModal>
       )}
 

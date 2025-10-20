@@ -4,10 +4,10 @@ import { AuthTypeMetadata } from "@/lib/userSS";
 import LoginText from "@/app/auth/login/LoginText";
 import Link from "next/link";
 import SignInButton from "@/app/auth/login/SignInButton";
-import EmailPasswordForm from "./EmailPasswordForm";
+import { EmailPasswordForm } from "./EmailPasswordForm";
 import { NEXT_PUBLIC_FORGOT_PASSWORD_ENABLED } from "@/lib/constants";
 import { useSendAuthRequiredMessage } from "@/lib/extension/utils";
-import Text from "@/refresh-components/texts/Text";
+import Text from "@/refresh-components/Text";
 import Button from "@/refresh-components/buttons/Button";
 
 interface LoginPageProps {
@@ -47,7 +47,7 @@ export default function LoginPage({
           <EmailPasswordForm shouldVerify={true} nextUrl={nextUrl} />
           {NEXT_PUBLIC_FORGOT_PASSWORD_ENABLED && (
             <Link href="/auth/forgot-password">
-              <Button>Passwort zurücksetzen</Button>
+              <Button>Reset Password</Button>
             </Link>
           )}
           {authUrl && authTypeMetadata && (

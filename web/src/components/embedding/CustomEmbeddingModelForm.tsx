@@ -1,8 +1,4 @@
-import {
-  CloudEmbeddingModel,
-  EmbeddingProvider,
-  getFormattedProviderName,
-} from "./interfaces";
+import { CloudEmbeddingModel, EmbeddingProvider } from "./interfaces";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { TextFormField, BooleanFormField } from "@/components/Field";
@@ -60,15 +56,16 @@ export function CustomEmbeddingModelForm({
         {({ isSubmitting, submitForm, errors }) => (
           <Form>
             <Text className="text-xl text-text-900 font-bold mb-4">
-              Specify details for your {getFormattedProviderName(embeddingType)}{" "}
+              Specify details for your{" "}
+              {embeddingType === EmbeddingProvider.AZURE ? "Azure" : "LiteLLM"}{" "}
               Provider&apos;s model
             </Text>
             <TextFormField
               name="model_name"
               label="Model Name:"
-              subtext={`The name of the ${getFormattedProviderName(
-                embeddingType
-              )} model`}
+              subtext={`The name of the ${
+                embeddingType === EmbeddingProvider.AZURE ? "Azure" : "LiteLLM"
+              } model`}
               placeholder="e.g. 'all-MiniLM-L6-v2'"
               autoCompleteDisabled={true}
             />
@@ -108,7 +105,9 @@ export function CustomEmbeddingModelForm({
               disabled={isSubmitting}
               className="w-64 mx-auto"
             >
-              Configure {getFormattedProviderName(embeddingType)} Model
+              Configure{" "}
+              {embeddingType === EmbeddingProvider.AZURE ? "Azure" : "LiteLLM"}{" "}
+              Model
             </Button>
           </Form>
         )}
