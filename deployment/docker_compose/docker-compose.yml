@@ -96,7 +96,7 @@ services:
       if [ -f /etc/ssl/certs/custom-ca.crt ]; then
         update-ca-certificates;
       fi &&
-      /app/scripts/supervisord_entrypoint.sh"
+      /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf"
     env_file:
       - path: .env
         required: false
@@ -108,7 +108,6 @@ services:
       - indexing_model_server
     restart: unless-stopped
     environment:
-      - USE_LIGHTWEIGHT_BACKGROUND_WORKER=${USE_LIGHTWEIGHT_BACKGROUND_WORKER:-true}
       - POSTGRES_HOST=${POSTGRES_HOST:-relational_db}
       - VESPA_HOST=${VESPA_HOST:-index}
       - REDIS_HOST=${REDIS_HOST:-cache}
@@ -141,10 +140,10 @@ services:
     #   - ${CA_CERT_PATH:-./custom-ca.crt}:/etc/ssl/certs/custom-ca.crt:ro
 
   web_server:
-    image: onyxdotapp/onyx-web-server:${IMAGE_TAG:-latest}
+    image: teamLogo/onyx-web:${IMAGE_TAG:-latest}
     build:
       context: ../../web
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.web
       args:
         - NEXT_PUBLIC_POSITIVE_PREDEFINED_FEEDBACK_OPTIONS=${NEXT_PUBLIC_POSITIVE_PREDEFINED_FEEDBACK_OPTIONS:-}
         - NEXT_PUBLIC_NEGATIVE_PREDEFINED_FEEDBACK_OPTIONS=${NEXT_PUBLIC_NEGATIVE_PREDEFINED_FEEDBACK_OPTIONS:-}
@@ -295,10 +294,6 @@ services:
         required: false
     environment:
       - DOMAIN=localhost
-      # Nginx proxy timeout settings (in seconds)
-      - NGINX_PROXY_CONNECT_TIMEOUT=${NGINX_PROXY_CONNECT_TIMEOUT:-300}
-      - NGINX_PROXY_SEND_TIMEOUT=${NGINX_PROXY_SEND_TIMEOUT:-300}
-      - NGINX_PROXY_READ_TIMEOUT=${NGINX_PROXY_READ_TIMEOUT:-300}
     ports:
       - "80:80"
       - "${HOST_PORT:-3000}:80" # allow for localhost:3000 usage, since that is the norm
@@ -362,6 +357,17 @@ services:
       interval: 30s
       timeout: 20s
       retries: 3
+  
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    restart: unless-stopped
+    ports:
+      - "11434:11434" # expose Ollama to host if you want to curl it from outside
+    volumes:
+      - ollama_data:/root/.ollama
+    environment:
+      - OLLAMA_HOST=0.0.0.0
 
   # PRODUCTION: Uncomment the following certbot service for SSL certificate management
   # certbot:
@@ -378,6 +384,7 @@ services:
   #   entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
 volumes:
+  ollama_data:
   # Necessary for persisting data for use
   db_volume:
   vespa_volume: # Created by the container itself
