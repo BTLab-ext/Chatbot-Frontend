@@ -239,7 +239,7 @@ export function UserSettings({ onClose }: UserSettingsProps) {
   const handleChangePassword = async (e: React.FormEvent) => {
     e.preventDefault();
     if (newPassword !== confirmPassword) {
-      setPopup({ message: "New passwords do not match", type: "error" });
+      setPopup({ message: "Neue Passwörter stimmen nicht überein", type: "error" });
       return;
     }
 
@@ -258,20 +258,20 @@ export function UserSettings({ onClose }: UserSettingsProps) {
       });
 
       if (response.ok) {
-        setPopup({ message: "Password changed successfully", type: "success" });
+        setPopup({ message: "Password erfolgreich geändert", type: "success" });
         setCurrentPassword("");
         setNewPassword("");
         setConfirmPassword("");
       } else {
         const errorData = await response.json();
         setPopup({
-          message: errorData.detail || "Failed to change password",
+          message: errorData.detail || "Password konnte nicht geändert werden.",
           type: "error",
         });
       }
     } catch (error) {
       setPopup({
-        message: "An error occurred while changing the password",
+        message: "Ein Fehler trat auf. Password konnte nicht geändert werden.",
         type: "error",
       });
     } finally {
@@ -288,7 +288,7 @@ export function UserSettings({ onClose }: UserSettingsProps) {
       const response = await deleteAllChatSessions();
       if (response.ok) {
         setPopup({
-          message: "All your chat sessions have been deleted.",
+          message: "Alle Chatverläufe wurden gelöscht.",
           type: "success",
         });
         // refreshChatSessions();
@@ -296,11 +296,11 @@ export function UserSettings({ onClose }: UserSettingsProps) {
           router.push("/chat");
         }
       } else {
-        throw new Error("Failed to delete all chat sessions");
+        throw new Error("Löschen aller Chatverläufe ist fehlgeschlagen.");
       }
     } catch (error) {
       setPopup({
-        message: "Failed to delete all chat sessions",
+        message: "Löschen aller Chatverläufe ist fehlgeschlagen.",
         type: "error",
       });
     } finally {
@@ -320,7 +320,7 @@ export function UserSettings({ onClose }: UserSettingsProps) {
                 active={activeSection === "settings"}
                 onClick={() => setActiveSection("settings")}
               >
-                Settings
+                Einstellungen
               </Button>
             </li>
             {showPasswordSection && (
@@ -330,7 +330,7 @@ export function UserSettings({ onClose }: UserSettingsProps) {
                   active={activeSection === "password"}
                   onClick={() => setActiveSection("password")}
                 >
-                  Password
+                  Passwort
                 </Button>
               </li>
             )}
@@ -355,7 +355,7 @@ export function UserSettings({ onClose }: UserSettingsProps) {
         {activeSection === "settings" && (
           <div className="space-y-6">
             <div>
-              <h3 className="text-lg font-medium">Theme</h3>
+              <h3 className="text-lg font-medium">Darstellung</h3>
               <Select
                 value={selectedTheme}
                 onValueChange={(value) => {
@@ -374,10 +374,10 @@ export function UserSettings({ onClose }: UserSettingsProps) {
                     System
                   </SelectItem>
                   <SelectItem value="light" icon={<Sun className="h-4 w-4" />}>
-                    Light
+                    Hell
                   </SelectItem>
                   <SelectItem icon={<Moon />} value="dark">
-                    Dark
+                    Dunkel
                   </SelectItem>
                 </SelectContent>
               </Select>
@@ -385,7 +385,7 @@ export function UserSettings({ onClose }: UserSettingsProps) {
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-lg font-medium">Auto-scroll</h3>
-                <SubLabel>Automatically scroll to new content</SubLabel>
+                <SubLabel>Automatisch zu neuem Inhalt scrollen</SubLabel>
               </div>
               <Switch
                 checked={user?.preferences.auto_scroll}
@@ -409,7 +409,7 @@ export function UserSettings({ onClose }: UserSettingsProps) {
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-lg font-medium">Prompt Shortcuts</h3>
-                <SubLabel>Enable keyboard shortcuts for prompts</SubLabel>
+                <SubLabel>Tastatur-Shortcuts für Prompts aktivieren</SubLabel>
               </div>
               <Switch
                 checked={user?.preferences?.shortcut_enabled}
@@ -420,7 +420,7 @@ export function UserSettings({ onClose }: UserSettingsProps) {
             </div>
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <h3 className="text-lg font-medium">Default Model</h3>
+                <h3 className="text-lg font-medium">Standard-Modell</h3>
                 {isModelUpdating && (
                   <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
                 )}
@@ -457,21 +457,20 @@ export function UserSettings({ onClose }: UserSettingsProps) {
               {!showDeleteConfirmation ? (
                 <div className="space-y-3">
                   <p className="text-sm text-neutral-600 dark:text-neutral-400">
-                    This will permanently delete all your chat sessions and
-                    cannot be undone.
+                    Alle Chatverläufe werden dauerhaft gelöscht. Dieser Vorgang kann nicht rückgängig gemacht werden.
                   </p>
                   <Button
                     danger
                     onClick={() => setShowDeleteConfirmation(true)}
                     leftIcon={SvgTrash}
                   >
-                    Delete All Chats
+                    Alle Chats löschen
                   </Button>
                 </div>
               ) : (
                 <div className="space-y-3">
                   <p className="text-sm text-neutral-600 dark:text-neutral-400">
-                    Are you sure you want to delete all your chat sessions?
+                    Sind Sie sich sicher, dass Sie alle Chatverläufe löschen wollen?
                   </p>
                   <div className="flex gap-2">
                     <Button
@@ -479,14 +478,14 @@ export function UserSettings({ onClose }: UserSettingsProps) {
                       onClick={handleDeleteAllChats}
                       disabled={isDeleteAllLoading}
                     >
-                      {isDeleteAllLoading ? "Deleting..." : "Yes, Delete All"}
+                      {isDeleteAllLoading ? "Löschen..." : "Ja, alles löschen"}
                     </Button>
                     <Button
                       secondary
                       onClick={() => setShowDeleteConfirmation(false)}
                       disabled={isDeleteAllLoading}
                     >
-                      Cancel
+                      Abbrechen
                     </Button>
                   </div>
                 </div>
@@ -497,16 +496,15 @@ export function UserSettings({ onClose }: UserSettingsProps) {
         {activeSection === "password" && (
           <div className="space-y-6">
             <div className="space-y-2">
-              <h3 className="text-xl font-medium">Change Password</h3>
+              <h3 className="text-xl font-medium">Passwort ändern</h3>
               <SubLabel>
-                Enter your current password and new password to change your
-                password.
+                Geben Sie Ihr aktuelles Passwort und neues Passwort ein, um Ihr Passwort zu ändern.
               </SubLabel>
             </div>
             <form onSubmit={handleChangePassword} className="w-full">
               <div className="w-full">
                 <label htmlFor="currentPassword" className="block mb-1">
-                  Current Password
+                  Aktuelles Passwort
                 </label>
                 <Input
                   id="currentPassword"
@@ -519,7 +517,7 @@ export function UserSettings({ onClose }: UserSettingsProps) {
               </div>
               <div className="w-full">
                 <label htmlFor="newPassword" className="block mb-1">
-                  New Password
+                  Neues Passwort
                 </label>
                 <Input
                   id="newPassword"
@@ -532,7 +530,7 @@ export function UserSettings({ onClose }: UserSettingsProps) {
               </div>
               <div className="w-full">
                 <label htmlFor="confirmPassword" className="block mb-1">
-                  Confirm New Password
+                  Neues Passwort bestätigen
                 </label>
                 <Input
                   id="confirmPassword"
@@ -544,7 +542,7 @@ export function UserSettings({ onClose }: UserSettingsProps) {
                 />
               </div>
               <Button disabled={isLoading}>
-                {isLoading ? "Changing..." : "Change Password"}
+                {isLoading ? "Ändere ..." : "Passwort ändern"}
               </Button>
             </form>
           </div>

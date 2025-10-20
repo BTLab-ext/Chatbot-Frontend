@@ -54,7 +54,7 @@ export function PopoverMenu({ className, children }: PopoverMenuProps) {
 
   return (
     <div
-      className={cn("flex flex-col gap-spacing-inline w-[10rem]", className)}
+      className={cn("flex flex-col gap-spacing-inline w-[12rem]", className)}
     >
       {filteredChildren.map((child, index) => (
         <div key={index}>
