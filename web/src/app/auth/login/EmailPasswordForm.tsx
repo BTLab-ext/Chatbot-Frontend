@@ -72,7 +72,7 @@ export default function EmailPasswordForm({
                 errorMsg = errorDetail.reason;
               } else if (errorDetail === "REGISTER_USER_ALREADY_EXISTS") {
                 errorMsg =
-                  "An account already exists with the specified email.";
+                  "Ein Konto mit dieser E-Mail-Adresse existiert bereits.";
               }
               if (response.status === 429) {
                 errorMsg = "Too many requests. Please try again later.";
@@ -86,7 +86,7 @@ export default function EmailPasswordForm({
             } else {
               setPopup({
                 type: "success",
-                message: "Account created successfully. Please log in.",
+                message: "Konto wurde erfolgreich erstellt. Bitte loggen Sie sich ein.",
               });
             }
           }
@@ -113,9 +113,9 @@ export default function EmailPasswordForm({
             const errorDetail: any = (await loginResponse.json()).detail;
             let errorMsg: string = "Unknown error";
             if (errorDetail === "LOGIN_BAD_CREDENTIALS") {
-              errorMsg = "Invalid email or password";
+              errorMsg = "Falscher Benutzername oder Passwort";
             } else if (errorDetail === "NO_WEB_LOGIN_AND_HAS_NO_PASSWORD") {
-              errorMsg = "Create an account to set a password";
+              errorMsg = "Erstellen Sie ein Konto um ein Passwort festzusetzen.";
             } else if (typeof errorDetail === "string") {
               errorMsg = errorDetail;
             }
@@ -124,7 +124,7 @@ export default function EmailPasswordForm({
             }
             setPopup({
               type: "error",
-              message: `Failed to login - ${errorMsg}`,
+              message: `Login fehlgeschlagen - ${errorMsg}`,
             });
           }
         }}
@@ -133,7 +133,7 @@ export default function EmailPasswordForm({
           <Form>
             <TextFormField
               name="email"
-              label="Email"
+              label="E-Mail"
               type="email"
               placeholder="email@yourcompany.com"
               data-testid="email"
@@ -141,7 +141,7 @@ export default function EmailPasswordForm({
 
             <TextFormField
               name="password"
-              label="Password"
+              label="Passwort"
               type="password"
               placeholder="**************"
               data-testid="password"
@@ -156,7 +156,7 @@ export default function EmailPasswordForm({
                 className="text-xs text-action-link-05 cursor-pointer text-center w-full font-medium mx-auto"
               >
                 <span className="hover:border-b hover:border-dotted hover:border-action-link-05">
-                  or continue as guest
+                  oder als Gast fortfahren.
                 </span>
               </Link>
             )}

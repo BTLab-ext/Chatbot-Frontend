@@ -38,6 +38,7 @@ export default function WelcomeMessage() {
           </div>
         )}
       </div>
+      <Text headingH2>{greeting}</Text>
     </div>
   );
 }

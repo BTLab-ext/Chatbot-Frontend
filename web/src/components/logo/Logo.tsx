@@ -2,7 +2,7 @@
 
 import { useContext } from "react";
 import { SettingsContext } from "../settings/SettingsProvider";
-import { OnyxIcon, OnyxLogoTypeIcon, bayLogo } from "../icons/icons";
+import { OnyxIcon, OnyxLogoTypeIcon } from "../icons/icons";
 import teamLogo from "../../../public/lfst_logo.png";
 
 export function Logo({

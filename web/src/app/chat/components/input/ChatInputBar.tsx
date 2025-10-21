@@ -420,7 +420,7 @@ function ChatInputBarInner({
           style={{ scrollbarWidth: "thin" }}
           role="textarea"
           aria-multiline
-          placeholder={ "Wie kann ChatBai Ihnen heute helfen?" }
+          placeholder={ "Wie kann chat.BAI Ihnen heute helfen?" }
           value={message}
           onKeyDown={(event) => {
             if (
@@ -539,7 +539,7 @@ function ChatInputBarInner({
                         prev.filter((id) => id !== toolId)
                       );
                     }}
-                    actionDeep Research
+                    action
                     active
                   >
                     {tool.display_name}

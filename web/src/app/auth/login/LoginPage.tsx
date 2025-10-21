@@ -77,7 +77,7 @@ export default function LoginPage({
 
       {!hidePageRedirect && (
         <p className="text-center mt-4">
-          Don&apos;t have an account?{" "}
+          Noch kein Konto?{" "}
           <span
             onClick={() => {
               if (typeof window !== "undefined" && window.top) {
@@ -88,7 +88,7 @@ export default function LoginPage({
             }}
             className="text-link font-medium cursor-pointer"
           >
-            Create an account
+            Konto erstellen.
           </span>
         </p>
       )}

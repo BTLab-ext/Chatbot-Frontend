@@ -384,7 +384,7 @@ export function UserSettings({ onClose }: UserSettingsProps) {
             </div>
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-lg font-medium">Auto-scroll</h3>
+                <h3 className="text-lg font-medium">Auto-Scroll</h3>
                 <SubLabel>Automatisch zu neuem Inhalt scrollen</SubLabel>
               </div>
               <Switch
@@ -396,8 +396,8 @@ export function UserSettings({ onClose }: UserSettingsProps) {
             </div>
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-lg font-medium">Temperature override</h3>
-                <SubLabel>Set the temperature for the LLM</SubLabel>
+                <h3 className="text-lg font-medium">Temperatur Einstellungen</h3>
+                <SubLabel>Bestimme den Temperatur/Kreativitätswert für das Modell</SubLabel>
               </div>
               <Switch
                 checked={user?.preferences.temperature_override_enabled}
