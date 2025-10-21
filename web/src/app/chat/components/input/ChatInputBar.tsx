@@ -382,7 +382,7 @@ function ChatInputBarInner({
               href="/chat/input-prompts"
             >
               <FiPlus size={17} />
-              <p>Create a new prompt</p>
+              <p>Erstelle einen neuen Prompt</p>
             </a>
           </div>
         </div>
@@ -518,7 +518,7 @@ function ChatInputBarInner({
                 folded
                 action
               >
-                Deep Research
+                Denkmodus
               </SelectButton>
             )}
 
@@ -539,7 +539,7 @@ function ChatInputBarInner({
                         prev.filter((id) => id !== toolId)
                       );
                     }}
-                    action
+                    actionDeep Research
                     active
                   >
                     {tool.display_name}

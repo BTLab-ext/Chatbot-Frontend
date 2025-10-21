@@ -39,7 +39,7 @@ export default function SidebarWrapper({
                   tertiary
                   onClick={() => setFolded?.(false)}
                   className="hidden group-hover/SidebarWrapper:flex"
-                  tooltip="Close Sidebar"
+                  tooltip="Seitenmenüleiste schließen"
                 />
                 <OnyxIcon
                   size={24}
@@ -49,13 +49,12 @@ export default function SidebarWrapper({
             </div>
           ) : (
             <>
-              <OnyxLogoTypeIcon size={88} />
               <IconButton
                 icon={SvgSidebar}
                 tertiary
                 onClick={() => setFolded?.(true)}
                 className={cn(folded === undefined && "invisible")}
-                tooltip="Close Sidebar"
+                tooltip="Seitenmenüleiste schließen"
               />
             </>
           )}

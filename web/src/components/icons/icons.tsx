@@ -3205,7 +3205,7 @@ export const OnyxLogoTypeIcon = ({
     <BayLogo
       src ={lfstLogo}
       width = {size}
-      height = {size/2}
+      height = {size}
       />
   );
 };
@@ -3291,7 +3291,7 @@ export const OnyxIcon = ({
     <BayLogo
       src ={lfstLogo}
       width = {size}
-      height = {size/2}
+      height = {size}
       />
   );
 };

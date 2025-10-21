@@ -161,20 +161,20 @@ export default function TextView({
           <div className="flex items-center space-x-2">
             <Button variant="ghost" size="icon" onClick={handleZoomOut}>
               <ZoomOut className="h-4 w-4" />
-              <span className="sr-only">Zoom Out</span>
+              <span className="sr-only">Heraus zoomem</span>
             </Button>
             <span className="text-sm">{zoom}%</span>
             <Button variant="ghost" size="icon" onClick={handleZoomIn}>
               <ZoomIn className="h-4 w-4" />
-              <span className="sr-only">Zoom In</span>
+              <span className="sr-only">Hinein zoomen</span>
             </Button>
             <Button variant="ghost" size="icon" onClick={handleDownload}>
               <Download className="h-4 w-4" />
-              <span className="sr-only">Download</span>
+              <span className="sr-only">Herunterladen</span>
             </Button>
             <Button variant="ghost" size="icon" onClick={onClose}>
               <XIcon className="h-4 w-4" />
-              <span className="sr-only">Close</span>
+              <span className="sr-only">Schließen</span>
             </Button>
           </div>
         </DialogHeader>
@@ -184,7 +184,7 @@ export default function TextView({
               <div className="flex flex-col items-center justify-center h-full">
                 <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primary"></div>
                 <p className="mt-6 text-lg font-medium text-muted-foreground">
-                  Loading document...
+                  Dokument lädt ...
                 </p>
               </div>
             ) : (
@@ -251,10 +251,10 @@ export default function TextView({
                 ) : (
                   <div className="flex flex-col items-center justify-center h-full">
                     <p className="text-lg font-medium text-muted-foreground">
-                      This file format is not supported for preview.
+                      Dieses Dateiformat wird für eine Vorschau nicht unterstützt.
                     </p>
                     <Button className="mt-4" onClick={handleDownload}>
-                      Download File
+                      Datei herunterladen
                     </Button>
                   </div>
                 )}

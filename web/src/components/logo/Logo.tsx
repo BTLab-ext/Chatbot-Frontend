@@ -19,9 +19,9 @@ export function Logo({
   const settings = useContext(SettingsContext);
 
   const sizeMap = {
-    small: { height: 48, width: 45 },//{ height: 24, width: 22 },
-    default: { height: 48, width: 45 },     //default: { height: 32, width: 30 }
-    large: { height: 48, width: 45 },
+    small: { height: 24, width: 24 },//{ height: 24, width: 22 },
+    default: { height: 32, width: 32 },     //default: { height: 32, width: 30 }
+    large: { height: 100, width: 100 },
   };
 
   const { height: defaultHeight, width: defaultWidth } = sizeMap[size];

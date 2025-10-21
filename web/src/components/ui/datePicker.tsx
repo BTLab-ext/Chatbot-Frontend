@@ -77,7 +77,7 @@ export function DatePicker({
               setSelectedDate(now);
             }}
           >
-            Today
+            Heute
           </Button>
         </div>
         <Calendar
