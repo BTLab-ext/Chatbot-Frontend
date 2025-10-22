@@ -16,23 +16,23 @@ export default function AuthFlowContainer({
       </div>
       {authState === "login" && (
         <div className="text-sm mt-4 text-center w-full text-text-04 font-medium mx-auto">
-          Don&apos;t have an account?{" "}
+          Noch kein Konto?{" "}
           <Link
             href="/auth/signup"
             className="text-action-link-05 underline transition-colors duration-200"
           >
-            Create one
+            Konto erstellen
           </Link>
         </div>
       )}
       {authState === "signup" && (
         <div className="text-sm mt-4 text-center w-full text-text-04 font-medium mx-auto">
-          Already have an account?{" "}
+          Sie haben bereits ein Konto?{" "}
           <Link
             href="/auth/login"
             className="text-action-link-05 underline transition-colors duration-200"
           >
-            Log In
+            Einloggen
           </Link>
         </div>
       )}

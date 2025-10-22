@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { OnyxIcon, OnyxLogoTypeIcon } from "@/components/icons/icons";
 import IconButton from "@/refresh-components/buttons/IconButton";
 import SvgSidebar from "@/icons/sidebar";
+import teamLogo from "../../../public/Vek_Logo_BAI.svg";
 
 interface SidebarWrapperProps {
   folded?: boolean;
@@ -41,10 +42,6 @@ export default function SidebarWrapper({
                   className="hidden group-hover/SidebarWrapper:flex"
                   tooltip="Seitenmenüleiste schließen"
                 />
-                <OnyxIcon
-                  size={24}
-                  className="visible group-hover/SidebarWrapper:hidden"
-                />
               </>
             </div>
           ) : (
@@ -55,6 +52,11 @@ export default function SidebarWrapper({
                 onClick={() => setFolded?.(true)}
                 className={cn(folded === undefined && "invisible")}
                 tooltip="Seitenmenüleiste schließen"
+              />
+              <img
+                src={teamLogo.src}
+                alt="Bay Logo"
+                style={{ objectFit: "contain",   width: "48px", height: "48px"  }}
               />
             </>
           )}

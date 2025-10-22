@@ -44,6 +44,7 @@ import SidebarWrapper from "@/sections/sidebar/SidebarWrapper";
 import SidebarTab from "@/refresh-components/buttons/SidebarTab";
 import VerticalShadowScroller from "@/refresh-components/VerticalShadowScroller";
 
+
 // Visible-agents = pinned-agents + current-agent (if current-agent not in pinned-agents)
 // OR Visible-agents = pinned-agents (if current-agent in pinned-agents)
 function buildVisibleAgents(

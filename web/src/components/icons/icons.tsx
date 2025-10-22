@@ -123,7 +123,7 @@ export const OpenAIISVG = ({
   </svg>
 );
 
-/* export const BayLogo = ({
+export const BayLogo = ({
   width = 48,
   height = 48,
   className = defaultTailwindCSS,
@@ -142,7 +142,7 @@ export const OpenAIISVG = ({
     width={width}
     height={height}
   />
-);  */
+); 
 
 export const LogoIcon = ({
   size = 16,
@@ -1359,7 +1359,7 @@ export const OCIStorageIcon = ({
   />
 );
 
-export const BayLogo = ({
+export const bayLogo = ({
   size = 32,
   className = defaultTailwindCSS,
 }: IconProps) => (
