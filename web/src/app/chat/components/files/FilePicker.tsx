@@ -50,7 +50,7 @@ export function FilePickerContents({
       {recentFiles.length > 0 && (
         <>
           <label className="text-sm font-light text-input-text p-2.5">
-            Recent Files
+          Zuletzt verwendete Dateien
           </label>
 
           {recentFiles.slice(0, 3).map((f) => (
@@ -93,7 +93,7 @@ export function FilePickerContents({
 
           {recentFiles.length > 3 && (
             <LineItem onClick={() => setShowRecentFiles(true)}>
-              ... All Recent Files
+              ... Alle aktuellen Dateien
             </LineItem>
           )}
 
@@ -103,10 +103,10 @@ export function FilePickerContents({
 
       <LineItem
         icon={SvgPaperclip}
-        description="Upload a file from your device"
+        description="Laden Sie eine Datei von Ihrem Gerät hoch."
         onClick={triggerUploadPicker}
       >
-        Upload Files
+        Datei hochladen
       </LineItem>
     </>
   );
@@ -131,7 +131,7 @@ export default function FilePicker({
   recentFiles,
   handleUploadChange,
   showTriggerLabel = false,
-  triggerLabel = "Add Files",
+  triggerLabel = "Dateien hinzufügen",
 }: FilePickerProps) {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [showRecentFiles, setShowRecentFiles] = useState(false);
@@ -157,7 +157,7 @@ export default function FilePicker({
               ) : (
                 <IconButton
                   icon={SvgPlusCircle}
-                  tooltip="Attach Files"
+                  tooltip="Dateien anhängen"
                   tertiary
                 />
               )}
@@ -190,7 +190,7 @@ export default function FilePicker({
         >
           <DialogHeader className="px-0 pt-0 pb-2">
             <Files size={32} />
-            <DialogTitle>Recent Files</DialogTitle>
+            <DialogTitle>Zuletzt verwendete Dateien</DialogTitle>
           </DialogHeader>
           <FilesList
             recentFiles={recentFiles}

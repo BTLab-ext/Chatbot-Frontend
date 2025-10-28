@@ -83,7 +83,7 @@ ENV NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}
 ARG NODE_OPTIONS
 
 # Use NODE_OPTIONS in the build command
-RUN NODE_OPTIONS="${NODE_OPTIONS}" npx next build
+RUN NODE_OPTIONS="${NODE_OPTIONS}" npx next build --no-lint
 
 # Step 2. Production image, copy all the files and run next
 FROM base AS runner

@@ -467,7 +467,7 @@ function MCPToolsList({
           />
           <input
             type="text"
-            placeholder={`Search ${serverName} tools`}
+            placeholder={`Durchsuche ${serverName} Werkzeuge`}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="
@@ -493,7 +493,7 @@ function MCPToolsList({
       <div className="pt-2 flex-1 overflow-y-auto mx-1 pb-2">
         {filteredTools.length === 0 ? (
           <div className="text-center py-1 text-text-400">
-            No matching tools found
+            Keine passenden Werkzeuge gefunden
           </div>
         ) : (
           filteredTools.map((tool) => (
@@ -900,7 +900,7 @@ export function ActionToggle({
               icon={SvgSliders}
               tertiary
               data-testid="action-management-toggle"
-              tooltip="Manage Actions"
+              tooltip="Aktionen verwalten"
             />
           </div>
         </PopoverTrigger>
@@ -947,7 +947,7 @@ export function ActionToggle({
           {!showSourceManagement && (
             <div className="pt-1 mx-2">
               <InputTypeIn
-                placeholder="Search Menu"
+                placeholder="Suchmenü"
                 value={searchTerm}
                 onChange={(event) => setSearchTerm(event.target.value)}
                 autoFocus
@@ -973,7 +973,7 @@ export function ActionToggle({
                       </button>
                       <input
                         type="text"
-                        placeholder="Search Filters"
+                        placeholder="Suchfilter"
                         value={sourceSearchTerm}
                         onChange={(e) => setSourceSearchTerm(e.target.value)}
                         className="
@@ -997,7 +997,7 @@ export function ActionToggle({
                           <div className="relative mt-1">
                             <input
                               type="text"
-                              placeholder="Disable All Sources"
+                              placeholder="Alle Quellen deaktivieren"
                               readOnly
                               onClick={disableAllSources}
                               className="
@@ -1016,7 +1016,7 @@ export function ActionToggle({
                             />
                             <img
                               src="/unplug.svg"
-                              alt="Disable All Sources"
+                              alt="Alle Quellen deaktivieren"
                               className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 pointer-events-none"
                               style={{
                                 filter:
@@ -1033,7 +1033,7 @@ export function ActionToggle({
                           <div className="relative mt-1">
                             <input
                               type="text"
-                              placeholder="Enable All Sources"
+                              placeholder="Alle Quellen aktivieren"
                               readOnly
                               onClick={enableAllSources}
                               className="
@@ -1088,7 +1088,7 @@ export function ActionToggle({
                   onLoad={(e) => checkScrollState(e.currentTarget)}
                 >
                   <div className="space-y-1.5 pb-2 pt-2">
-                    {getConfiguredSources(availableSources)
+                    { getConfiguredSources(availableSources)
                       .filter((source) => {
                         if (!sourceSearchTerm) return true;
                         const searchLower = sourceSearchTerm.toLowerCase();
@@ -1097,7 +1097,7 @@ export function ActionToggle({
                           .includes(searchLower);
                       })
                       .map((source) => (
-                        <div
+                         <div
                           key={source.uniqueKey}
                           className="flex items-center justify-between px-1 py-1 mx-1 rounded-lg"
                         >
@@ -1151,7 +1151,7 @@ export function ActionToggle({
                               }}
                             ></div>
                           </button>
-                        </div>
+                        </div> 
                       ))}
                     {getConfiguredSources(availableSources).filter((source) => {
                       if (!sourceSearchTerm) return true;
@@ -1162,8 +1162,8 @@ export function ActionToggle({
                     }).length === 0 && (
                       <div className="text-center py-4 text-neutral-400 dark:text-neutral-500">
                         {sourceSearchTerm
-                          ? "No matching sources found"
-                          : "No configured sources found"}
+                          ? "Keine passenden Quellen gefunden"
+                          : "Keine konfigurierten Quellen gefunden"}
                       </div>
                     )}
                   </div>
@@ -1179,7 +1179,7 @@ export function ActionToggle({
             ) : filteredTools.length === 0 &&
               filteredMCPServers.length === 0 ? (
               <div className="text-center py-1 text-neutral-400 dark:text-neutral-500">
-                No matching actions found
+                Keine passenden Aktionen gefunden
               </div>
             ) : (
               <>

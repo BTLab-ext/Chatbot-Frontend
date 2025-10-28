@@ -225,7 +225,7 @@ export const SearchToolRenderer: MessageRenderer<
     content: (
       <div className="flex flex-col py-padding-button gap-spacing-interline">
         <Text text02 secondaryBody>
-          Queries
+        Abfragen
         </Text>
         <div className="flex flex-wrap gap-spacing-interline pl-1">
           {queries.slice(0, queriesToShow).map((query, index) => (

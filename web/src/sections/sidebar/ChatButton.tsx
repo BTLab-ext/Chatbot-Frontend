@@ -277,7 +277,7 @@ function ChatButtonInner({ chatSession, project }: ChatButtonProps) {
     <>
       {deleteConfirmationModalOpen && (
         <ConfirmationModal
-          title="Delete Chat"
+          title="Chat löschen"
           icon={SvgTrash}
           onClose={() => setDeleteConfirmationModalOpen(false)}
           submit={

@@ -28,7 +28,7 @@ export default function CreateProjectModal() {
       const newProject = await createProject(name);
       route({ projectId: newProject.id });
     } catch (e) {
-      console.error(`Failed to create the project ${name}`);
+      console.error(`Das Projekt ${name} konnte nicht erstellt werden.`);
     }
 
     toggleModal(ModalIds.CreateProjectModal, false);
@@ -40,14 +40,14 @@ export default function CreateProjectModal() {
     <Modal
       id={ModalIds.CreateProjectModal}
       icon={SvgFolderPlus}
-      title="Create New Project"
-      description="Use projects to organize your files and chats in one place, and add custom instructions for ongoing work."
+      title="Neues Projekt erstellen"
+      description="Verwenden Sie Projekte, um Ihre Dateien und Chats an einem Ort zu organisieren, und fügen Sie benutzerdefinierte Anweisungen für laufende Arbeiten hinzu."
       xs
     >
       <div className="flex flex-col p-spacing-paragraph bg-background-tint-01">
         <FieldInput
-          label="Project Name"
-          placeholder="What are you working on?"
+          label="Projektname"
+          placeholder="Woran arbeiten Sie gerade?"
           ref={fieldInputRef}
         />
       </div>
@@ -56,9 +56,9 @@ export default function CreateProjectModal() {
           secondary
           onClick={() => toggleModal(ModalIds.CreateProjectModal, false)}
         >
-          Cancel
+          Abbrechen
         </Button>
-        <Button onClick={handleSubmit}>Create Project</Button>
+        <Button onClick={handleSubmit}>Projekt erstellen</Button>
       </div>
     </Modal>
   );

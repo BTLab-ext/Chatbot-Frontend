@@ -117,15 +117,14 @@ export default function ShareChatSessionModal({
 
       <ConfirmationModal
         icon={SvgShare}
-        title="Share Chat"
+        title="Chat teilen"
         onClose={onClose}
-        submit={<Button>Share</Button>}
+        submit={<Button>Teilen</Button>}
       >
         {shareLink ? (
           <div>
             <Text>
-              This chat session is currently shared. Anyone in your team can
-              view the message history using the following link:
+            Diese Chat-Sitzung wird derzeit geteilt. Alle Mitglieder Ihres Teams können den Nachrichtenverlauf über den folgenden Link einsehen:
             </Text>
 
             <div className={cn("flex mt-2")}>
@@ -151,7 +150,7 @@ export default function ShareChatSessionModal({
             <Separator />
 
             <Text className={cn("mb-4")}>
-              Click the button below to make the chat private again.
+              Klicken Sie auf den Button unten, um den Chat wieder privat zu machen.
             </Text>
 
             <Button
@@ -163,19 +162,18 @@ export default function ShareChatSessionModal({
                     ChatSessionSharedStatus.Private
                   );
                 } else {
-                  alert("Failed to delete share link");
+                  alert("Löschen des Freigabelinks fehlgeschlagen");
                 }
               }}
               danger
             >
-              Delete Share Link
+              Freigabelink löschen
             </Button>
           </div>
         ) : (
           <div className="flex flex-col gap-spacing-interline">
-            <Callout type="warning" title="Warning">
-              Please make sure that all content in this chat is safe to share
-              with the whole team.
+            <Callout type="warning" title="Warnung">
+            Bitte stellen Sie sicher, dass alle Inhalte in diesem Chat für das gesamte Team geeignet sind.
             </Callout>
             <Button
               leftIcon={SvgCopy}
@@ -185,7 +183,7 @@ export default function ShareChatSessionModal({
                 try {
                   const shareLink = await generateShareLink(chatSession.id);
                   if (!shareLink) {
-                    alert("Failed to generate share link");
+                    alert("Fehler beim Generieren des Freigabelinks");
                   } else {
                     setShareLink(shareLink);
                     updateCurrentChatSessionSharedStatus(
@@ -199,7 +197,7 @@ export default function ShareChatSessionModal({
               }}
               secondary
             >
-              Generate and Copy Share Link
+              Link zum Teilen generieren und kopieren
             </Button>
           </div>
         )}
@@ -209,14 +207,13 @@ export default function ShareChatSessionModal({
         <AdvancedOptionsToggle
           showAdvancedOptions={showAdvancedOptions}
           setShowAdvancedOptions={setShowAdvancedOptions}
-          title="Advanced Options"
+          title="Erweiterte Optionen"
         />
 
         {showAdvancedOptions && (
           <div className="flex flex-col gap-spacing-interline">
-            <Callout type="notice" title="Seed New Chat">
-              Generate a link to a new chat session with the same settings as
-              this chat (including the assistant and model).
+            <Callout type="notice" title="Seed-Chat starten">
+            Erstellen Sie einen Link zu einer neuen Chat-Sitzung mit denselben Einstellungen wie dieser Chat.
             </Callout>
             <Button
               leftIcon={SvgCopy}
@@ -229,25 +226,25 @@ export default function ShareChatSessionModal({
                   );
                   if (!seedLink) {
                     setPopup({
-                      message: "Failed to generate seed link",
+                      message: "Fehler beim Generieren des Links",
                       type: "error",
                     });
                   } else {
                     navigator.clipboard.writeText(seedLink);
                     copyAll(seedLink);
                     setPopup({
-                      message: "Link copied to clipboard!",
+                      message: "Link in die Zwischenablage kopiert!",
                       type: "success",
                     });
                   }
                 } catch (e) {
                   console.error(e);
-                  alert("Failed to generate or copy link.");
+                  alert("Link konnte nicht generiert oder kopiert werden.");
                 }
               }}
               secondary
             >
-              Generate and Copy Seed Link
+              Seed-Link generieren und kopieren
             </Button>
           </div>
         )}
