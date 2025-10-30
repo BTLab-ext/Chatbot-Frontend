@@ -21,21 +21,21 @@ export default function MoveCustomAgentChatModal({
   return (
     <ConfirmationModal
       icon={SvgAlertCircle}
-      title="Move Custom Agent Chat"
+      title="Benutzerdefinierten Chat Agent verschieben"
       onClose={onCancel}
       submit={
         <Button primary onClick={() => onConfirm(doNotShowAgain)}>
-          Confirm Move
+          Verschieben bestätigen
         </Button>
       }
     >
-      <div className="flex flex-col gap-spacing-paragraph">
+      <div className="flex flex-col gap-4">
         <Text text03>
-          This chat uses a <b>custom agent</b> and moving it to a <b>project</b>{" "}
-          will not override the agent&apos;s prompt or knowledge configurations.
-          This should only be used for organization purposes.
+          Dieser Chat nutzt einen <b>custom agent</b>. Wenn Sie diesen in  <b>project</b>{" "}
+          verschieben, werden die Einstellungen und die Wissensbasis des Agenten nicht verändert.
+          Dies sollte nur zur besseren Übersicht geschehen.
         </Text>
-        <div className="flex items-center gap-spacing-inline">
+        <div className="flex items-center gap-1">
           <Checkbox
             id="move-custom-agent-do-not-show"
             checked={doNotShowAgain}
@@ -45,7 +45,7 @@ export default function MoveCustomAgentChatModal({
             htmlFor="move-custom-agent-do-not-show"
             className="text-text-03 text-sm"
           >
-            Do not show this again
+            Nicht wieder anzeigen
           </label>
         </div>
       </div>

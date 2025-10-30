@@ -155,18 +155,18 @@ export const SearchToolRendererV2: MessageRenderer<SearchToolPacket, {}> = ({
     if (results.length > 0) {
       // If we're still showing as searching (before transition), show "Searching"
       if (shouldShowAsSearching) {
-        return `Durchsuche ${searchType}`;
+        return `Searching ${searchType}`;
       }
       // Otherwise show "Searched"
-      return `Durchsuche ${searchType}`;
+      return `Searched ${searchType}`;
     }
 
     // Handle states based on timing
     if (shouldShowAsSearched) {
-      return `Durchsucht ${searchType}`;
+      return `Searched ${searchType}`;
     }
     if (isSearching || isComplete || shouldShowAsSearching) {
-      return `Durchsuche ${searchType}`;
+      return `Searching ${searchType}`;
     }
     return null;
   }, [
@@ -223,7 +223,7 @@ export const SearchToolRendererV2: MessageRenderer<SearchToolPacket, {}> = ({
                 }}
               >
                 <SourceChip2
-                  title={`${queries.length - queriesToShow} mehr...`}
+                  title={`${queries.length - queriesToShow} more...`}
                   onClick={() => {
                     setQueriesToShow((prevQueries) =>
                       Math.min(
@@ -244,7 +244,7 @@ export const SearchToolRendererV2: MessageRenderer<SearchToolPacket, {}> = ({
         {/* Only show results section for internal search, not web search */}
         {!isInternetSearch && (
           <div className="flex flex-col mt-3">
-            <div className="text-xs font-medium mb-1 ml-1">Dokumente</div>
+            <div className="text-xs font-medium mb-1 ml-1">Documents</div>
             <div className="flex flex-wrap gap-x-2 gap-y-2 ml-1">
               {results.slice(0, resultsToShow).map((result, index) => (
                 <div

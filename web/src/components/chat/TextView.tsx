@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Button } from "@/components/ui/button";
+import Button from "@/refresh-components/buttons/Button";
 import {
   Table,
   TableBody,
@@ -19,11 +19,17 @@ import {
 import { Download, XIcon, ZoomIn, ZoomOut } from "lucide-react";
 import { MinimalOnyxDocument } from "@/lib/search/interfaces";
 import MinimalMarkdown from "@/components/chat/MinimalMarkdown";
+import IconButton from "@/refresh-components/buttons/IconButton";
+import SvgX from "@/icons/x";
+import SvgDownloadCloud from "@/icons/download-cloud";
+import SvgZoomIn from "@/icons/zoom-in";
+import SvgZoomOut from "@/icons/zoom-out";
 
-interface TextViewProps {
+export interface TextViewProps {
   presentingDocument: MinimalOnyxDocument;
   onClose: () => void;
 }
+
 export default function TextView({
   presentingDocument,
   onClose,
@@ -151,7 +157,8 @@ export default function TextView({
     <Dialog open onOpenChange={onClose}>
       <DialogContent
         hideCloseIcon
-        className="max-w-4xl w-[90vw] flex flex-col justify-between gap-y-0 h-[90vh] max-h-[90vh] p-0"
+        overlayClassName="z-[3000]"
+        className="z-[3001] max-w-4xl w-[90vw] flex flex-col justify-between gap-y-0 h-[90vh] max-h-[90vh] p-0"
       >
         <DialogHeader className="px-4 mb-0 pt-2 pb-3 flex flex-row items-center justify-between border-b">
           <DialogTitle className="text-lg font-medium truncate">
@@ -159,23 +166,31 @@ export default function TextView({
           </DialogTitle>
 
           <div className="flex items-center space-x-2">
-            <Button variant="ghost" size="icon" onClick={handleZoomOut}>
-              <ZoomOut className="h-4 w-4" />
-              <span className="sr-only">Heraus zoomem</span>
-            </Button>
+            <IconButton
+              internal
+              onClick={handleZoomOut}
+              icon={SvgZoomOut}
+              tooltip="Zoom Out"
+            ></IconButton>
             <span className="text-sm">{zoom}%</span>
-            <Button variant="ghost" size="icon" onClick={handleZoomIn}>
-              <ZoomIn className="h-4 w-4" />
-              <span className="sr-only">Hinein zoomen</span>
-            </Button>
-            <Button variant="ghost" size="icon" onClick={handleDownload}>
-              <Download className="h-4 w-4" />
-              <span className="sr-only">Herunterladen</span>
-            </Button>
-            <Button variant="ghost" size="icon" onClick={onClose}>
-              <XIcon className="h-4 w-4" />
-              <span className="sr-only">Schließen</span>
-            </Button>
+            <IconButton
+              internal
+              onClick={handleZoomIn}
+              icon={SvgZoomIn}
+              tooltip="Zoom In"
+            />
+            <IconButton
+              internal
+              onClick={handleDownload}
+              icon={SvgDownloadCloud}
+              tooltip="Download"
+            />
+            <IconButton
+              internal
+              onClick={onClose}
+              icon={SvgX}
+              tooltip="Close"
+            />
           </div>
         </DialogHeader>
         <div className="mt-0 rounded-b-lg flex-1 overflow-hidden">
@@ -184,7 +199,7 @@ export default function TextView({
               <div className="flex flex-col items-center justify-center h-full">
                 <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primary"></div>
                 <p className="mt-6 text-lg font-medium text-muted-foreground">
-                  Dokument lädt ...
+                  Loading document...
                 </p>
               </div>
             ) : (
@@ -251,10 +266,10 @@ export default function TextView({
                 ) : (
                   <div className="flex flex-col items-center justify-center h-full">
                     <p className="text-lg font-medium text-muted-foreground">
-                      Dieses Dateiformat wird für eine Vorschau nicht unterstützt.
+                      This file format is not supported for preview.
                     </p>
                     <Button className="mt-4" onClick={handleDownload}>
-                      Datei herunterladen
+                      Download File
                     </Button>
                   </div>
                 )}

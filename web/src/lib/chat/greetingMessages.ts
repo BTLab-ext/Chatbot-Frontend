@@ -1,5 +1,4 @@
-// export const GREETING_MESSAGES = ["How can I help?", "Let's get started."];
-export const GREETING_MESSAGES = ["Willkommen bei chat.BAI!", "Wie kann chat.BAI Ihnen helfen?"];
+export const GREETING_MESSAGES = ["Wie kann ich behilflich sein?", "Dann starten wir mal.."];
 
 export function getRandomGreeting(): string {
   return GREETING_MESSAGES[

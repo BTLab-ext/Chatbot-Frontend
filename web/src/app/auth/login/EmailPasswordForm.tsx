@@ -11,6 +11,7 @@ import { useState } from "react";
 import { Spinner } from "@/components/Spinner";
 import Link from "next/link";
 import { useUser } from "@/components/user/UserProvider";
+import { validateInternalRedirect } from "@/lib/auth/redirectValidation";
 
 interface EmailPasswordFormProps {
   isSignup?: boolean;
@@ -43,6 +44,8 @@ export default function EmailPasswordForm({
           email: defaultEmail ? defaultEmail.toLowerCase() : "",
           password: "",
         }}
+        validateOnChange={false}
+        validateOnBlur={true}
         validationSchema={Yup.object().shape({
           email: Yup.string()
             .email()
@@ -72,7 +75,7 @@ export default function EmailPasswordForm({
                 errorMsg = errorDetail.reason;
               } else if (errorDetail === "REGISTER_USER_ALREADY_EXISTS") {
                 errorMsg =
-                  "Ein Konto mit dieser E-Mail-Adresse existiert bereits.";
+                  "An account already exists with the specified email.";
               }
               if (response.status === 429) {
                 errorMsg = "Too many requests. Please try again later.";
@@ -86,7 +89,7 @@ export default function EmailPasswordForm({
             } else {
               setPopup({
                 type: "success",
-                message: "Konto wurde erfolgreich erstellt. Bitte loggen Sie sich ein.",
+                message: "Account created successfully. Please log in.",
               });
             }
           }
@@ -104,8 +107,9 @@ export default function EmailPasswordForm({
               // It replicates the behavior of the case where a user
               // has signed up with email / password as the only user to an instance
               // and has just completed verification
-              window.location.href = nextUrl
-                ? encodeURI(nextUrl)
+              const validatedNextUrl = validateInternalRedirect(nextUrl);
+              window.location.href = validatedNextUrl
+                ? validatedNextUrl
                 : `/chat${isSignup && !isJoin ? "?new_team=true" : ""}`;
             }
           } else {
@@ -113,9 +117,9 @@ export default function EmailPasswordForm({
             const errorDetail: any = (await loginResponse.json()).detail;
             let errorMsg: string = "Unknown error";
             if (errorDetail === "LOGIN_BAD_CREDENTIALS") {
-              errorMsg = "Falscher Benutzername oder Passwort";
+              errorMsg = "Invalid email or password";
             } else if (errorDetail === "NO_WEB_LOGIN_AND_HAS_NO_PASSWORD") {
-              errorMsg = "Erstellen Sie ein Konto um ein Passwort festzusetzen.";
+              errorMsg = "Create an account to set a password";
             } else if (typeof errorDetail === "string") {
               errorMsg = errorDetail;
             }
@@ -124,7 +128,7 @@ export default function EmailPasswordForm({
             }
             setPopup({
               type: "error",
-              message: `Login fehlgeschlagen - ${errorMsg}`,
+              message: `Failed to login - ${errorMsg}`,
             });
           }
         }}
@@ -133,7 +137,7 @@ export default function EmailPasswordForm({
           <Form>
             <TextFormField
               name="email"
-              label="E-Mail"
+              label="Email"
               type="email"
               placeholder="email@yourcompany.com"
               data-testid="email"
@@ -141,7 +145,7 @@ export default function EmailPasswordForm({
 
             <TextFormField
               name="password"
-              label="Passwort"
+              label="Password"
               type="password"
               placeholder="**************"
               data-testid="password"
@@ -156,7 +160,7 @@ export default function EmailPasswordForm({
                 className="text-xs text-action-link-05 cursor-pointer text-center w-full font-medium mx-auto"
               >
                 <span className="hover:border-b hover:border-dotted hover:border-action-link-05">
-                  oder als Gast fortfahren.
+                  or continue as guest
                 </span>
               </Link>
             )}

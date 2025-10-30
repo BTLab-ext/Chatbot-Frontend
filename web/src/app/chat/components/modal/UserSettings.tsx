@@ -1,10 +1,11 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { getDisplayNameForModel } from "@/lib/hooks";
 import { parseLlmDescriptor, structureValue } from "@/lib/llm/utils";
 import { setUserDefaultModel } from "@/lib/users/UserSettings";
 import { usePathname, useRouter } from "next/navigation";
 import { usePopup } from "@/components/admin/connectors/Popup";
 import { useUser } from "@/components/user/UserProvider";
+import { ThemePreference } from "@/lib/types";
 import { Switch } from "@/components/ui/switch";
 import { SubLabel } from "@/components/Field";
 import { SettingsContext } from "@/components/settings/SettingsProvider";
@@ -29,8 +30,14 @@ import SvgExternalLink from "@/icons/external-link";
 import { useFederatedOAuthStatus } from "@/lib/hooks/useFederatedOAuthStatus";
 import { useCCPairs } from "@/lib/hooks/useCCPairs";
 import { useLLMProviders } from "@/lib/hooks/useLLMProviders";
+import { useUserPersonalization } from "@/lib/hooks/useUserPersonalization";
+import { AutoResizeTextarea } from "@/components/ui/auto-resize-textarea";
 
-type SettingsSection = "settings" | "password" | "connectors";
+type SettingsSection =
+  | "settings"
+  | "password"
+  | "connectors"
+  | "personalization";
 
 interface UserSettingsProps {
   onClose: () => void;
@@ -43,13 +50,14 @@ export function UserSettings({ onClose }: UserSettingsProps) {
     updateUserAutoScroll,
     updateUserShortcuts,
     updateUserTemperatureOverrideEnabled,
+    updateUserPersonalization,
+    updateUserThemePreference,
   } = useUser();
   const { llmProviders } = useLLMProviders();
   const router = useRouter();
   const containerRef = useRef<HTMLDivElement>(null);
   const messageRef = useRef<HTMLDivElement>(null);
   const { theme, setTheme } = useTheme();
-  const [selectedTheme, setSelectedTheme] = useState(theme);
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -64,7 +72,6 @@ export function UserSettings({ onClose }: UserSettingsProps) {
   const [isDeleteAllLoading, setIsDeleteAllLoading] = useState(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [isDisconnecting, setIsDisconnecting] = useState<number | null>(null);
-
   const { popup, setPopup } = usePopup();
 
   // Fetch federated-connector info so the modal can list/refresh them
@@ -90,6 +97,52 @@ export function UserSettings({ onClose }: UserSettingsProps) {
   const hasConnectors =
     (ccPairs && ccPairs.length > 0) ||
     (federatedConnectors && federatedConnectors.length > 0);
+
+  const showPasswordSection = Boolean(user?.password_configured);
+
+  const {
+    personalizationValues,
+    updatePersonalizationField,
+    toggleUseMemories,
+    updateMemoryAtIndex,
+    addMemory,
+    handleSavePersonalization,
+    isSavingPersonalization,
+  } = useUserPersonalization(user, updateUserPersonalization, {
+    onSuccess: () =>
+      setPopup({
+        message: "Personalization updated successfully",
+        type: "success",
+      }),
+    onError: () =>
+      setPopup({
+        message: "Failed to update personalization",
+        type: "error",
+      }),
+  });
+
+  const sections = useMemo(() => {
+    const visibleSections: { id: SettingsSection; label: string }[] = [
+      { id: "settings", label: "Settings" },
+      { id: "personalization", label: "Personalization" },
+    ];
+
+    if (showPasswordSection) {
+      visibleSections.push({ id: "password", label: "Password" });
+    }
+
+    if (hasConnectors) {
+      visibleSections.push({ id: "connectors", label: "Connectors" });
+    }
+
+    return visibleSections;
+  }, [showPasswordSection, hasConnectors]);
+
+  useEffect(() => {
+    if (!sections.some((section) => section.id === activeSection)) {
+      setActiveSection(sections[0]?.id ?? "settings");
+    }
+  }, [sections, activeSection]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -239,7 +292,7 @@ export function UserSettings({ onClose }: UserSettingsProps) {
   const handleChangePassword = async (e: React.FormEvent) => {
     e.preventDefault();
     if (newPassword !== confirmPassword) {
-      setPopup({ message: "Neue Passwörter stimmen nicht überein", type: "error" });
+      setPopup({ message: "New passwords do not match", type: "error" });
       return;
     }
 
@@ -258,20 +311,20 @@ export function UserSettings({ onClose }: UserSettingsProps) {
       });
 
       if (response.ok) {
-        setPopup({ message: "Password erfolgreich geändert", type: "success" });
+        setPopup({ message: "Password changed successfully", type: "success" });
         setCurrentPassword("");
         setNewPassword("");
         setConfirmPassword("");
       } else {
         const errorData = await response.json();
         setPopup({
-          message: errorData.detail || "Password konnte nicht geändert werden.",
+          message: errorData.detail || "Failed to change password",
           type: "error",
         });
       }
     } catch (error) {
       setPopup({
-        message: "Ein Fehler trat auf. Password konnte nicht geändert werden.",
+        message: "An error occurred while changing the password",
         type: "error",
       });
     } finally {
@@ -280,15 +333,13 @@ export function UserSettings({ onClose }: UserSettingsProps) {
   };
   const pathname = usePathname();
 
-  const showPasswordSection = user?.password_configured;
-
   const handleDeleteAllChats = async () => {
     setIsDeleteAllLoading(true);
     try {
       const response = await deleteAllChatSessions();
       if (response.ok) {
         setPopup({
-          message: "Alle Chatverläufe wurden gelöscht.",
+          message: "All your chat sessions have been deleted.",
           type: "success",
         });
         // refreshChatSessions();
@@ -296,11 +347,11 @@ export function UserSettings({ onClose }: UserSettingsProps) {
           router.push("/chat");
         }
       } else {
-        throw new Error("Löschen aller Chatverläufe ist fehlgeschlagen.");
+        throw new Error("Failed to delete all chat sessions");
       }
     } catch (error) {
       setPopup({
-        message: "Löschen aller Chatverläufe ist fehlgeschlagen.",
+        message: "Failed to delete all chat sessions",
         type: "error",
       });
     } finally {
@@ -310,57 +361,37 @@ export function UserSettings({ onClose }: UserSettingsProps) {
   };
 
   return (
-    <div className="flex flex-col gap-padding-content p-padding-content">
-      {(showPasswordSection || hasConnectors) && (
+    <div className="flex flex-col gap-6 p-6">
+      {sections.length > 1 && (
         <nav>
           <ul className="flex space-x-2">
-            <li>
-              <Button
-                tertiary
-                active={activeSection === "settings"}
-                onClick={() => setActiveSection("settings")}
-              >
-                Einstellungen
-              </Button>
-            </li>
-            {showPasswordSection && (
-              <li>
+            {sections.map(({ id, label }) => (
+              <li key={id}>
                 <Button
                   tertiary
-                  active={activeSection === "password"}
-                  onClick={() => setActiveSection("password")}
+                  active={activeSection === id}
+                  onClick={() => setActiveSection(id)}
                 >
-                  Passwort
+                  {label}
                 </Button>
               </li>
-            )}
-            {hasConnectors && (
-              <li>
-                <Button
-                  tertiary
-                  active={activeSection === "connectors"}
-                  onClick={() => setActiveSection("connectors")}
-                >
-                  Connectors
-                </Button>
-              </li>
-            )}
+            ))}
           </ul>
         </nav>
       )}
 
       {popup}
 
-      <div className="w-full overflow-y-scroll">
+      <div className="w-full overflow-y-auto px-1">
         {activeSection === "settings" && (
           <div className="space-y-6">
             <div>
-              <h3 className="text-lg font-medium">Darstellung</h3>
+              <h3 className="text-lg font-medium">Theme</h3>
               <Select
-                value={selectedTheme}
+                value={theme}
                 onValueChange={(value) => {
-                  setSelectedTheme(value);
                   setTheme(value);
+                  updateUserThemePreference(value as ThemePreference);
                 }}
               >
                 <SelectTrigger className="w-full mt-2">
@@ -368,24 +399,27 @@ export function UserSettings({ onClose }: UserSettingsProps) {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem
-                    value="system"
+                    value={ThemePreference.SYSTEM}
                     icon={<Monitor className="h-4 w-4" />}
                   >
                     System
                   </SelectItem>
-                  <SelectItem value="light" icon={<Sun className="h-4 w-4" />}>
-                    Hell
+                  <SelectItem
+                    value={ThemePreference.LIGHT}
+                    icon={<Sun className="h-4 w-4" />}
+                  >
+                    Light
                   </SelectItem>
-                  <SelectItem icon={<Moon />} value="dark">
-                    Dunkel
+                  <SelectItem icon={<Moon />} value={ThemePreference.DARK}>
+                    Dark
                   </SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-lg font-medium">Auto-Scroll</h3>
-                <SubLabel>Automatisch zu neuem Inhalt scrollen</SubLabel>
+                <h3 className="text-lg font-medium">Auto-scroll</h3>
+                <SubLabel>Automatically scroll to new content</SubLabel>
               </div>
               <Switch
                 checked={user?.preferences.auto_scroll}
@@ -396,8 +430,8 @@ export function UserSettings({ onClose }: UserSettingsProps) {
             </div>
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-lg font-medium">Temperatur Einstellungen</h3>
-                <SubLabel>Bestimme den Temperatur/Kreativitätswert für das Modell</SubLabel>
+                <h3 className="text-lg font-medium">Temperature override</h3>
+                <SubLabel>Set the temperature for the LLM</SubLabel>
               </div>
               <Switch
                 checked={user?.preferences.temperature_override_enabled}
@@ -409,7 +443,7 @@ export function UserSettings({ onClose }: UserSettingsProps) {
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-lg font-medium">Prompt Shortcuts</h3>
-                <SubLabel>Tastatur-Shortcuts für Prompts aktivieren</SubLabel>
+                <SubLabel>Enable keyboard shortcuts for prompts</SubLabel>
               </div>
               <Switch
                 checked={user?.preferences?.shortcut_enabled}
@@ -420,7 +454,7 @@ export function UserSettings({ onClose }: UserSettingsProps) {
             </div>
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <h3 className="text-lg font-medium">Standard-Modell</h3>
+                <h3 className="text-lg font-medium">Default Model</h3>
                 {isModelUpdating && (
                   <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
                 )}
@@ -457,20 +491,21 @@ export function UserSettings({ onClose }: UserSettingsProps) {
               {!showDeleteConfirmation ? (
                 <div className="space-y-3">
                   <p className="text-sm text-neutral-600 dark:text-neutral-400">
-                    Alle Chatverläufe werden dauerhaft gelöscht. Dieser Vorgang kann nicht rückgängig gemacht werden.
+                    This will permanently delete all your chat sessions and
+                    cannot be undone.
                   </p>
                   <Button
                     danger
                     onClick={() => setShowDeleteConfirmation(true)}
                     leftIcon={SvgTrash}
                   >
-                    Alle Chats löschen
+                    Delete All Chats
                   </Button>
                 </div>
               ) : (
                 <div className="space-y-3">
                   <p className="text-sm text-neutral-600 dark:text-neutral-400">
-                    Sind Sie sich sicher, dass Sie alle Chatverläufe löschen wollen?
+                    Are you sure you want to delete all your chat sessions?
                   </p>
                   <div className="flex gap-2">
                     <Button
@@ -478,14 +513,14 @@ export function UserSettings({ onClose }: UserSettingsProps) {
                       onClick={handleDeleteAllChats}
                       disabled={isDeleteAllLoading}
                     >
-                      {isDeleteAllLoading ? "Löschen..." : "Ja, alles löschen"}
+                      {isDeleteAllLoading ? "Deleting..." : "Yes, Delete All"}
                     </Button>
                     <Button
                       secondary
                       onClick={() => setShowDeleteConfirmation(false)}
                       disabled={isDeleteAllLoading}
                     >
-                      Abbrechen
+                      Cancel
                     </Button>
                   </div>
                 </div>
@@ -493,18 +528,101 @@ export function UserSettings({ onClose }: UserSettingsProps) {
             </div>
           </div>
         )}
+        {activeSection === "personalization" && (
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-lg font-medium">Name</h3>
+              <Input
+                value={personalizationValues.name}
+                onChange={(event) =>
+                  updatePersonalizationField("name", event.target.value)
+                }
+                placeholder="Set how Onyx should refer to you"
+                className="mt-2"
+              />
+            </div>
+            <div>
+              <h3 className="text-lg font-medium">Role</h3>
+              <Input
+                value={personalizationValues.role}
+                onChange={(event) =>
+                  updatePersonalizationField("role", event.target.value)
+                }
+                placeholder="Share your role to tailor responses"
+                className="mt-2"
+              />
+            </div>
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-lg font-medium">Use memories</h3>
+                <SubLabel>
+                  Allow Onyx to reference stored memories in future chats.
+                </SubLabel>
+              </div>
+              <Switch
+                checked={personalizationValues.use_memories}
+                onCheckedChange={(checked) => toggleUseMemories(checked)}
+              />
+            </div>
+            <div className="border-t border-border pt-4 space-y-3">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-lg font-medium">Memories</h3>
+                  <SubLabel>
+                    Keep personal notes that should inform future chats.
+                  </SubLabel>
+                </div>
+                <Button tertiary onClick={addMemory}>
+                  Add Memory
+                </Button>
+              </div>
+              {personalizationValues.memories.length === 0 ? (
+                <p className="text-sm text-muted-foreground">
+                  No memories saved yet.
+                </p>
+              ) : (
+                <div className="max-h-64 overflow-y-auto flex flex-col gap-3 pr-1">
+                  {personalizationValues.memories.map((memory, index) => (
+                    <AutoResizeTextarea
+                      key={index}
+                      value={memory}
+                      placeholder="Write something Onyx should remember"
+                      onChange={(value) => updateMemoryAtIndex(index, value)}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+            <div className="flex justify-end">
+              <Button
+                onClick={() => {
+                  void handleSavePersonalization();
+                }}
+                disabled={isSavingPersonalization}
+              >
+                {isSavingPersonalization
+                  ? "Saving Personalization..."
+                  : "Save Personalization"}
+              </Button>
+            </div>
+          </div>
+        )}
         {activeSection === "password" && (
           <div className="space-y-6">
             <div className="space-y-2">
-              <h3 className="text-xl font-medium">Passwort ändern</h3>
+              <h3 className="text-lg font-medium">Change Password</h3>
               <SubLabel>
-                Geben Sie Ihr aktuelles Passwort und neues Passwort ein, um Ihr Passwort zu ändern.
+                Enter your current password and new password to change your
+                password.
               </SubLabel>
             </div>
             <form onSubmit={handleChangePassword} className="w-full">
               <div className="w-full">
-                <label htmlFor="currentPassword" className="block mb-1">
-                  Aktuelles Passwort
+                <label
+                  htmlFor="currentPassword"
+                  className="text-sm font-medium"
+                >
+                  Current Password
                 </label>
                 <Input
                   id="currentPassword"
@@ -512,12 +630,12 @@ export function UserSettings({ onClose }: UserSettingsProps) {
                   value={currentPassword}
                   onChange={(e) => setCurrentPassword(e.target.value)}
                   required
-                  className="w-full"
+                  className="mt-2"
                 />
               </div>
               <div className="w-full">
-                <label htmlFor="newPassword" className="block mb-1">
-                  Neues Passwort
+                <label htmlFor="newPassword" className="text-sm font-medium">
+                  New Password
                 </label>
                 <Input
                   id="newPassword"
@@ -525,12 +643,15 @@ export function UserSettings({ onClose }: UserSettingsProps) {
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                   required
-                  className="w-full"
+                  className="mt-2"
                 />
               </div>
               <div className="w-full">
-                <label htmlFor="confirmPassword" className="block mb-1">
-                  Neues Passwort bestätigen
+                <label
+                  htmlFor="confirmPassword"
+                  className="text-sm font-medium"
+                >
+                  Confirm New Password
                 </label>
                 <Input
                   id="confirmPassword"
@@ -538,12 +659,14 @@ export function UserSettings({ onClose }: UserSettingsProps) {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   required
-                  className="w-full"
+                  className="mt-2"
                 />
               </div>
-              <Button disabled={isLoading}>
-                {isLoading ? "Ändere ..." : "Passwort ändern"}
-              </Button>
+              <div className="flex justify-end w-full">
+                <Button disabled={isLoading}>
+                  {isLoading ? "Changing..." : "Change Password"}
+                </Button>
+              </div>
             </form>
           </div>
         )}

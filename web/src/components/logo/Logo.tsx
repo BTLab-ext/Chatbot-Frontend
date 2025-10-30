@@ -2,8 +2,7 @@
 
 import { useContext } from "react";
 import { SettingsContext } from "../settings/SettingsProvider";
-import { OnyxIcon, OnyxLogoTypeIcon } from "../icons/icons";
-import teamLogo from "../../../public/lfst_logo.png";
+import { BaiIcon } from "../icons/icons";
 
 export function Logo({
   height,
@@ -19,14 +18,14 @@ export function Logo({
   const settings = useContext(SettingsContext);
 
   const sizeMap = {
-    small: { height: 48, width: 48 },//{ height: 24, width: 22 },
-    default: { height: 48, width: 48 },     //default: { height: 32, width: 30 }
-    large: { height: 100, width: 100 },
+    small: { height: 24, width: 22 },
+    default: { height: 32, width: 30 },
+    large: { height: 48, width: 45 },
   };
 
   const { height: defaultHeight, width: defaultWidth } = sizeMap[size];
-  height = defaultHeight;   //height || defaultHeight;
-  width = defaultWidth; //width || defaultWidth;
+  height = height || defaultHeight;
+  width = width || defaultWidth;
 
   if (
     !settings ||
@@ -35,10 +34,9 @@ export function Logo({
   ) {
     return (
       <div style={{ height, width }} className={className}>
-        <img
-          src={teamLogo.src}
-          alt="Bay Logo"
-          style={{ objectFit: "contain", height, width }}
+        <BaiIcon
+          size={height}
+          className={`${className} dark:text-[#fff] text-[#000]`}
         />
       </div>
     );
@@ -56,18 +54,5 @@ export function Logo({
         style={{ objectFit: "contain", height, width }}
       />
     </div>
-  );
-}
-
-export function LogoType({
-  size = "default",
-}: {
-  size?: "small" | "default" | "large";
-}) {
-  return (
-    <OnyxLogoTypeIcon
-      size={115}
-      className={`items-center w-full dark:text-[#fff]`}
-    />
   );
 }

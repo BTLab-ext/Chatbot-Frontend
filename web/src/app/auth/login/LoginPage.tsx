@@ -32,7 +32,7 @@ export default function LoginPage({
         authTypeMetadata.authType !== "cloud" &&
         // basic auth is handled below w/ the EmailPasswordForm
         authTypeMetadata.authType !== "basic" && (
-          <div className="flex flex-col w-full gap-spacing-paragraph">
+          <div className="flex flex-col w-full gap-4">
             <LoginText />
             <SignInButton
               authorizeUrl={authUrl}
@@ -42,17 +42,17 @@ export default function LoginPage({
         )}
 
       {authTypeMetadata?.authType === "cloud" && (
-        <div className="w-full justify-center flex flex-col gap-padding-content">
+        <div className="w-full justify-center flex flex-col gap-6">
           <LoginText />
           <EmailPasswordForm shouldVerify={true} nextUrl={nextUrl} />
           {NEXT_PUBLIC_FORGOT_PASSWORD_ENABLED && (
             <Link href="/auth/forgot-password">
-              <Button>Passwort zurücksetzen</Button>
+              <Button>Reset Password</Button>
             </Link>
           )}
           {authUrl && authTypeMetadata && (
             <>
-              <div className="flex flex-row items-center w-full gap-spacing-interline">
+              <div className="flex flex-row items-center w-full gap-2">
                 <div className="flex-1 border-t border-text-04" />
                 <Text>or</Text>
                 <div className="flex-1 border-t border-text-04" />
@@ -77,7 +77,7 @@ export default function LoginPage({
 
       {!hidePageRedirect && (
         <p className="text-center mt-4">
-          Noch kein Konto?{" "}
+          Don&apos;t have an account?{" "}
           <span
             onClick={() => {
               if (typeof window !== "undefined" && window.top) {
@@ -88,7 +88,7 @@ export default function LoginPage({
             }}
             className="text-link font-medium cursor-pointer"
           >
-            Konto erstellen.
+            Create an account
           </span>
         </p>
       )}

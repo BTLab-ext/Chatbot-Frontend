@@ -13,7 +13,6 @@ import {
 } from "@/lib/constants";
 import { Metadata } from "next";
 import { buildClientUrl } from "@/lib/utilsSS";
-import { Inter } from "next/font/google";
 import {
   EnterpriseSettings,
   ApplicationStatus,
@@ -24,7 +23,6 @@ import { getAuthTypeMetadataSS, getCurrentUserSS } from "@/lib/userSS";
 import { Suspense } from "react";
 import PostHogPageView from "./PostHogPageView";
 import Script from "next/script";
-import { Hanken_Grotesk } from "next/font/google";
 import { WebVitals } from "./web-vitals";
 import { ThemeProvider } from "next-themes";
 import CloudError from "@/components/errorPages/CloudErrorPage";
@@ -33,18 +31,6 @@ import AccessRestrictedPage from "@/components/errorPages/AccessRestrictedPage";
 import { fetchAssistantData } from "@/lib/chat/fetchAssistantdata";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { fetchAppSidebarMetadata } from "@/lib/appSidebarSS";
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-});
-
-const hankenGrotesk = Hanken_Grotesk({
-  subsets: ["latin"],
-  variable: "--font-hanken-grotesk",
-  display: "swap",
-});
 
 export async function generateMetadata(): Promise<Metadata> {
   let logoLocation = buildClientUrl("/Vek_Logo_BAI.svg");
@@ -59,7 +45,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
   return {
     title: enterpriseSettings?.application_name || "chat.BAI",
-    description: "Question answering for your documents",
+    description: "chat.BAI beantwortet Ihre Fragen zu Dokumenten",
     icons: {
       icon: logoLocation,
     },
@@ -88,8 +74,7 @@ export default async function RootLayout({
 
   const getPageContent = async (content: React.ReactNode) => (
     <html
-      lang="en"
-      className={`${inter.variable} ${hankenGrotesk.variable}`}
+      lang="de"
       suppressHydrationWarning
     >
       <head>
@@ -124,7 +109,7 @@ export default async function RootLayout({
         )}
       </head>
 
-      <body className={`relative ${inter.variable} font-hanken`}>
+      <body className={`relative`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

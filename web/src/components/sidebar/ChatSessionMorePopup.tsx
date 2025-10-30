@@ -150,7 +150,7 @@ export function ChatSessionMorePopup({
             icon={SvgShare}
             onClick={noProp(() => showShareModal(chatSession))}
           >
-            Teilen
+            Share
           </MenuButton>
         ),
         <MenuButton
@@ -158,7 +158,7 @@ export function ChatSessionMorePopup({
           icon={SvgFolderIn}
           onClick={noProp(() => setShowMoveOptions(true))}
         >
-          Ins Projekt verschieben
+          Move to Project
         </MenuButton>,
         projectId && (
           <MenuButton
@@ -166,8 +166,8 @@ export function ChatSessionMorePopup({
             icon={SvgFolder}
             onClick={noProp(() => handleRemoveChatSessionFromProject())}
           >
-            {`Vom ${
-              projects.find((p) => p.id === projectId)?.name ?? " Projekt entfernen"
+            {`Remove from ${
+              projects.find((p) => p.id === projectId)?.name ?? "Project"
             }`}
           </MenuButton>
         ),
@@ -178,7 +178,7 @@ export function ChatSessionMorePopup({
           onClick={noProp(() => setIsDeleteModalOpen(true))}
           danger
         >
-          Löschen
+          Delete
         </MenuButton>,
       ];
     }
@@ -255,11 +255,12 @@ export function ChatSessionMorePopup({
           onClose={() => setIsDeleteModalOpen(false)}
           submit={
             <Button danger onClick={handleConfirmDelete}>
-              Löschen
+              Delete
             </Button>
           }
         >
-          Sind Sie sich sicher, dass Sie diesen Chat löschen wollen? Dies kann nicht mehr rückgängig gemacht werden.
+          Are you sure you want to delete this chat? This action cannot be
+          undone.
         </ConfirmationModal>
       )}
 

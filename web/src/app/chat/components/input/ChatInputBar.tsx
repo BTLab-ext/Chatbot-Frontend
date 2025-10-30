@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { FiPlus } from "react-icons/fi";
 import { MinimalPersonaSnapshot } from "@/app/admin/assistants/interfaces";
-import LLMPopover from "@/refresh-components/LLMPopover";
+import LLMPopover from "@/refresh-components/popovers/LLMPopover";
 import { InputPrompt } from "@/app/chat/interfaces";
 import { FilterManager, LlmManager, useFederatedConnectors } from "@/lib/hooks";
 import { useChatContext } from "@/refresh-components/contexts/ChatContext";
@@ -20,7 +20,6 @@ import { getFormattedDateRangeString } from "@/lib/dateUtils";
 import { truncateString, cn } from "@/lib/utils";
 import { useUser } from "@/components/user/UserProvider";
 import { SettingsContext } from "@/components/settings/SettingsProvider";
-import { UnconfiguredLlmProviderText } from "@/components/chat/UnconfiguredLlmProviderText";
 import { useProjectsContext } from "@/app/chat/projects/ProjectsContext";
 import { FileCard } from "@/app/chat/components/projects/ProjectContextPanel";
 import {
@@ -31,9 +30,10 @@ import IconButton from "@/refresh-components/buttons/IconButton";
 import SvgHourglass from "@/icons/hourglass";
 import SvgArrowUp from "@/icons/arrow-up";
 import SvgStop from "@/icons/stop";
-import FilePicker from "@/app/chat/components/files/FilePicker";
-import { ActionToggle } from "@/app/chat/components/input/ActionManagement";
+import FilePickerPopover from "@/refresh-components/popovers/FilePickerPopover";
+import ActionsPopover from "@/refresh-components/popovers/ActionsPopover";
 import SelectButton from "@/refresh-components/buttons/SelectButton";
+import SvgPlusCircle from "@/icons/plus-circle";
 import {
   getIconForAction,
   hasSearchToolsAvailable,
@@ -82,7 +82,6 @@ export function SourceChip({
 
 export interface ChatInputBarProps {
   removeDocs: () => void;
-  showConfigureAPIKey: () => void;
   selectedDocuments: OnyxDocument[];
   message: string;
   setMessage: (message: string) => void;
@@ -111,7 +110,6 @@ function ChatInputBarInner({
   removeDocs,
   toggleDocumentSidebar,
   filterManager,
-  showConfigureAPIKey,
   selectedDocuments,
   message,
   setMessage,
@@ -133,8 +131,7 @@ function ChatInputBarInner({
   const { user } = useUser();
 
   const { forcedToolIds, setForcedToolIds } = useAgentsContext();
-  const { currentMessageFiles, setCurrentMessageFiles, recentFiles } =
-    useProjectsContext();
+  const { currentMessageFiles, setCurrentMessageFiles } = useProjectsContext();
 
   const currentIndexingFiles = useMemo(() => {
     return currentMessageFiles.filter(
@@ -167,11 +164,11 @@ function ChatInputBarInner({
     [handleFileUpload]
   );
 
-  const settings = useContext(SettingsContext);
+  const combinedSettings = useContext(SettingsContext);
   useEffect(() => {
     const textarea = textAreaRef.current;
     if (textarea) {
-      textarea.style.height = "0px";
+      textarea.style.height = "0px"; // this is necessary in order to "reset" the scrollHeight
       textarea.style.height = `${Math.min(
         textarea.scrollHeight,
         MAX_INPUT_HEIGHT
@@ -204,13 +201,7 @@ function ChatInputBarInner({
     [setCurrentMessageFiles]
   );
 
-  const {
-    llmProviders,
-    inputPrompts,
-    ccPairs,
-    availableSources,
-    documentSets,
-  } = useChatContext();
+  const { inputPrompts, ccPairs } = useChatContext();
   const { data: federatedConnectorsData } = useFederatedConnectors();
   const [showPrompts, setShowPrompts] = useState(false);
 
@@ -305,9 +296,18 @@ function ChatInputBarInner({
   ]);
 
   // Check if the assistant has search tools available (internal search or web search)
+  // AND if deep research is globally enabled in admin settings
   const showDeepResearch = useMemo(() => {
-    return hasSearchToolsAvailable(selectedAssistant.tools);
-  }, [selectedAssistant.tools]);
+    const deepResearchGloballyEnabled =
+      combinedSettings?.settings?.deep_research_enabled ?? true;
+    return (
+      deepResearchGloballyEnabled &&
+      hasSearchToolsAvailable(selectedAssistant.tools)
+    );
+  }, [
+    selectedAssistant.tools,
+    combinedSettings?.settings?.deep_research_enabled,
+  ]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (showPrompts && (e.key === "Tab" || e.key == "Enter")) {
@@ -382,28 +382,24 @@ function ChatInputBarInner({
               href="/chat/input-prompts"
             >
               <FiPlus size={17} />
-              <p>Erstelle einen neuen Prompt</p>
+              <p>Erstellen Sie einen neuen Prompt</p>
             </a>
           </div>
         </div>
       )}
 
-      <UnconfiguredLlmProviderText showConfigureAPIKey={showConfigureAPIKey} />
-
       <div className="w-full h-full flex flex-col shadow-01 bg-background-neutral-00 rounded-16">
         {currentMessageFiles.length > 0 && (
-          <div className="px-4 pt-4">
-            <div className="flex flex-wrap gap-2">
-              {currentMessageFiles.map((file) => (
-                <FileCard
-                  key={file.id}
-                  file={file}
-                  removeFile={handleRemoveMessageFile}
-                  hideProcessingState={hideProcessingState}
-                  onFileClick={handleFileClick}
-                />
-              ))}
-            </div>
+          <div className="p-1 rounded-t-16 flex flex-wrap gap-2">
+            {currentMessageFiles.map((file) => (
+              <FileCard
+                key={file.id}
+                file={file}
+                removeFile={handleRemoveMessageFile}
+                hideProcessingState={hideProcessingState}
+                onFileClick={handleFileClick}
+              />
+            ))}
           </div>
         )}
 
@@ -414,13 +410,31 @@ function ChatInputBarInner({
           ref={textAreaRef}
           id="onyx-chat-input-textarea"
           className={cn(
-            "w-full outline-none bg-transparent resize-none placeholder:text-text-03 whitespace-normal break-word overscroll-contain overflow-y-auto p-spacing-paragraph"
+            "w-full",
+            "outline-none",
+            "bg-transparent",
+            "resize-none",
+            "placeholder:text-text-03",
+            "whitespace-normal",
+            "break-word",
+            "overscroll-contain",
+            "overflow-y-auto",
+            "px-3",
+            "pb-2",
+            "pt-3"
           )}
           autoFocus
           style={{ scrollbarWidth: "thin" }}
           role="textarea"
           aria-multiline
-          placeholder={ "Wie kann chat.BAI Ihnen heute helfen?" }
+          placeholder={
+            selectedAssistant.id === 0
+              ? `Wie kann Ihnen ${
+                  combinedSettings?.enterpriseSettings?.application_name ||
+                  "chat.BAI"
+                } heute helfen?`
+              : `Wie kann ${selectedAssistant.name} Ihnen heute helfen?`
+          }
           value={message}
           onKeyDown={(event) => {
             if (
@@ -487,9 +501,9 @@ function ChatInputBarInner({
           </div>
         )}
 
-        <div className="flex justify-between items-center w-full p-spacing-interline">
-          <div className="flex flex-row items-center gap-spacing-inline">
-            <FilePicker
+        <div className="flex justify-between items-center w-full p-1">
+          <div className="flex flex-row items-center gap-1">
+            <FilePickerPopover
               onFileClick={handleFileClick}
               onPickRecent={(file: ProjectFile) => {
                 // Check if file with same ID already exists
@@ -501,12 +515,28 @@ function ChatInputBarInner({
                   setCurrentMessageFiles((prev) => [...prev, file]);
                 }
               }}
-              recentFiles={recentFiles}
+              onUnpickRecent={(file: ProjectFile) => {
+                setCurrentMessageFiles((prev) =>
+                  prev.filter(
+                    (existingFile) => existingFile.file_id !== file.file_id
+                  )
+                );
+              }}
               handleUploadChange={handleUploadChange}
+              trigger={(open) => (
+                <IconButton
+                  icon={SvgPlusCircle}
+                  tooltip="Dateien anhängen"
+                  tertiary
+                  active={open}
+                />
+              )}
+              selectedFileIds={currentMessageFiles.map((f) => f.id)}
             />
             {selectedAssistant.tools.length > 0 && (
-              <ActionToggle
+              <ActionsPopover
                 selectedAssistant={selectedAssistant}
+                filterManager={filterManager}
                 availableSources={memoizedAvailableSources}
               />
             )}
@@ -548,7 +578,7 @@ function ChatInputBarInner({
               })}
           </div>
 
-          <div className="flex flex-row items-center gap-spacing-inline">
+          <div className="flex flex-row items-center gap-1">
             <div data-testid="ChatInputBar/llm-popover-trigger">
               <LLMPopover
                 llmManager={llmManager}
@@ -556,6 +586,7 @@ function ChatInputBarInner({
               />
             </div>
             <IconButton
+              id="onyx-chat-input-send-button"
               icon={chatState === "input" ? SvgArrowUp : SvgStop}
               disabled={chatState === "input" && !message}
               onClick={() => {

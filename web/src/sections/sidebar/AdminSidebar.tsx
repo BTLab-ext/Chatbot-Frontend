@@ -37,21 +37,21 @@ import {
   SearchIcon,
   DocumentIcon2,
   BrainIcon,
-  OnyxSparkleIcon,
 } from "@/components/icons/icons";
+import OnyxLogo from "@/icons/onyx-logo";
 import { CombinedSettings } from "@/app/admin/settings/interfaces";
 import { FiActivity, FiBarChart2 } from "react-icons/fi";
 import SidebarTab from "@/refresh-components/buttons/SidebarTab";
-import VerticalShadowScroller from "@/refresh-components/VerticalShadowScroller";
+import { SidebarBody } from "@/sections/sidebar/utils";
 
 const connectors_items = () => [
   {
-    name: "Existing Connectors",
+    name: "Vorhandene Connectors",
     icon: NotebookIconSkeleton,
     link: "/admin/indexing/status",
   },
   {
-    name: "Add Connector",
+    name: "Connector hinzufügen",
     icon: ConnectorIconSkeleton,
     link: "/admin/add-connector",
   },
@@ -59,7 +59,7 @@ const connectors_items = () => [
 
 const document_management_items = () => [
   {
-    name: "Document Sets",
+    name: "Dokumenten-Sammlungen",
     icon: DocumentSetIconSkeleton,
     link: "/admin/documents/sets",
   },
@@ -95,16 +95,22 @@ const custom_assistants_items = (
         link: "/admin/bots",
       },
       {
-        name: "Actions",
+        name: "Aktionen",
         icon: ToolIconSkeleton,
         link: "/admin/actions",
       }
     );
+  } else {
+    items.push({
+      name: "Aktionen",
+      icon: ToolIconSkeleton,
+      link: "/admin/actions",
+    });
   }
 
   if (enableEnterprise) {
     items.push({
-      name: "Standard Answers",
+      name: "Standard-Antworten",
       icon: ClipboardIcon,
       link: "/admin/standard-answer",
     });
@@ -126,20 +132,20 @@ const collections = (
     items: connectors_items(),
   },
   {
-    name: "Document Management",
+    name: "Dokumenten-Verwaltung",
     items: document_management_items(),
   },
   {
-    name: "Custom Assistants",
+    name: "Benutzerdefinierte Assistants",
     items: custom_assistants_items(isCurator, enableEnterprise),
   },
   ...(isCurator
     ? [
         {
-          name: "User Management",
+          name: "Nutzermanagement",
           items: [
             {
-              name: "Groups",
+              name: "Gruppen",
               icon: GroupsIconSkeleton,
               link: "/admin/groups",
             },
@@ -150,11 +156,11 @@ const collections = (
   ...(!isCurator
     ? [
         {
-          name: "Configuration",
+          name: "Konfiguration",
           items: [
             {
               name: "Default Assistant",
-              icon: OnyxSparkleIcon,
+              icon: OnyxLogo,
               link: "/admin/configuration/default-assistant",
             },
             {
@@ -162,14 +168,18 @@ const collections = (
               icon: CpuIconSkeleton,
               link: "/admin/configuration/llm",
             },
+            ...(!enableCloud
+              ? [
+                  {
+                    error: settings?.settings.needs_reindexing,
+                    name: "Such-Einstellungen",
+                    icon: SearchIcon,
+                    link: "/admin/configuration/search",
+                  },
+                ]
+              : []),
             {
-              error: settings?.settings.needs_reindexing,
-              name: "Search Settings",
-              icon: SearchIcon,
-              link: "/admin/configuration/search",
-            },
-            {
-              name: "Document Processing",
+              name: "Dokumentenverarbeitung",
               icon: DocumentIcon2,
               link: "/admin/configuration/document-processing",
             },
@@ -185,17 +195,17 @@ const collections = (
           ],
         },
         {
-          name: "User Management",
+          name: "Nutzermanagement",
           items: [
             {
-              name: "Users",
+              name: "Nutzer",
               icon: UsersIconSkeleton,
               link: "/admin/users",
             },
             ...(enableEnterprise
               ? [
                   {
-                    name: "Groups",
+                    name: "Gruppen",
                     icon: GroupsIconSkeleton,
                     link: "/admin/groups",
                   },
@@ -216,17 +226,17 @@ const collections = (
         ...(enableEnterprise
           ? [
               {
-                name: "Performance",
+                name: "Leistung",
                 items: [
                   {
-                    name: "Usage Statistics",
+                    name: "Nutzungsmetriken",
                     icon: FiActivity,
                     link: "/admin/performance/usage",
                   },
                   ...(settings?.settings.query_history_type !== "disabled"
                     ? [
                         {
-                          name: "Query History",
+                          name: "Vergangene Anfragen",
                           icon: DatabaseIconSkeleton,
                           link: "/admin/performance/query-history",
                         },
@@ -235,7 +245,7 @@ const collections = (
                   ...(!enableCloud && customAnalyticsEnabled
                     ? [
                         {
-                          name: "Custom Analytics",
+                          name: "Benutzerdefinierte Analysen",
                           icon: FiBarChart2,
                           link: "/admin/performance/custom-analytics",
                         },
@@ -246,10 +256,10 @@ const collections = (
             ]
           : []),
         {
-          name: "Settings",
+          name: "Einstellungen",
           items: [
             {
-              name: "Workspace Settings",
+              name: "Einstellungen des Arbeitsplatzes",
               icon: SettingsIconSkeleton,
               link: "/admin/settings",
             },
@@ -318,19 +328,28 @@ export default function AdminSidebar({
 
   return (
     <SidebarWrapper>
-      <div className="px-spacing-interline">
-        <SidebarTab
-          leftIcon={({ className }) => (
-            <CgArrowsExpandUpLeft className={className} size={16} />
-          )}
-          href="/chat"
-        >
-          Exit Admin
-        </SidebarTab>
-      </div>
-
-      {/* This is the main scrollable body. It should have top + bottom shadows on overflow */}
-      <VerticalShadowScroller className="flex px-spacing-interline gap-padding-content">
+      <SidebarBody
+        actionButton={
+          <SidebarTab
+            leftIcon={({ className }) => (
+              <CgArrowsExpandUpLeft className={className} size={16} />
+            )}
+            href="/chat"
+          >
+            Exit Admin
+          </SidebarTab>
+        }
+        footer={
+          <div className="flex flex-col px-2 gap-2">
+            {combinedSettings.webVersion && (
+              <Text text02 secondaryBody className="px-2 pt-1">
+                {`Onyx version: ${combinedSettings.webVersion}`}
+              </Text>
+            )}
+            <Settings />
+          </div>
+        }
+      >
         {items.map((collection, index) => (
           <SidebarSection key={index} title={collection.name}>
             <div className="flex flex-col w-full">
@@ -349,16 +368,7 @@ export default function AdminSidebar({
             </div>
           </SidebarSection>
         ))}
-      </VerticalShadowScroller>
-
-      <div className="flex flex-col px-spacing-interline gap-spacing-interline">
-        {combinedSettings.webVersion && (
-          <Text text02 secondaryBody className="px-spacing-interline">
-            {`Onyx version: ${combinedSettings.webVersion}`}
-          </Text>
-        )}
-        <Settings removeAdminPanelLink />
-      </div>
+      </SidebarBody>
     </SidebarWrapper>
   );
 }

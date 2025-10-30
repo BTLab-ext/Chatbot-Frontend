@@ -124,7 +124,8 @@ export default function ShareChatSessionModal({
         {shareLink ? (
           <div>
             <Text>
-            Diese Chat-Sitzung wird derzeit geteilt. Alle Mitglieder Ihres Teams können den Nachrichtenverlauf über den folgenden Link einsehen:
+            Diese Chat-Sitzung wird derzeit geteilt. 
+            Alle Mitglieder Ihres Teams können den Nachrichtenverlauf über den folgenden Link einsehen:
             </Text>
 
             <div className={cn("flex mt-2")}>
@@ -162,18 +163,18 @@ export default function ShareChatSessionModal({
                     ChatSessionSharedStatus.Private
                   );
                 } else {
-                  alert("Löschen des Freigabelinks fehlgeschlagen");
+                  alert("Löschen des Teilen-Link fehlgeschlagen");
                 }
               }}
               danger
             >
-              Freigabelink löschen
+              Teilen-Link löschen
             </Button>
           </div>
         ) : (
-          <div className="flex flex-col gap-spacing-interline">
-            <Callout type="warning" title="Warnung">
-            Bitte stellen Sie sicher, dass alle Inhalte in diesem Chat für das gesamte Team geeignet sind.
+          <div className="flex flex-col gap-2">
+            <Callout type="warning" title="Warning">
+                Bitte stellen Sie sicher, dass alle Inhalte in diesem Chat für das gesamte Team geeignet sind.
             </Callout>
             <Button
               leftIcon={SvgCopy}
@@ -183,7 +184,7 @@ export default function ShareChatSessionModal({
                 try {
                   const shareLink = await generateShareLink(chatSession.id);
                   if (!shareLink) {
-                    alert("Fehler beim Generieren des Freigabelinks");
+                    alert("Fehler beim Generieren des Teilen-Links");
                   } else {
                     setShareLink(shareLink);
                     updateCurrentChatSessionSharedStatus(
@@ -197,7 +198,7 @@ export default function ShareChatSessionModal({
               }}
               secondary
             >
-              Link zum Teilen generieren und kopieren
+              Teilen-Link erstellen und kopieren
             </Button>
           </div>
         )}
@@ -211,9 +212,9 @@ export default function ShareChatSessionModal({
         />
 
         {showAdvancedOptions && (
-          <div className="flex flex-col gap-spacing-interline">
-            <Callout type="notice" title="Seed-Chat starten">
-            Erstellen Sie einen Link zu einer neuen Chat-Sitzung mit denselben Einstellungen wie dieser Chat.
+          <div className="flex flex-col gap-2">
+            <Callout type="notice" title="Neuen Seed-Chat starten">
+            Erstellen Sie einen Link zu einer neuen Chat-Sitzung mit denselben Einstellungen wie dieser Chat (einschließlich Modell).
             </Callout>
             <Button
               leftIcon={SvgCopy}
@@ -226,7 +227,7 @@ export default function ShareChatSessionModal({
                   );
                   if (!seedLink) {
                     setPopup({
-                      message: "Fehler beim Generieren des Links",
+                      message: "Fehler beim Generieren des Seed-Links",
                       type: "error",
                     });
                   } else {
@@ -244,7 +245,7 @@ export default function ShareChatSessionModal({
               }}
               secondary
             >
-              Seed-Link generieren und kopieren
+              Seed-Link erstellen und kopieren
             </Button>
           </div>
         )}

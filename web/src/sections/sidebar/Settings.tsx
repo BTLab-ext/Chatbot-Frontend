@@ -16,7 +16,6 @@ import {
   PopoverMenu,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import SvgSettings from "@/icons/settings";
 import SvgLogOut from "@/icons/log-out";
 import SvgBell from "@/icons/bell";
 import SvgX from "@/icons/x";
@@ -26,7 +25,13 @@ import { cn } from "@/lib/utils";
 import { useModalContext } from "@/components/context/ModalContext";
 import SidebarTab from "@/refresh-components/buttons/SidebarTab";
 
-function getUsernameFromEmail(email?: string): string {
+function getDisplayName(email?: string, personalName?: string): string {
+  // Prioritize custom personal name if set
+  if (personalName && personalName.trim()) {
+    return personalName.trim();
+  }
+
+  // Fallback to email-derived username
   if (!email) return ANONYMOUS_USER_NAME;
   const atIndex = email.indexOf("@");
   if (atIndex <= 0) return ANONYMOUS_USER_NAME;
@@ -35,17 +40,15 @@ function getUsernameFromEmail(email?: string): string {
 }
 
 interface SettingsPopoverProps {
-  removeAdminPanelLink?: boolean;
   onUserSettingsClick: () => void;
   onNotificationsClick: () => void;
 }
 
 function SettingsPopover({
-  removeAdminPanelLink,
   onUserSettingsClick,
   onNotificationsClick,
 }: SettingsPopoverProps) {
-  const { user, isAdmin, isCurator } = useUser();
+  const { user } = useUser();
   const { data: notifications } = useSWR<Notification[]>(
     "/api/notifications",
     errorHandlingFetcher
@@ -54,8 +57,6 @@ function SettingsPopover({
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const showAdminPanel = (!user || isAdmin) && !removeAdminPanelLink;
-  const showCuratorPanel = user && isCurator;
   const showLogout =
     user && !checkUserIsNoAuthUser(user.id) && !LOGOUT_DISABLED;
 
@@ -89,27 +90,9 @@ function SettingsPopover({
           //     {item.title}
           //   </NavigationTab>
           // )),
-          showAdminPanel && (
-            <MenuButton
-              key="admin-panel"
-              href="/admin/indexing/status"
-              icon={SvgSettings}
-            >
-              Admin Einstellungen
-            </MenuButton>
-          ),
-          showCuratorPanel && (
-            <MenuButton
-              key="curator-panel"
-              href="/admin/indexing/status"
-              icon={SvgSettings}
-            >
-              Kurator Übersicht
-            </MenuButton>
-          ),
           <div key="user-settings" data-testid="Settings/user-settings">
             <MenuButton icon={SvgUser} onClick={onUserSettingsClick}>
-              Benutzereinstellungen
+              User Settings
             </MenuButton>
           </div>,
           <MenuButton
@@ -117,7 +100,7 @@ function SettingsPopover({
             icon={SvgBell}
             onClick={onNotificationsClick}
           >
-            {`Benachrichtigungen ${
+            {`Notifications ${
               notifications && notifications.length > 0
                 ? `(${notifications.length})`
                 : ""
@@ -131,7 +114,7 @@ function SettingsPopover({
               danger
               onClick={handleLogout}
             >
-              Ausloggen
+              Log out
             </MenuButton>
           ),
         ]}
@@ -152,21 +135,21 @@ function NotificationsPopover({ onClose }: NotificationsPopoverProps) {
 
   return (
     <div className="w-[20rem] h-[30rem] flex flex-col">
-      <div className="flex flex-row justify-between items-center p-spacing-paragraph">
-        <Text headingH2>Benachrichtigungen</Text>
+      <div className="flex flex-row justify-between items-center p-4">
+        <Text headingH2>Notifications</Text>
         <SvgX
           className="stroke-text-05 w-[1.2rem] h-[1.2rem] hover:stroke-text-04 cursor-pointer"
           onClick={onClose}
         />
       </div>
 
-      <div className="flex-1 overflow-y-auto overflow-x-hidden p-spacing-paragraph flex flex-col gap-spacing-interline items-center">
+      <div className="flex-1 overflow-y-auto overflow-x-hidden p-4 flex flex-col gap-2 items-center">
         {!notifications || notifications.length === 0 ? (
           <div className="w-full h-full flex flex-col justify-center items-center">
-            <Text>Keine Benachrichtigungen</Text>
+            <Text>No notifications</Text>
           </div>
         ) : (
-          <div className="w-full flex flex-col gap-spacing-interline">
+          <div className="w-full flex flex-col gap-2">
             {notifications?.map((notification, index) => (
               <Text key={index}>{notification.notif_type}</Text>
             ))}
@@ -179,20 +162,16 @@ function NotificationsPopover({ onClose }: NotificationsPopoverProps) {
 
 export interface SettingsProps {
   folded?: boolean;
-  removeAdminPanelLink?: boolean;
 }
 
-export default function Settings({
-  folded,
-  removeAdminPanelLink,
-}: SettingsProps) {
+export default function Settings({ folded }: SettingsProps) {
   const [popupState, setPopupState] = useState<
     "Settings" | "Notifications" | undefined
   >(undefined);
   const { user } = useUser();
   const { setShowUserSettingsModal } = useModalContext();
 
-  const username = getUsernameFromEmail(user?.email);
+  const displayName = getDisplayName(user?.email, user?.personalization?.name);
 
   return (
     <Popover
@@ -213,21 +192,20 @@ export default function Settings({
                 )}
               >
                 <Text inverted secondaryBody>
-                  {username[0]?.toUpperCase()}
+                  {displayName[0]?.toUpperCase()}
                 </Text>
               </Avatar>
             )}
             active={!!popupState}
             folded={folded}
           >
-            {username}
+            {displayName}
           </SidebarTab>
         </div>
       </PopoverTrigger>
       <PopoverContent align="end" side="right">
         {popupState === "Settings" && (
           <SettingsPopover
-            removeAdminPanelLink={removeAdminPanelLink}
             onUserSettingsClick={() => {
               setPopupState(undefined);
               setShowUserSettingsModal(true);

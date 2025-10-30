@@ -10,16 +10,17 @@ import {
   IMAGE_ASSISTANT_ID,
 } from "@/lib/constants";
 import SvgLightbulbSimple from "@/icons/lightbulb-simple";
-import { OnyxIcon } from "@/components/icons/icons";
+import { BaiIcon } from "@/components/icons/icons";
 import SvgImage from "@/icons/image";
 import { generateIdenticon } from "@/refresh-components/AgentIcon";
 import { buildImgUrl } from "@/app/chat/components/files/images/utils";
 import { cn } from "@/lib/utils";
+import VerticalShadowScroller from "@/refresh-components/VerticalShadowScroller";
 
 export function getAgentIcon(
   agent: MinimalPersonaSnapshot
 ): React.FunctionComponent<SvgProps> {
-  if (agent.id === DEFAULT_ASSISTANT_ID) return OnyxIcon;
+  if (agent.id === DEFAULT_ASSISTANT_ID) return BaiIcon;
   if (agent.id === GENERAL_ASSISTANT_ID) return SvgLightbulbSimple;
   if (agent.id === IMAGE_ASSISTANT_ID || agent.id === ART_ASSISTANT_ID)
     return SvgImage;
@@ -47,4 +48,28 @@ export function getAgentIcon(
   );
   GeneratedIcon.displayName = "SidebarGeneratedAgentIcon";
   return GeneratedIcon;
+}
+
+export interface SidebarBodyProps {
+  actionButton: React.ReactNode;
+  children: React.ReactNode;
+  footer: React.ReactNode;
+}
+
+export function SidebarBody({
+  actionButton,
+  children,
+  footer,
+}: SidebarBodyProps) {
+  return (
+    <>
+      <div className="px-2">{actionButton}</div>
+      <div className="flex flex-col min-h-0 h-full gap-2">
+        <VerticalShadowScroller className="px-2 gap-4">
+          {children}
+        </VerticalShadowScroller>
+        {footer}
+      </div>
+    </>
+  );
 }

@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import faviconFetch from "favicon-fetch";
 import { SourceIcon } from "./SourceIcon";
 import { ValidSources } from "@/lib/types";
-import { bayLogo } from "./icons/icons";
+import { BaiIcon } from "./icons/icons";
 
 const CACHE_DURATION = 24 * 60 * 60 * 1000;
 
@@ -51,11 +51,7 @@ export function SearchResultIcon({ url }: { url: string }) {
     return <SourceIcon sourceType={ValidSources.Web} iconSize={18} />;
   }
   if (url.includes("onyx.app")) {
-    return  <img
-    src="/api/enterprise-settings/logo"
-    alt="Logo"
-    style={{ objectFit: "contain" }}
-  />;
+    return <BaiIcon size={18} className="dark:text-[#fff] text-[#000]" />;
   }
 
   return (
