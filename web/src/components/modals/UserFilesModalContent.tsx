@@ -160,7 +160,7 @@ export default function UserFilesModalContent({
       {/* Search bar section */}
       <div className="flex items-center gap-2 p-3">
         <InputTypeIn
-          placeholder="Search files..."
+          placeholder="Dokumente durchsuchen ..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           leftSearchIcon
@@ -176,7 +176,7 @@ export default function UserFilesModalContent({
             secondary={false}
             internal
           >
-            Add Files
+            Dokument hinzufügen
           </CreateButton>
         )}
       </div>
