@@ -64,7 +64,7 @@ export default function AttachmentButton({
       )}
       {...rest}
     >
-      <div className="flex-1 flex flex-row gap-2">
+      <div className="flex-1 flex flex-row gap-2 min-w-0">
         <div className="h-full aspect-square bg-background-tint-01 rounded-08 flex flex-col items-center justify-center">
           {selected ? (
             <Checkbox checked />
@@ -74,9 +74,9 @@ export default function AttachmentButton({
             />
           )}
         </div>
-        <div className="flex flex-col items-start justify-center">
-          <div className="flex flex-row items-center gap-2">
-            <Truncated mainUiMuted text04 nowrap>
+        <div className="flex flex-col items-start justify-center min-w-0 overflow-hidden">
+          <div className="flex-1 flex flex-row items-center gap-2 min-w-0 overflow-hidden">
+            <Truncated mainUiMuted text04 nowrap className="min-w-0 flex-1 overflow-hidden">
               {children}
             </Truncated>
             {onView && (
@@ -84,11 +84,11 @@ export default function AttachmentButton({
                 icon={SvgExternalLink}
                 onClick={noProp(onView)}
                 internal
-                className="invisible group-hover/Attachment:visible"
+                className="invisible group-hover/Attachment:visible flex-shrink-0"
               />
             )}
           </div>
-          <Truncated secondaryBody text03>
+          <Truncated secondaryBody text03 className="min-w-0 w-full">
             {description}
           </Truncated>
         </div>
