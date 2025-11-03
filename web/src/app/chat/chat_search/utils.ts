@@ -43,7 +43,7 @@ export async function fetchChatSessions(
   });
 
   if (!response.ok) {
-    throw new Error(`Failed to fetch chat sessions: ${response.statusText}`);
+    throw new Error(`Fehler beim Abrufen der Chat-Sitzungen: ${response.statusText}`);
   }
 
   return response.json();

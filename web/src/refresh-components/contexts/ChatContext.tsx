@@ -43,7 +43,7 @@ export function ChatProvider({
   async function refreshChatSessions() {
     try {
       const response = await fetch("/api/chat/get-user-chat-sessions");
-      if (!response.ok) throw new Error("Failed to fetch chat sessions");
+      if (!response.ok) throw new Error("Fehler beim Abrufen der Chat-Sitzungen");
       const { sessions } = await response.json();
       const projects = await fetchProjects();
       const projectSessions = projects.flatMap(
@@ -62,7 +62,7 @@ export function ChatProvider({
         router.replace("/chat");
       }
     } catch (error) {
-      console.error("Error refreshing chat sessions:", error);
+      console.error("Fehler beim Aktualisieren von Chat-Sitzungen:", error);
     }
   }
 

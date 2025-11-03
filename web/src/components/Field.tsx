@@ -448,12 +448,12 @@ export function TypedFileUploadFormField({
         if (validation?.isValid) {
           setCustomError("");
         } else {
-          setCustomError(validation?.errors.join(", ") || "Unknown error");
+          setCustomError(validation?.errors.join(", ") || "Unbekannter Fehler");
           helpers.setValue(null);
         }
       } catch (error) {
         setCustomError(
-          error instanceof Error ? error.message : "Validation error"
+          error instanceof Error ? error.message : "Validierungsfehler"
         );
         helpers.setValue(null);
       } finally {
@@ -473,7 +473,7 @@ export function TypedFileUploadFormField({
 
     const file = files[0];
     if (!file) {
-      setCustomError("File selection error");
+      setCustomError("Dateiauswahlfehler");
       return;
     }
 
@@ -510,7 +510,7 @@ export function TypedFileUploadFormField({
       {/* Validation feedback */}
       {isValidating && (
         <div className="text-status-info-05 text-sm mt-1">
-          Validating file...
+          Datei wird überprüft...
         </div>
       )}
 
