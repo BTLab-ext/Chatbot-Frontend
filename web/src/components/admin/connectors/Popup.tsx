@@ -95,7 +95,7 @@ export const usePopup = () => {
     if (popupSpec) {
       timeoutRef.current = setTimeout(() => {
         setPopup(null);
-      }, 4000);
+      }, 10000);
     }
   }, []);
 

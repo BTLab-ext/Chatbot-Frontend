@@ -301,6 +301,39 @@ export const ProjectsProvider: React.FC<ProjectsProviderProps> = ({
     return tempIdMap;
   };
 
+
+  const removeOptimisticFilesByTempIds = useCallback(
+    (optimisticTempIds: Set<string>, projectId?: number | null) => {
+      // Remove from recent optimistic list
+      setAllRecentFiles((prev) =>
+        prev.filter((f) => !f.temp_id || !optimisticTempIds.has(f.temp_id))
+      );
+
+      // Remove from current message files if present
+      setCurrentMessageFiles((prev) =>
+        prev.filter((f) => !f.temp_id || !optimisticTempIds.has(f.temp_id))
+      );
+
+
+      // Remove from project optimistic list
+      if (projectId) {
+        setAllCurrentProjectFiles((prev) =>
+          prev.filter((f) => !f.temp_id || !optimisticTempIds.has(f.temp_id))
+        );
+
+        // Clear the tracked optimistic files for this project
+        let projectIdToFiles: ProjectFile[] =
+          projectToUploadFilesMapRef.current.get(projectId) || [];
+        projectIdToFiles = projectIdToFiles.filter(
+          (f: ProjectFile) => !f.temp_id || !optimisticTempIds.has(f.temp_id)
+        );
+        projectToUploadFilesMapRef.current.set(projectId, projectIdToFiles);
+      }
+    },
+    [projectToUploadFilesMapRef]
+  );
+
+
   const beginUpload = useCallback(
     async (
       files: File[],
@@ -360,14 +393,18 @@ export const ProjectsProvider: React.FC<ProjectsProviderProps> = ({
           if (unsupported.length > 0 || nonAccepted.length > 0) {
             const detailsParts: string[] = [];
             if (unsupported.length > 0) {
-              detailsParts.push(`Unsupported: ${unsupported.join(", ")}`);
+              detailsParts.push(
+                `Nicht unterstütztes Dateiformat: ${unsupported.join(", ")}`
+              );
             }
             if (nonAccepted.length > 0) {
-              detailsParts.push(`Not accepted: ${nonAccepted.join(", ")}`);
+              detailsParts.push(
+                `Die Datei überschreiten das Größenlimit: ${nonAccepted.join(", ")}`
+              );
             }
             setPopup?.({
               type: "warning",
-              message: `Some files were not uploaded. ${detailsParts.join(
+              message: `Einige Dateien wurden nicht hochgeladen. ${detailsParts.join(
                 " | "
               )}`,
             });
@@ -383,6 +420,7 @@ export const ProjectsProvider: React.FC<ProjectsProviderProps> = ({
                   .map((f) => f.temp_id as string)
               )
             );
+            removeOptimisticFilesByTempIds(new Set(failedTempIds), projectId);
             if (failedTempIds.length > 0) {
               onFailure?.(failedTempIds);
             }
@@ -404,30 +442,11 @@ export const ProjectsProvider: React.FC<ProjectsProviderProps> = ({
               .filter((id): id is string => Boolean(id))
           );
 
-          // Remove from recent optimistic list
-          setAllRecentFiles((prev) =>
-            prev.filter((f) => !f.temp_id || !optimisticTempIds.has(f.temp_id))
-          );
-
-          // Remove from current message files if present
-          setCurrentMessageFiles((prev) =>
-            prev.filter((f) => !f.temp_id || !optimisticTempIds.has(f.temp_id))
-          );
-
-          // Remove from project optimistic list
-          if (projectId) {
-            setAllCurrentProjectFiles((prev) =>
-              prev.filter(
-                (f) => !f.temp_id || !optimisticTempIds.has(f.temp_id)
-              )
-            );
-            // Clear the tracked optimistic files for this project
-            projectToUploadFilesMapRef.current.delete(projectId);
-          }
+          removeOptimisticFilesByTempIds(optimisticTempIds, projectId);
 
           setPopup?.({
             type: "error",
-            message: "Failed to upload files",
+            message: "Dateien konnten nicht hochgeladen werden.",
           });
 
           onFailure?.(Array.from(optimisticTempIds));
@@ -440,7 +459,12 @@ export const ProjectsProvider: React.FC<ProjectsProviderProps> = ({
         });
       return optimisticFiles;
     },
-    [currentProjectId, refreshCurrentProjectDetails, refreshRecentFiles]
+    [
+      currentProjectId,
+      refreshCurrentProjectDetails,
+      refreshRecentFiles,
+      removeOptimisticFilesByTempIds,
+    ]
   );
 
   const uploadFiles = useCallback(
@@ -483,7 +507,7 @@ export const ProjectsProvider: React.FC<ProjectsProviderProps> = ({
         return data;
       } catch (err) {
         const message =
-          err instanceof Error ? err.message : "Failed to fetch project files";
+          err instanceof Error ? err.message : "Projektdateien konnten nicht abgerufen werden.";
         return [];
       }
     },
