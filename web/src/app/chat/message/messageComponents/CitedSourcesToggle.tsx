@@ -110,7 +110,7 @@ export default function CitedSourcesToggle({
   const uniqueIcons = getUniqueIcons();
 
   return (
-    <Tag label="Sources" onClick={() => onToggle(nodeId)}>
+    <Tag label="Quellen" onClick={() => onToggle(nodeId)}>
       {uniqueIcons.map((icon) => (() => icon.element) as any)}
     </Tag>
   );

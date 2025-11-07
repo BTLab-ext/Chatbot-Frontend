@@ -44,12 +44,12 @@ export interface UserFileDeleteResult {
 }
 
 export enum UserFileStatus {
-  UPLOADING = "UPLOADING", //UI only
-  PROCESSING = "PROCESSING",
-  COMPLETED = "COMPLETED",
-  FAILED = "FAILED",
-  CANCELED = "CANCELED",
-  DELETING = "DELETING",
+  UPLOADING = "Hochladen", //UI only
+  PROCESSING = "Verarbeiten",
+  COMPLETED = "Abgeschlossen",
+  FAILED = "Fehlgeschlagen",
+  CANCELED = "Abgebrochen",
+  DELETING = "Löschen",
 }
 
 export type ProjectDetails = {

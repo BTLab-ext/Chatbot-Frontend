@@ -25,7 +25,7 @@ export default function AuthFlowContainer({
                 href="/auth/signup"
                 className="text-action-link-05 underline transition-colors duration-200"
               >
-                Create one
+                Account erstellen
               </Link>
             </>
           )}
@@ -38,7 +38,7 @@ export default function AuthFlowContainer({
             href="/auth/login"
             className="text-action-link-05 underline transition-colors duration-200"
           >
-            Log In
+            Zum Login
           </Link>
         </div>
       )}

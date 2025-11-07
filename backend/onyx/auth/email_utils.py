@@ -72,7 +72,7 @@ HTML_EMAIL_TEMPLATE = """\
       border: 1px solid #eaeaea;
     }}
     .header {{
-      background-color: #000000;
+      background-color: #104067;
       padding: 20px;
       text-align: center;
     }}
@@ -128,7 +128,7 @@ HTML_EMAIL_TEMPLATE = """\
       <td class="header">
         <img
           style="background-color: #ffffff; border-radius: 8px;"
-          src="cid:logo.png"
+          src="cid:Logo_BAI.png"
           alt="{application_name} Logo"
         >
       </td>
@@ -163,7 +163,7 @@ def build_html_email(
 ) -> str:
     community_link_fragment = ""
     if application_name == ONYX_DEFAULT_APPLICATION_NAME:
-        community_link_fragment = f'<br>Have questions? Join our Discord community <a href="{ONYX_DISCORD_URL}">here</a>.'
+        community_link_fragment = f'<br>Falls Sie weitere Fragen haben, finden Sie vielleicht eine Antwort im Wiki <a href="{ONYX_DISCORD_URL}">here</a>.'
 
     if cta_text and cta_link:
         cta_block = f'<a class="cta-button" href="{cta_link}">{cta_text}</a>'
@@ -189,7 +189,7 @@ def send_email(
     inline_png: tuple[str, bytes] | None = None,
 ) -> None:
     if not EMAIL_CONFIGURED:
-        raise ValueError("Email is not configured.")
+        raise ValueError("Email ist nocht konfiguriert.")
 
     if SENDGRID_API_KEY:
         send_email_with_sendgrid(
@@ -210,7 +210,7 @@ def send_email_with_sendgrid(
     mail_from: str = EMAIL_FROM,
     inline_png: tuple[str, bytes] | None = None,
 ) -> None:
-    from_email = Email(mail_from) if mail_from else Email("noreply@onyx.app")
+    from_email = Email(mail_from) if mail_from else Email("noreply@lfst.bayern.de")
     to_email = To(user_email)
 
     mail = Mail(
@@ -262,7 +262,7 @@ def send_email_with_smtplib(
     if mail_from:
         msg["From"] = mail_from
     msg["Date"] = formatdate(localtime=True)
-    msg["Message-ID"] = make_msgid(domain="onyx.app")
+    msg["Message-ID"] = make_msgid(domain="lfst.bayern.de")
 
     # Add text part first (lowest priority)
     text_part = MIMEText(text_body, "plain")
@@ -336,41 +336,35 @@ def send_subscription_cancellation_email(user_email: str) -> None:
         subject,
         html_content,
         text_content,
-        inline_png=("logo.png", onyx_file.data),
+        inline_png=("Logo_BAI.png", onyx_file.data),
     )
 
 
 def build_user_email_invite(
     from_email: str, to_email: str, application_name: str, auth_type: AuthType
 ) -> tuple[str, str]:
-    heading = "You've Been Invited!"
+    heading = "Sie wurden soeben eingeladen!"
 
     # the exact action taken by the user, and thus the message, depends on the auth type
-    message = f"<p>You have been invited by {from_email} to join an organization on {application_name}.</p>"
+    message = f"<p>Sie wurden von {from_email} eingeladen, einer Gruppe im {application_name} beizutreten.</p>"
     if auth_type == AuthType.CLOUD:
         message += (
-            "<p>To join the organization, please click the button below to set a password "
-            "or login with Google and complete your registration.</p>"
+            "<p>Um der Gruppe  beizutreten, klicken Sie bitte auf den Button um ein Passwort festzulegen "
         )
     elif auth_type == AuthType.BASIC:
         message += (
-            "<p>To join the organization, please click the button below to set a password "
-            "and complete your registration.</p>"
-        )
-    elif auth_type == AuthType.GOOGLE_OAUTH:
-        message += (
-            "<p>To join the organization, please click the button below to login with Google "
-            "and complete your registration.</p>"
+            "<p>Um der Gruppe  beizutreten, klicken Sie bitte auf den Button um ein Passwort festzulegen "
+            "und Ihre Registrierung abzuschließen.</p>"
         )
     elif auth_type == AuthType.OIDC or auth_type == AuthType.SAML:
         message += (
-            "<p>To join the organization, please click the button below to"
-            " complete your registration.</p>"
+            "<p>Um der Gruppe  beizutreten, klicken Sie bitte auf den Button um ein Passwort festzulegen"
+            " und Ihre Registrierung abzuschließen.</p>"
         )
     else:
         raise ValueError(f"Invalid auth type: {auth_type}")
 
-    cta_text = "Join Organization"
+    cta_text = "Gruppe beitreten"
     cta_link = f"{WEB_DOMAIN}/auth/signup?email={to_email}"
 
     html_content = build_html_email(
@@ -384,8 +378,8 @@ def build_user_email_invite(
     # text content is the fallback for clients that don't support HTML
     # not as critical, so not having special cases for each auth type
     text_content = (
-        f"You have been invited by {from_email} to join an organization on {application_name}.\n"
-        "To join the organization, please visit the following link:\n"
+        f"Sie wurden von {from_email} eingeladen, einer Gruppe in {application_name} beizutreten.\n"
+        "Um der Gruppe beizutreten, klicken Sie bitte auf den folgenden Link:\n"
         f"{WEB_DOMAIN}/auth/signup?email={to_email}\n"
     )
     if auth_type == AuthType.CLOUD:
@@ -408,7 +402,7 @@ def send_user_email_invite(
 
     onyx_file = OnyxRuntime.get_emailable_logo()
 
-    subject = f"Invitation to Join {application_name} Organization"
+    subject = f"Einladung, einer Gruppe in {application_name} beizutreten"
 
     text_content, html_content = build_user_email_invite(
         current_user.email, user_email, application_name, auth_type
@@ -419,7 +413,7 @@ def send_user_email_invite(
         subject,
         html_content,
         text_content,
-        inline_png=("logo.png", onyx_file.data),
+        inline_png=("Logo_BAI.png", onyx_file.data),
     )
 
 
@@ -441,11 +435,11 @@ def send_forgot_password_email(
 
     onyx_file = OnyxRuntime.get_emailable_logo()
 
-    subject = f"Reset Your {application_name} Password"
-    heading = "Reset Your Password"
+    subject = f"Passwort für {application_name} zurücksetzen"
+    heading = "Passwort zurücksetzen"
     tenant_param = f"&tenant={tenant_id}" if tenant_id and MULTI_TENANT else ""
-    message = "<p>Please click the button below to reset your password. This link will expire in 24 hours.</p>"
-    cta_text = "Reset Password"
+    message = "<p>Bitte klicken Sie auf den nachfolgenden Button, um Ihr Passwort zurückzusetzen. Dieser ist 24 Stunden aktiv.</p>"
+    cta_text = "Passwort zurücksetzen"
     cta_link = f"{WEB_DOMAIN}/auth/reset-password?token={token}{tenant_param}"
     html_content = build_html_email(
         application_name,
@@ -455,7 +449,7 @@ def send_forgot_password_email(
         cta_link,
     )
     text_content = (
-        f"Please click the following link to reset your password. This link will expire in 24 hours.\n"
+        f"Bitte klicken Sie auf den nachfolgenden Link, um Ihr Passwort zurücktzsetzen. Dieser Link ist 24 Stunden gültig.\n"
         f"{WEB_DOMAIN}/auth/reset-password?token={token}{tenant_param}"
     )
     send_email(
@@ -464,7 +458,7 @@ def send_forgot_password_email(
         html_content,
         text_content,
         mail_from,
-        inline_png=("logo.png", onyx_file.data),
+        inline_png=("Logo_BAI.png", onyx_file.data),
     )
 
 
@@ -486,24 +480,30 @@ def send_user_verification_email(
 
     onyx_file = OnyxRuntime.get_emailable_logo()
 
-    subject = f"{application_name} Email Verification"
+    subject = f"{application_name} Email Verifizierung"
     link = f"{WEB_DOMAIN}/auth/verify-email?token={token}"
     if new_organization:
         link = add_url_params(link, {"first_user": "true"})
     message = (
-        f"<p>Click the following link to verify your email address:</p><p>{link}</p>"
+        f"<p>Vielen Dank für Ihr Interesse an </p><p>{application_name}</p>"
+        f"<p>Klicken Sie auf diese Schaltfläche, um Ihre E-Mail Adresse zu verifizieren:</p>"#<p>{link}</p>"
     )
+    cta_text = "E-Mail Adresse Verifizieren",
+    cta_link = link
+
     html_content = build_html_email(
         application_name,
-        "Verify Your Email",
+        "E-Mail Adresse Verifizieren",
         message,
+        cta_text,
+        cta_link,
     )
-    text_content = f"Click the following link to verify your email address: {link}"
+    text_content = f"Bitte klicken Sie auf folgenden Link, um Ihre E-Mail Adresse für {application_name} zu verifizieren: {link}"
     send_email(
         user_email,
         subject,
         html_content,
         text_content,
         mail_from,
-        inline_png=("logo.png", onyx_file.data),
+        inline_png=("Logo_BAI.png", onyx_file.data),
     )

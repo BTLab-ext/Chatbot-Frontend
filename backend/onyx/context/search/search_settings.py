@@ -23,7 +23,7 @@ def get_kv_search_settings() -> SavedSearchSettings | None:
     except KvKeyNotFoundError:
         return None
     except Exception as e:
-        logger.error(f"Error loading search settings: {e}")
+        logger.error(f"Fehler beim Laden der Sucheinstellungen: {e}")
         # Wiping it so that next server startup, it can load the defaults
         # or the user can set it via the API/UI
         kv_store.delete(KV_SEARCH_SETTINGS)

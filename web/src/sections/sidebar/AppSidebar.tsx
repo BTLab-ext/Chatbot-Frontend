@@ -321,7 +321,7 @@ function AppSidebarInner() {
           onClick={() => route({})}
           active={Array.from(searchParams).length === 0}
         >
-          New Session
+          Neuer Chat
         </SidebarTab>
       </div>
     ),
@@ -402,7 +402,7 @@ function AppSidebarInner() {
                 active={isOpen(ModalIds.AgentsModal)}
                 folded
               >
-                Agents
+                Agenten
               </SidebarTab>
               <SidebarTab
                 leftIcon={SvgFolderPlus}
@@ -410,7 +410,7 @@ function AppSidebarInner() {
                 active={isOpen(ModalIds.CreateProjectModal)}
                 folded
               >
-                New Project
+                Neues Projekt
               </SidebarTab>
             </div>
             {settingsButton}
@@ -422,13 +422,13 @@ function AppSidebarInner() {
               footer={settingsButton}
             >
               <>
-                {/* Agents */}
+                {/* Agents 
                 <DndContext
                   sensors={sensors}
                   collisionDetection={closestCenter}
                   onDragEnd={handleAgentDragEnd}
                 >
-                  <SidebarSection title="Agents">
+                  <SidebarSection title="Agenten">
                     <SortableContext
                       items={visibleAgentIds}
                       strategy={verticalListSortingStrategy}
@@ -446,12 +446,12 @@ function AppSidebarInner() {
                         onClick={() => toggleModal(ModalIds.AgentsModal, true)}
                         lowlight
                       >
-                        More Agents
+                        Mehr Agenten
                       </SidebarTab>
                     </div>
                   </SidebarSection>
                 </DndContext>
-
+                */}
                 {/* Wrap Projects and Recents in a shared DndContext for chat-to-project drag */}
                 <DndContext
                   sensors={sensors}
@@ -468,7 +468,7 @@ function AppSidebarInner() {
                       <IconButton
                         icon={SvgFolderPlus}
                         internal
-                        tooltip="New Project"
+                        tooltip="Neues Projekt"
                         onClick={() =>
                           toggleModal(ModalIds.CreateProjectModal, true)
                         }
@@ -486,7 +486,7 @@ function AppSidebarInner() {
                       }
                       lowlight
                     >
-                      New Project
+                      Neues Projekt
                     </SidebarTab>
                   </SidebarSection>
 

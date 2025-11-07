@@ -70,26 +70,26 @@ export default function EmailPasswordForm({
               setIsWorking(false);
 
               const errorDetail: any = (await response.json()).detail;
-              let errorMsg: string = "Unknown error";
+              let errorMsg: string = "Unkannter Fehler";
               if (typeof errorDetail === "object" && errorDetail.reason) {
                 errorMsg = errorDetail.reason;
               } else if (errorDetail === "REGISTER_USER_ALREADY_EXISTS") {
                 errorMsg =
-                  "An account already exists with the specified email.";
+                  "Es existiert bereits ein Konto mit der angegebenen E-Mail-Adresse.";
               }
               if (response.status === 429) {
-                errorMsg = "Too many requests. Please try again later.";
+                errorMsg = "Zu viele Versuche. Bitte versuchen Sie es später erneut.";
               }
               setPopup({
                 type: "error",
-                message: `Failed to sign up - ${errorMsg}`,
+                message: `Anmeldung fehlgeschlagen - ${errorMsg}`,
               });
               setIsWorking(false);
               return;
             } else {
               setPopup({
                 type: "success",
-                message: "Account created successfully. Please log in.",
+                message: "Konto erfolgreich erstellt. Bitte melden Sie sich an.",
               });
             }
           }
@@ -115,20 +115,20 @@ export default function EmailPasswordForm({
           } else {
             setIsWorking(false);
             const errorDetail: any = (await loginResponse.json()).detail;
-            let errorMsg: string = "Unknown error";
+            let errorMsg: string = "Unbekannter Fehler";
             if (errorDetail === "LOGIN_BAD_CREDENTIALS") {
-              errorMsg = "Invalid email or password";
+              errorMsg = "Ungültige E-Mail-Adresse oder Passwort.";
             } else if (errorDetail === "NO_WEB_LOGIN_AND_HAS_NO_PASSWORD") {
-              errorMsg = "Create an account to set a password";
+              errorMsg = "Erstellen Sie ein Konto, um ein Passwort festzulegen.";
             } else if (typeof errorDetail === "string") {
               errorMsg = errorDetail;
             }
             if (loginResponse.status === 429) {
-              errorMsg = "Too many requests. Please try again later.";
+              errorMsg = "Zu viele Anfragen. Bitte versuchen Sie es später erneut.";
             }
             setPopup({
               type: "error",
-              message: `Failed to login - ${errorMsg}`,
+              message: `Anmeldung fehlgeschlagen - ${errorMsg}`,
             });
           }
         }}
@@ -139,7 +139,7 @@ export default function EmailPasswordForm({
               name="email"
               label="Email"
               type="email"
-              placeholder="email@yourcompany.com"
+              placeholder="email@lfst.bayern.de"
               data-testid="email"
             />
 
@@ -152,7 +152,7 @@ export default function EmailPasswordForm({
             />
 
             <Button type="submit" className="w-full" disabled={isSubmitting}>
-              {isJoin ? "Join" : isSignup ? "Sign Up" : "Log In"}
+              {isJoin ? "Beitreten" : isSignup ? "Anmelden" : "Einloggen"}
             </Button>
             {user?.is_anonymous_user && (
               <Link
@@ -160,7 +160,7 @@ export default function EmailPasswordForm({
                 className="text-xs text-action-link-05 cursor-pointer text-center w-full font-medium mx-auto"
               >
                 <span className="hover:border-b hover:border-dotted hover:border-action-link-05">
-                  or continue as guest
+                  oder als Gast fortfahren
                 </span>
               </Link>
             )}

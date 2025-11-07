@@ -91,7 +91,7 @@ export function PopoverSearchInput({
         value={searchTerm}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
-        placeholder="Search Projects"
+        placeholder="Projekte durchsuchen"
         onClick={noProp()}
         internal
         autoFocus
@@ -197,21 +197,21 @@ function ChatButtonInner({
           icon={SvgShare}
           onClick={noProp(() => setShowShareModal(true))}
         >
-          Share
+          Teilen
         </MenuButton>,
         <MenuButton
           key="rename"
           icon={SvgEdit}
           onClick={noProp(() => setRenaming(true))}
         >
-          Rename
+          Umbenennen
         </MenuButton>,
         <MenuButton
           key="move"
           icon={SvgFolderIn}
           onClick={noProp(() => setShowMoveOptions(true))}
         >
-          Move to Project
+          Zum Projekt verschieben
         </MenuButton>,
         project && (
           <MenuButton
@@ -219,7 +219,7 @@ function ChatButtonInner({
             icon={SvgFolder}
             onClick={noProp(() => handleRemoveFromProject())}
           >
-            {`Remove from ${project.name}`}
+            {`Aus Projekt ${project.name} entfernen`}
           </MenuButton>
         ),
         null,
@@ -229,7 +229,7 @@ function ChatButtonInner({
           onClick={noProp(() => setDeleteConfirmationModalOpen(true))}
           danger
         >
-          Delete
+          Löschen
         </MenuButton>,
       ];
       setPopoverItems(popoverItems);
@@ -289,7 +289,7 @@ function ChatButtonInner({
       console.error("Failed to delete chat:", error);
       showErrorNotification(
         setPopup,
-        "Failed to delete chat. Please try again."
+        "Chat konnte nicht gelöscht werden. Bitte versuchen Sie es erneut."
       );
     }
   }
@@ -404,12 +404,12 @@ function ChatButtonInner({
                 handleChatDelete();
               }}
             >
-              Delete
+              Löschen
             </Button>
           }
         >
-          Are you sure you want to delete this chat? This action cannot be
-          undone.
+          Möchten Sie diesen Chat wirklich löschen? Diese Aktion kann nicht rückgängig 
+          gemacht werden.
         </ConfirmationModal>
       )}
 

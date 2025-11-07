@@ -301,7 +301,6 @@ export const ProjectsProvider: React.FC<ProjectsProviderProps> = ({
     return tempIdMap;
   };
 
-
   const removeOptimisticFilesByTempIds = useCallback(
     (optimisticTempIds: Set<string>, projectId?: number | null) => {
       // Remove from recent optimistic list
@@ -313,7 +312,6 @@ export const ProjectsProvider: React.FC<ProjectsProviderProps> = ({
       setCurrentMessageFiles((prev) =>
         prev.filter((f) => !f.temp_id || !optimisticTempIds.has(f.temp_id))
       );
-
 
       // Remove from project optimistic list
       if (projectId) {
@@ -332,7 +330,6 @@ export const ProjectsProvider: React.FC<ProjectsProviderProps> = ({
     },
     [projectToUploadFilesMapRef]
   );
-
 
   const beginUpload = useCallback(
     async (
@@ -393,18 +390,14 @@ export const ProjectsProvider: React.FC<ProjectsProviderProps> = ({
           if (unsupported.length > 0 || nonAccepted.length > 0) {
             const detailsParts: string[] = [];
             if (unsupported.length > 0) {
-              detailsParts.push(
-                `Nicht unterstütztes Dateiformat: ${unsupported.join(", ")}`
-              );
+              detailsParts.push(`Nicht unterstütztes Dateiformat: ${unsupported.join(", ")}`);
             }
             if (nonAccepted.length > 0) {
-              detailsParts.push(
-                `Die Datei überschreiten das Größenlimit: ${nonAccepted.join(", ")}`
-              );
+              detailsParts.push(`Die Datei überschreitet das Größenlimit: ${nonAccepted.join(", ")}`);
             }
             setPopup?.({
               type: "warning",
-              message: `Einige Dateien wurden nicht hochgeladen. ${detailsParts.join(
+              message: `Die Datei konnte nicht hochgeladen werden. ${detailsParts.join(
                 " | "
               )}`,
             });
@@ -441,12 +434,11 @@ export const ProjectsProvider: React.FC<ProjectsProviderProps> = ({
               .map((f) => f.temp_id)
               .filter((id): id is string => Boolean(id))
           );
-
           removeOptimisticFilesByTempIds(optimisticTempIds, projectId);
 
           setPopup?.({
             type: "error",
-            message: "Dateien konnten nicht hochgeladen werden.",
+            message: "Datei konnte nicht hochgeladen werden.",
           });
 
           onFailure?.(Array.from(optimisticTempIds));
@@ -507,7 +499,7 @@ export const ProjectsProvider: React.FC<ProjectsProviderProps> = ({
         return data;
       } catch (err) {
         const message =
-          err instanceof Error ? err.message : "Projektdateien konnten nicht abgerufen werden.";
+          err instanceof Error ? err.message : "Projektdateien konnten nicht geladen werden.";
         return [];
       }
     },

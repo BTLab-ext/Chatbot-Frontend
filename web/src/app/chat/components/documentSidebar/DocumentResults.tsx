@@ -56,7 +56,7 @@ function Header({ children, onClose }: HeaderProps) {
           icon={SvgArrowWallRight}
           tertiary
           onClick={onClose}
-          tooltip="Close Sidebar"
+          tooltip="Navigationsleiste minimieren"
         />
       </div>
       <Separator className="border-b my-3 mx-2" />
@@ -160,7 +160,7 @@ function DocumentResultsInner({
       <div className="h-full flex flex-col p-3 gap-6 border-l">
         {hasCited && (
           <div>
-            <Header onClose={closeSidebar}>Cited Sources</Header>
+            <Header onClose={closeSidebar}>Zitierte Quellen</Header>
             <ChatDocumentDisplayWrapper>
               {citedDocuments.map((document) => (
                 <ChatDocumentDisplay
@@ -220,7 +220,7 @@ function DocumentResultsInner({
 
         {humanFileDescriptors && humanFileDescriptors.length > 0 && (
           <div>
-            <Header onClose={closeSidebar}>User Files</Header>
+            <Header onClose={closeSidebar}>Nutzerdokumente</Header>
             <ChatDocumentDisplayWrapper>
               {humanFileDescriptors.map((file) => (
                 <ChatDocumentDisplay

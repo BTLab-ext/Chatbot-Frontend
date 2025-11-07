@@ -43,7 +43,7 @@ const ResetPasswordPage: React.FC = () => {
     <AuthFlowContainer>
       <div className="flex flex-col w-full justify-center">
         <div className="flex">
-          <Title className="mb-2 mx-auto font-bold">Reset Password</Title>
+          <Title className="mb-2 mx-auto font-bold">Passwort zurücksetzen</Title>
         </div>
         {isWorking && <Spinner />}
         {popup}
@@ -53,16 +53,16 @@ const ResetPasswordPage: React.FC = () => {
             confirmPassword: "",
           }}
           validationSchema={Yup.object().shape({
-            password: Yup.string().required("Password is required"),
+            password: Yup.string().required("Passwort ist erforderlich"),
             confirmPassword: Yup.string()
-              .oneOf([Yup.ref("password"), undefined], "Passwords must match")
-              .required("Confirm Password is required"),
+              .oneOf([Yup.ref("password"), undefined], "Passwörter müssen übereinstimmen")
+              .required("Bitte Passwort bestätigen"),
           })}
           onSubmit={async (values) => {
             if (!token) {
               setPopup({
                 type: "error",
-                message: "Invalid or missing reset token.",
+                message: "Ungültiges oder fehlendes Reset-Token.",
               });
               return;
             }
@@ -71,7 +71,7 @@ const ResetPasswordPage: React.FC = () => {
               await resetPassword(token, values.password);
               setPopup({
                 type: "success",
-                message: "Password reset successfully. Redirecting to login...",
+                message: "Passwort erfolgreich zurückgesetzt. Weiterleitung zur Anmeldung...",
               });
               setTimeout(() => {
                 redirect("/auth/login");
@@ -81,12 +81,12 @@ const ResetPasswordPage: React.FC = () => {
                 setPopup({
                   type: "error",
                   message:
-                    error.message || "An error occurred during password reset.",
+                    error.message || "Beim Zurücksetzen des Passworts ist ein Fehler aufgetreten.",
                 });
               } else {
                 setPopup({
                   type: "error",
-                  message: "An unexpected error occurred. Please try again.",
+                  message: "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
                 });
               }
             } finally {
@@ -98,15 +98,15 @@ const ResetPasswordPage: React.FC = () => {
             <Form className="w-full flex flex-col items-stretch mt-2">
               <TextFormField
                 name="password"
-                label="New Password"
+                label="Neues Passwort"
                 type="password"
-                placeholder="Enter your new password"
+                placeholder="Geben Sie ein neues Passwort an"
               />
               <TextFormField
                 name="confirmPassword"
-                label="Confirm New Password"
+                label="Neues Passwort bestätigen"
                 type="password"
-                placeholder="Confirm your new password"
+                placeholder="Bestätigen Sie Ihr neues Passwort"
               />
 
               <div className="flex">
@@ -115,7 +115,7 @@ const ResetPasswordPage: React.FC = () => {
                   disabled={isSubmitting}
                   className="mx-auto w-full"
                 >
-                  Reset Password
+                  Passwort zurücksetzen
                 </Button>
               </div>
             </Form>
@@ -124,7 +124,7 @@ const ResetPasswordPage: React.FC = () => {
         <div className="flex">
           <Text className="mt-4 mx-auto">
             <Link href="/auth/login" className="text-link font-medium">
-              Back to Login
+              Zurück zum Login
             </Link>
           </Text>
         </div>

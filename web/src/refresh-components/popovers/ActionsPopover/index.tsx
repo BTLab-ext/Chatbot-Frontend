@@ -480,7 +480,7 @@ export default function ActionsPopover({
       {[
         <InputTypeIn
           key="search"
-          placeholder="Search Actions"
+          placeholder="Aktionen durchsuchen"
           value={searchTerm}
           onChange={(event) => setSearchTerm(event.target.value)}
           autoFocus
@@ -546,7 +546,7 @@ export default function ActionsPopover({
 
         (isAdmin || isCurator) && (
           <LineItem href="/admin/actions" icon={SvgActions} key="more-actions">
-            More Actions
+            Mehr Aktionen
           </LineItem>
         ),
       ]}
@@ -560,8 +560,8 @@ export default function ActionsPopover({
       allDisabled={allSourcesDisabled}
       onDisableAll={disableAllSources}
       onEnableAll={enableAllSources}
-      disableAllLabel="Disable All Sources"
-      enableAllLabel="Enable All Sources"
+      disableAllLabel="Alle Quellen deaktivieren"
+      enableAllLabel="Alle Quellen aktivieren"
       onBack={() => setSecondaryView(null)}
     />
   );
@@ -573,8 +573,8 @@ export default function ActionsPopover({
       allDisabled={mcpAllDisabled}
       onDisableAll={disableAllToolsForSelectedServer}
       onEnableAll={enableAllToolsForSelectedServer}
-      disableAllLabel="Disable All Tools"
-      enableAllLabel="Enable All Tools"
+      disableAllLabel="Alle Werkzeuge deaktivieren"
+      enableAllLabel="Alle Werkzeuge aktivieren"
       onBack={() => setSecondaryView(null)}
       footer={mcpFooter}
     />
@@ -592,7 +592,7 @@ export default function ActionsPopover({
               icon={SvgSliders}
               active={open}
               tertiary
-              tooltip="Manage Actions"
+              tooltip="Aktionen Verwalten"
             />
           </div>
         </PopoverTrigger>

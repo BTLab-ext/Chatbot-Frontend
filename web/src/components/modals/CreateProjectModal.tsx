@@ -56,9 +56,9 @@ export default function CreateProjectModal() {
           secondary
           onClick={() => toggleModal(ModalIds.CreateProjectModal, false)}
         >
-          Cancel
+          Abbrechen
         </Button>
-        <Button onClick={handleSubmit}>Create Project</Button>
+        <Button onClick={handleSubmit}>Projekt erstellen</Button>
       </div>
     </Modal>
   );

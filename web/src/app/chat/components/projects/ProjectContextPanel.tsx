@@ -77,7 +77,7 @@ export function FileCard({
       {String(file.status) !== UserFileStatus.UPLOADING && (
         <button
           onClick={handleRemoveFile}
-          title="Delete file"
+          title="Datei löschen"
           aria-label="Delete file"
           className="absolute -left-2 -top-2 z-10 h-5 w-5 flex items-center justify-center rounded-[4px] border border-border text-[11px] bg-[#1f1f1f] text-white dark:bg-[#fefcfa] dark:text-black shadow-sm opacity-0 group-hover:opacity-100 focus:opacity-100 pointer-events-none group-hover:pointer-events-auto focus:pointer-events-auto transition-opacity duration-150 hover:opacity-90"
         >
@@ -105,8 +105,8 @@ export function FileCard({
         <Text text03 secondaryBody nowrap className="truncate">
           {isProcessing
             ? file.status === UserFileStatus.UPLOADING
-              ? "Uploading..."
-              : "Processing..."
+              ? "Datei wird hochgeladen..."
+              : "Datei wird verarbeitet..."
             : typeLabel}
         </Text>
       </div>
@@ -191,7 +191,7 @@ export default function ProjectContextPanel({
         <SvgFolderOpen className="h-8 w-8 text-text-04" />
         <Text headingH2 className="font-heading-h2">
           {projects.find((p) => p.id === currentProjectId)?.name ||
-            "Loading project..."}
+            "Projekt wird geladen..."}
         </Text>
       </div>
 
@@ -199,7 +199,7 @@ export default function ProjectContextPanel({
       <div className="flex flex-row gap-2 justify-between">
         <div className="min-w-0">
           <Text headingH3 text04>
-            Instructions
+            Anweisungen
           </Text>
           {currentProjectDetails?.project?.instructions ? (
             <Text text02 secondaryBody className="truncate">
@@ -207,7 +207,7 @@ export default function ProjectContextPanel({
             </Text>
           ) : (
             <Text text02 secondaryBody className="truncate">
-              Add instructions to tailor the response in this project.
+              Füge Anweisuungen hinzu, um die Antworten für dieses Projekt bestimmten Regeln anzupassen.
             </Text>
           )}
         </div>
@@ -216,7 +216,7 @@ export default function ProjectContextPanel({
           onClick={() => toggleModal(ModalIds.AddInstructionModal, true)}
           tertiary
         >
-          Set Instructions
+          Anweisung erstellen
         </Button>
       </div>
       <div
@@ -229,7 +229,7 @@ export default function ProjectContextPanel({
               Files
             </Text>
             <Text text02 secondaryBody>
-              Chats in this project can access these files.
+              Chats in diesem Projekt haben Zugriff auf diese Dateien.
             </Text>
           </div>
           <FilePickerPopover
@@ -237,7 +237,7 @@ export default function ProjectContextPanel({
               // The `secondary={undefined}` is required here because `CreateButton` sets it to true.
               // Therefore, we need to first remove the truthiness before passing in the other `tertiary` flag.
               <CreateButton secondary={undefined} tertiary active={open}>
-                Add Files
+                Dateien hinzufügen
               </CreateButton>
             )}
             onFileClick={handleOnView}
@@ -268,7 +268,7 @@ export default function ProjectContextPanel({
                 <div className="flex flex-col overflow-hidden">
                   <div className="flex items-center justify-between gap-2 w-full">
                     <Text text04 secondaryAction>
-                      View files
+                      Dateien betrachten
                     </Text>
                     <SvgFiles className="h-5 w-5 stroke-text-02" />
                   </div>
@@ -303,7 +303,7 @@ export default function ProjectContextPanel({
                   <div className="flex flex-col overflow-hidden h-12 p-1">
                     <div className="flex items-center justify-between gap-2 w-full">
                       <Text text04 secondaryAction>
-                        View All
+                        Alle anzeigen
                       </Text>
                       <SvgFiles className="h-5 w-5 stroke-text-02" />
                     </div>
@@ -319,9 +319,9 @@ export default function ProjectContextPanel({
             </div>
             {projectTokenCount > availableContextTokens && (
               <Text text02 secondaryBody>
-                This project exceeds the model&apos;s context limits. Sessions
-                will automatically search for relevant files first before
-                generating response.
+                Dieses Projekt übersteigt das Kontextfeld des Modells. In der Sitzung 
+                wird automatisch nach relevanten Dateien gesucht bevor eine 
+                Antwort generiert wird.
               </Text>
             )}
           </>
@@ -339,8 +339,8 @@ export default function ProjectContextPanel({
               }`}
             >
               {isDragActive
-                ? "Drop files here to add to this project"
-                : "Add documents, texts, or images to use in the project. Drag & drop supported."}
+                ? "Datei hierhin ziehen, um sie dem Projekt hinzuzufügen"
+                : "Fügen Sie Dokumente oder Text hinzu, die für das Projekt relevant sind. Drag & drop ist unterstützt."}
             </p>
           </div>
         )}
@@ -354,8 +354,8 @@ export default function ProjectContextPanel({
           onClickOutside={onClose}
         >
           <UserFilesModalContent
-            title="Project files"
-            description="Sessions in this project can access the files here."
+            title="Projekt-Dateien"
+            description="Sitzungen dieses Projekts können auf die hier abgelegten Dateien zugreifen."
             icon={SvgFiles}
             recentFiles={[...allCurrentProjectFiles]}
             onView={handleOnView}

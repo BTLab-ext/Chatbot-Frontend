@@ -11,7 +11,7 @@ export function DeleteButton({ onClick, disabled }: DeleteButtonProps) {
     <IconButton
       onClick={onClick}
       icon={SvgTrash}
-      tooltip="Delete"
+      tooltip="Löschen"
       disabled={disabled}
       internal
     />

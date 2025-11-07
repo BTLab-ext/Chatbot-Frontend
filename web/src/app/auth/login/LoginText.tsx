@@ -9,8 +9,9 @@ export default function LoginText() {
   return (
     <div className="w-full flex flex-col items-center justify-center">
       <Text headingH3>
-        Log In to{" "}
+        Bei{" "}
         {(settings && settings?.enterpriseSettings?.application_name) || "chat.BAI"}
+        {" "}einloggen
       </Text>
     </div>
   );

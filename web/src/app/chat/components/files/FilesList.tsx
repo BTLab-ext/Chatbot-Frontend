@@ -154,7 +154,7 @@ export default function FilesList({
             >
               <FileUploadIcon className="text-text-darker dark:text-text-lighter" />
               <p className="text-sm text-text-darker dark:text-text-lighter whitespace-nowrap">
-                Add Files
+                Dateien hinzufügen
               </p>
             </button>
           </>

@@ -272,14 +272,14 @@ export function useChatController({
       const response = await nameChatSession(chatSessionId);
 
       if (!response.ok) {
-        console.error("Failed to name chat session, status:", response.status);
+        console.error("Fehler beim Benennen der Chat-Sitzung, Status:", response.status);
         // Still refresh to show the unnamed chat in sidebar
         refreshChatSessions();
         fetchProjects();
         return;
       }
     } catch (error) {
-      console.error("Failed to name chat session:", error);
+      console.error("Benennung der Chat-Sitzung fehlgeschlagen:", error);
     } finally {
       // Refresh sidebar to show new name
       await refreshChatSessions();
@@ -337,7 +337,7 @@ export function useChatController({
       try {
         await stopChatSession(currentSession);
       } catch (error) {
-        console.error("Failed to stop chat session:", error);
+        console.error("Chat-Sitzung konnte nicht beendet werden:", error);
         // Continue with UI cleanup even if backend call fails
       }
     }
@@ -481,12 +481,12 @@ export function useChatController({
       if (currentChatState != "input") {
         if (currentChatState == "uploading") {
           setPopup({
-            message: "Please wait for the content to upload",
+            message: "Bitte warten Sie, bis der Inhalt hochgeladen ist.",
             type: "error",
           });
         } else {
           setPopup({
-            message: "Please wait for the response to complete",
+            message: "Bitte warten Sie, bis die Antwort vollständig ist.",
             type: "error",
           });
         }
@@ -561,7 +561,7 @@ export function useChatController({
       if (!messageToResend && messageIdToResend !== undefined) {
         setPopup({
           message:
-            "Failed to re-send message - please refresh the page and try again.",
+            "Die Nachricht konnte nicht erneut gesendet werden – bitte aktualisieren Sie die Seite und versuchen Sie es erneut.",
           type: "error",
         });
         resetRegenerationState(frozenSessionId);

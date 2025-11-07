@@ -136,7 +136,7 @@ export function HorizontalFilters({
               <FiMap size={16} />
             </div>
           }
-          defaultDisplay="All Sources"
+          defaultDisplay="Alle Quellen"
         />
         {availableDocumentSets.length > 0 && (
           <FilterDropdown

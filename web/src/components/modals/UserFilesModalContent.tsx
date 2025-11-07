@@ -31,9 +31,9 @@ function getIcon(
 function getDescription(file: ProjectFile): string {
   const s = String(file.status || "");
   const typeLabel = getFileExtension(file.name);
-  if (s === UserFileStatus.PROCESSING) return "Processing...";
-  if (s === UserFileStatus.UPLOADING) return "Uploading...";
-  if (s === UserFileStatus.DELETING) return "Deleting...";
+  if (s === UserFileStatus.PROCESSING) return "Verarbeiten...";
+  if (s === UserFileStatus.UPLOADING) return "Hochladen...";
+  if (s === UserFileStatus.DELETING) return "Löschen...";
   if (s === UserFileStatus.COMPLETED) return typeLabel;
   return file.status ?? typeLabel;
 }
@@ -160,7 +160,7 @@ export default function UserFilesModalContent({
       {/* Search bar section */}
       <div className="flex items-center gap-2 p-3">
         <InputTypeIn
-          placeholder="Dokumente durchsuchen ..."
+          placeholder="Dateien durchsuchen..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           leftSearchIcon
@@ -176,7 +176,7 @@ export default function UserFilesModalContent({
             secondary={false}
             internal
           >
-            Dokument hinzufügen
+            Datei hinzufügen
           </CreateButton>
         )}
       </div>
@@ -185,7 +185,7 @@ export default function UserFilesModalContent({
       <div className="bg-background-tint-01 overflow-y-scroll">
         {filtered.length === 0 ? (
           <div className="p-4 flex w-full h-full items-center justify-center">
-            <Text text03>No files found</Text>
+            <Text text03>Keine Datei gefunden</Text>
           </div>
         ) : (
           <VerticalShadowScroller className="p-2 flex flex-col gap-2 overflow-scroll max-h-[20rem]">

@@ -432,7 +432,7 @@ export default function AIMessage({
                               }, 3000);
                             }}
                             tertiary
-                            tooltip={copied ? "Copied!" : "Copy"}
+                            tooltip={copied ? "Kopiert!" : "Kopieren"}
                             data-testid="AIMessage/copy-button"
                           />
                           <IconButton
@@ -442,8 +442,8 @@ export default function AIMessage({
                             active={currentFeedback === "like"}
                             tooltip={
                               currentFeedback === "like"
-                                ? "Remove Like"
-                                : "Good Response"
+                                ? "Gefällt mir entfernen"
+                                : "Gute Antwort"
                             }
                             data-testid="AIMessage/like-button"
                           />
@@ -454,8 +454,8 @@ export default function AIMessage({
                             active={currentFeedback === "dislike"}
                             tooltip={
                               currentFeedback === "dislike"
-                                ? "Remove Dislike"
-                                : "Bad Response"
+                                ? "Gefällt mir nicht entfernen"
+                                : "Schlechte Antwort"
                             }
                             data-testid="AIMessage/dislike-button"
                           />

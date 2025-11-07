@@ -50,7 +50,7 @@ export function ChatSearchModal({ open, onCloseModal }: ChatSearchModalProps) {
       onClose();
       router.push(`/chat`);
     } catch (error) {
-      console.error("Fehler beim Erstellen eines neuen Chats:", error);
+      console.error("Error creating new chat:", error);
     }
   };
 
@@ -101,7 +101,7 @@ export function ChatSearchModal({ open, onCloseModal }: ChatSearchModalProps) {
                     )}
                     {!hasMore && chatGroups.length > 0 && (
                       <div className="text-center text-xs text-neutral-500 dark:text-neutral-400 py-2">
-                        Keine Chats mehr zum Laden
+                        No more chats to load
                       </div>
                     )}
                   </div>
@@ -109,7 +109,7 @@ export function ChatSearchModal({ open, onCloseModal }: ChatSearchModalProps) {
               ) : (
                 !isLoading && (
                   <div className="px-4 py-3 text-sm text-neutral-500 dark:text-neutral-400">
-                    Keine Chats gefunden
+                    No chats found
                   </div>
                 )
               )}

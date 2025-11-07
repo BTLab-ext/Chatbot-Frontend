@@ -39,13 +39,13 @@ export default function ProjectChatSessionList() {
     <div className="flex flex-col gap-2 px-2 w-full max-w-[800px] mx-auto mt-6">
       <div className="flex items-center pl-2">
         <Text text02 secondaryBody>
-          Recent Chats
+          Verlauf
         </Text>
       </div>
 
       {projectChats.length === 0 ? (
         <Text text02 secondaryBody className="p-2">
-          No chats yet.
+          Noch keine Chats.
         </Text>
       ) : (
         <div className="flex flex-col gap-2 max-h-[46vh] overflow-y-auto overscroll-y-none">

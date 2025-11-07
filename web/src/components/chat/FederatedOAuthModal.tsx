@@ -157,9 +157,9 @@ export function FederatedOAuthModal() {
           <div className="text-center">
             <Text headingH3>Heads Up!</Text>
             <Text>
-              You can always connect your apps later by going to the{" "}
-              <strong>User Settings</strong> menu (click your profile icon) and
-              selecting <strong>Connectors</strong>.
+              Du kannst deine Apps später über die {" "}
+              <strong>Nutzereinstellungen</strong> (klick auf dein Profilbild) im
+              Tab <strong>Konnektoren</strong> erreichen.
             </Text>
           </div>
 
@@ -175,8 +175,8 @@ export function FederatedOAuthModal() {
     <Modal hideCloseButton={true} width="w-full max-w-xl">
       <div className="space-y-4 mt-4">
         <Text>
-          Improve answer quality by letting {applicationName} search all your
-          connected data.
+          Verbessern Sie die Qualität der Antworten, indem Sie {applicationName} alle 
+          verbundenen Datenquellen durchsuchen lassen.
         </Text>
 
         <div className="space-y-3">
@@ -207,7 +207,7 @@ export function FederatedOAuthModal() {
                   }}
                   disabled={!connector.authorize_url}
                 >
-                  Connect
+                  Verbinden
                 </Button>
               </div>
             );
@@ -217,7 +217,7 @@ export function FederatedOAuthModal() {
         {/* Add visual separation and center modal actions */}
         <div className="pt-4 mt-2">
           <div className="flex justify-center gap-3">
-            <Button onClick={onSkip}>Skip for now</Button>
+            <Button onClick={onSkip}>Überspringen</Button>
           </div>
         </div>
       </div>

@@ -151,9 +151,9 @@ function MessageEditing({
           }}
         />
         <div className="flex justify-end gap-2">
-          <Button onClick={handleSubmit}>Submit</Button>
+          <Button onClick={handleSubmit}>Senden</Button>
           <Button secondary onClick={handleCancel}>
-            Cancel
+            Abbrechen
           </Button>
         </div>
       </div>
@@ -266,14 +266,14 @@ export default function HumanMessage({
                           <IconButton
                             icon={SvgCopy}
                             tertiary
-                            tooltip="Copy"
+                            tooltip="Kopieren"
                             onClick={() => copyAll(content)}
                             data-testid="HumanMessage/copy-button"
                           />
                           <IconButton
                             icon={SvgEdit}
                             tertiary
-                            tooltip="Edit"
+                            tooltip="Bearbeiten"
                             onClick={() => {
                               setIsEditing(true);
                               setIsHovered(false);
@@ -314,7 +314,7 @@ export default function HumanMessage({
                             setIsHovered(false);
                           }}
                           tertiary
-                          tooltip="Edit"
+                          tooltip="Bearbeiten"
                         />
                       </div>
                     ) : (

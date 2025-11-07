@@ -30,7 +30,7 @@ function LogoSection({ folded, setFolded }: LogoSectionProps) {
           <IconButton
             icon={SvgSidebar}
             tertiary
-            tooltip="Close Sidebar"
+            tooltip="Navigationsleiste einblenden"
             onClick={() => setFolded?.(false)}
             className="hidden group-hover/SidebarWrapper:flex"
           />
@@ -41,7 +41,7 @@ function LogoSection({ folded, setFolded }: LogoSectionProps) {
           <IconButton
             icon={SvgSidebar}
             tertiary
-            tooltip="Close Sidebar"
+            tooltip="Navigationsleiste minimieren"
             onClick={() => setFolded?.(true)}
           />
         </>

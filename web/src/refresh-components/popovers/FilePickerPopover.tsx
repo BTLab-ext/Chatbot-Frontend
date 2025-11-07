@@ -77,7 +77,7 @@ function FileLineItem({
           <IconButton
             icon={SvgExternalLink}
             onClick={noProp(() => onFileClick(projectFile))}
-            tooltip="View File"
+            tooltip="Datei anzeigen"
             disabled={disableActionButton}
             internal
             className="hidden group-hover/LineItem:flex"

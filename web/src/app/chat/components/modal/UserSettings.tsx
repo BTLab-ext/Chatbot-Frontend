@@ -111,12 +111,12 @@ export function UserSettings({ onClose }: UserSettingsProps) {
   } = useUserPersonalization(user, updateUserPersonalization, {
     onSuccess: () =>
       setPopup({
-        message: "Personalization updated successfully",
+        message: "Personalisierung erfolgreich",
         type: "success",
       }),
     onError: () =>
       setPopup({
-        message: "Failed to update personalization",
+        message: "Personalisierung nicht erfolgreich",
         type: "error",
       }),
   });
@@ -229,7 +229,7 @@ export function UserSettings({ onClose }: UserSettingsProps) {
 
       if (response.ok) {
         setPopup({
-          message: "Default model updated successfully",
+          message: "Standardmodell erfolgreich angepasst",
           type: "success",
         });
         refreshUser();
@@ -239,13 +239,13 @@ export function UserSettings({ onClose }: UserSettingsProps) {
       } else {
         // Revert on failure
         setCurrentDefaultModel(user?.preferences?.default_model ?? null);
-        throw new Error("Failed to update default model");
+        throw new Error("Anpassung des Standardmodells gescheitert");
       }
     } catch (error) {
       // Revert on error
       setCurrentDefaultModel(user?.preferences?.default_model ?? null);
       setPopup({
-        message: "Failed to update default model",
+        message: "Anpassung des Standardmodells gescheitert",
         type: "error",
       });
     } finally {
@@ -267,18 +267,18 @@ export function UserSettings({ onClose }: UserSettingsProps) {
 
       if (response.ok) {
         setPopup({
-          message: "Disconnected successfully",
+          message: "Trennung erfolgreich",
           type: "success",
         });
         if (refetchFederatedConnectors) {
           refetchFederatedConnectors();
         }
       } else {
-        throw new Error("Failed to disconnect");
+        throw new Error("Trennung gescheitert");
       }
     } catch (error) {
       setPopup({
-        message: "Failed to disconnect",
+        message: "Trennung gescheitert",
         type: "error",
       });
     } finally {
@@ -292,7 +292,7 @@ export function UserSettings({ onClose }: UserSettingsProps) {
   const handleChangePassword = async (e: React.FormEvent) => {
     e.preventDefault();
     if (newPassword !== confirmPassword) {
-      setPopup({ message: "New passwords do not match", type: "error" });
+      setPopup({ message: "Neue Passwörter stimmen nicht überein", type: "error" });
       return;
     }
 
@@ -311,20 +311,20 @@ export function UserSettings({ onClose }: UserSettingsProps) {
       });
 
       if (response.ok) {
-        setPopup({ message: "Password changed successfully", type: "success" });
+        setPopup({ message: "Passwort erfolgreich geändert", type: "success" });
         setCurrentPassword("");
         setNewPassword("");
         setConfirmPassword("");
       } else {
         const errorData = await response.json();
         setPopup({
-          message: errorData.detail || "Failed to change password",
+          message: errorData.detail || "Bei der Passwortänderung ist ein Fehler aufgetreten",
           type: "error",
         });
       }
     } catch (error) {
       setPopup({
-        message: "An error occurred while changing the password",
+        message: "Bei der Passwortänderung ist ein Fehler aufgetreten",
         type: "error",
       });
     } finally {
@@ -339,7 +339,7 @@ export function UserSettings({ onClose }: UserSettingsProps) {
       const response = await deleteAllChatSessions();
       if (response.ok) {
         setPopup({
-          message: "All your chat sessions have been deleted.",
+          message: "Chatverlauf gelöscht.",
           type: "success",
         });
         // refreshChatSessions();
@@ -347,11 +347,11 @@ export function UserSettings({ onClose }: UserSettingsProps) {
           router.push("/chat");
         }
       } else {
-        throw new Error("Failed to delete all chat sessions");
+        throw new Error("Chatverlauf konnte nicht gelöscht werden");
       }
     } catch (error) {
       setPopup({
-        message: "Failed to delete all chat sessions",
+        message: "Chatverlauf konnte nicht gelöscht werden",
         type: "error",
       });
     } finally {
@@ -386,7 +386,7 @@ export function UserSettings({ onClose }: UserSettingsProps) {
         {activeSection === "settings" && (
           <div className="space-y-6">
             <div>
-              <h3 className="text-lg font-medium">Theme</h3>
+              <h3 className="text-lg font-medium">Erscheinungsbild</h3>
               <Select
                 value={theme}
                 onValueChange={(value) => {
@@ -408,10 +408,10 @@ export function UserSettings({ onClose }: UserSettingsProps) {
                     value={ThemePreference.LIGHT}
                     icon={<Sun className="h-4 w-4" />}
                   >
-                    Light
+                    Hell
                   </SelectItem>
                   <SelectItem icon={<Moon />} value={ThemePreference.DARK}>
-                    Dark
+                    Dunkel
                   </SelectItem>
                 </SelectContent>
               </Select>
@@ -419,7 +419,7 @@ export function UserSettings({ onClose }: UserSettingsProps) {
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-lg font-medium">Auto-scroll</h3>
-                <SubLabel>Automatically scroll to new content</SubLabel>
+                <SubLabel>Automatisch zum neuesten Textabschnitt springen</SubLabel>
               </div>
               <Switch
                 checked={user?.preferences.auto_scroll}
@@ -430,8 +430,8 @@ export function UserSettings({ onClose }: UserSettingsProps) {
             </div>
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-lg font-medium">Temperature override</h3>
-                <SubLabel>Set the temperature for the LLM</SubLabel>
+                <h3 className="text-lg font-medium">Temperatur anpassen</h3>
+                <SubLabel>Temperatur ('Kreativität') des LLM einstellen</SubLabel>
               </div>
               <Switch
                 checked={user?.preferences.temperature_override_enabled}
@@ -442,8 +442,8 @@ export function UserSettings({ onClose }: UserSettingsProps) {
             </div>
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-lg font-medium">Prompt Shortcuts</h3>
-                <SubLabel>Enable keyboard shortcuts for prompts</SubLabel>
+                <h3 className="text-lg font-medium">Prompt Tastenkürzel</h3>
+                <SubLabel>Tastaturkürzel für Prompts aktivieren</SubLabel>
               </div>
               <Switch
                 checked={user?.preferences?.shortcut_enabled}
@@ -454,7 +454,7 @@ export function UserSettings({ onClose }: UserSettingsProps) {
             </div>
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <h3 className="text-lg font-medium">Default Model</h3>
+                <h3 className="text-lg font-medium">Standardmodell</h3>
                 {isModelUpdating && (
                   <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
                 )}
@@ -491,21 +491,21 @@ export function UserSettings({ onClose }: UserSettingsProps) {
               {!showDeleteConfirmation ? (
                 <div className="space-y-3">
                   <p className="text-sm text-neutral-600 dark:text-neutral-400">
-                    This will permanently delete all your chat sessions and
-                    cannot be undone.
+                    Dieser Vorgang wird Ihre Chathistorie löschen und kann nicht 
+                    rückgängig gemacht werden.
                   </p>
                   <Button
                     danger
                     onClick={() => setShowDeleteConfirmation(true)}
                     leftIcon={SvgTrash}
                   >
-                    Delete All Chats
+                    Alle Chats löschen
                   </Button>
                 </div>
               ) : (
                 <div className="space-y-3">
                   <p className="text-sm text-neutral-600 dark:text-neutral-400">
-                    Are you sure you want to delete all your chat sessions?
+                    Sind Sie sicher, dass Sie Ihre Chathistorie löschen möchten?
                   </p>
                   <div className="flex gap-2">
                     <Button
@@ -513,14 +513,14 @@ export function UserSettings({ onClose }: UserSettingsProps) {
                       onClick={handleDeleteAllChats}
                       disabled={isDeleteAllLoading}
                     >
-                      {isDeleteAllLoading ? "Deleting..." : "Yes, Delete All"}
+                      {isDeleteAllLoading ? "Löschvorgang gestartet..." : "Ja, alle Chats löschen"}
                     </Button>
                     <Button
                       secondary
                       onClick={() => setShowDeleteConfirmation(false)}
                       disabled={isDeleteAllLoading}
                     >
-                      Cancel
+                      Abbrechen
                     </Button>
                   </div>
                 </div>
@@ -537,26 +537,26 @@ export function UserSettings({ onClose }: UserSettingsProps) {
                 onChange={(event) =>
                   updatePersonalizationField("name", event.target.value)
                 }
-                placeholder="Set how Onyx should refer to you"
+                placeholder="Wie soll chat.BAI Sie nennen?"
                 className="mt-2"
               />
             </div>
             <div>
-              <h3 className="text-lg font-medium">Role</h3>
+              <h3 className="text-lg font-medium">Beruf</h3>
               <Input
                 value={personalizationValues.role}
                 onChange={(event) =>
                   updatePersonalizationField("role", event.target.value)
                 }
-                placeholder="Share your role to tailor responses"
+                placeholder="Spezifizieren Sie Ihren Beruf, um Ausgaben entsprechend anzupassen"
                 className="mt-2"
               />
             </div>
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-lg font-medium">Use memories</h3>
+                <h3 className="text-lg font-medium">Erinnerungen vewenden</h3>
                 <SubLabel>
-                  Allow Onyx to reference stored memories in future chats.
+                  Erlauben Sie chat.BAI in zukünftigen Chats auf alte Unterhaltungen zuzugreifen.
                 </SubLabel>
               </div>
               <Switch
@@ -567,18 +567,18 @@ export function UserSettings({ onClose }: UserSettingsProps) {
             <div className="border-t border-border pt-4 space-y-3">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-lg font-medium">Memories</h3>
+                  <h3 className="text-lg font-medium">Erinnerungen</h3>
                   <SubLabel>
-                    Keep personal notes that should inform future chats.
+                    Persönliche Notizen behalten, die in zukünftigen Chats aufgegriffen werden sollen.
                   </SubLabel>
                 </div>
                 <Button tertiary onClick={addMemory}>
-                  Add Memory
+                  Erinnerung hinzufügen
                 </Button>
               </div>
               {personalizationValues.memories.length === 0 ? (
                 <p className="text-sm text-muted-foreground">
-                  No memories saved yet.
+                  Noch keine Erinnerungen gespeichert.
                 </p>
               ) : (
                 <div className="max-h-64 overflow-y-auto flex flex-col gap-3 pr-1">
@@ -586,7 +586,7 @@ export function UserSettings({ onClose }: UserSettingsProps) {
                     <AutoResizeTextarea
                       key={index}
                       value={memory}
-                      placeholder="Write something Onyx should remember"
+                      placeholder="Was soll chat.BAI sich merken?"
                       onChange={(value) => updateMemoryAtIndex(index, value)}
                     />
                   ))}
@@ -601,8 +601,8 @@ export function UserSettings({ onClose }: UserSettingsProps) {
                 disabled={isSavingPersonalization}
               >
                 {isSavingPersonalization
-                  ? "Saving Personalization..."
-                  : "Save Personalization"}
+                  ? "Personalisierung wird gespeichert..."
+                  : "Personalisierung wird gespeichert"}
               </Button>
             </div>
           </div>
@@ -610,10 +610,10 @@ export function UserSettings({ onClose }: UserSettingsProps) {
         {activeSection === "password" && (
           <div className="space-y-6">
             <div className="space-y-2">
-              <h3 className="text-lg font-medium">Change Password</h3>
+              <h3 className="text-lg font-medium">Passwort ändern</h3>
               <SubLabel>
-                Enter your current password and new password to change your
-                password.
+                Geben Sie ihr aktuelles und neues Passwort ein, um ihr Passwort zu 
+                ändern.
               </SubLabel>
             </div>
             <form onSubmit={handleChangePassword} className="w-full">
@@ -622,7 +622,7 @@ export function UserSettings({ onClose }: UserSettingsProps) {
                   htmlFor="currentPassword"
                   className="text-sm font-medium"
                 >
-                  Current Password
+                  Aktuelles Passwort
                 </label>
                 <Input
                   id="currentPassword"
@@ -635,7 +635,7 @@ export function UserSettings({ onClose }: UserSettingsProps) {
               </div>
               <div className="w-full">
                 <label htmlFor="newPassword" className="text-sm font-medium">
-                  New Password
+                  Neues Passwort
                 </label>
                 <Input
                   id="newPassword"
@@ -651,7 +651,7 @@ export function UserSettings({ onClose }: UserSettingsProps) {
                   htmlFor="confirmPassword"
                   className="text-sm font-medium"
                 >
-                  Confirm New Password
+                  Neues Passwort wiederholen
                 </label>
                 <Input
                   id="confirmPassword"
@@ -664,22 +664,23 @@ export function UserSettings({ onClose }: UserSettingsProps) {
               </div>
               <div className="flex justify-end w-full">
                 <Button disabled={isLoading}>
-                  {isLoading ? "Changing..." : "Change Password"}
+                  {isLoading ? "Passwort wird geändert..." : "Passwort ändern"}
                 </Button>
               </div>
             </form>
           </div>
         )}
+        {/*
         {activeSection === "connectors" && (
-          <div className="space-y-6">
+            <div className="space-y-6">
             <div>
-              <h3 className="text-lg font-medium mb-4">Connected Services</h3>
+              <h3 className="text-lg font-medium mb-4">Verbundene Dienste</h3>
               <p className="text-sm text-muted-foreground mb-4">
-                Manage your connected services to search across all your
-                content.
+                Passen Sie Ihre verbundenen Dienste an, um weiteren Kontext für 
+                chat.Bai hinzuzufügen.
               </p>
 
-              {/* Indexed Connectors Section */}
+              {/* Indexed Connectors Section 
               {ccPairs && ccPairs.length > 0 && (
                 <div className="space-y-3 mb-6">
                   <h4 className="text-md font-medium text-muted-foreground">
@@ -749,8 +750,8 @@ export function UserSettings({ onClose }: UserSettingsProps) {
                   })()}
                 </div>
               )}
-
-              {/* Federated Search Section */}
+              */}
+              {/* Federated Search Section
               {federatedConnectors && federatedConnectors.length > 0 && (
                 <div className="space-y-3">
                   <h4 className="text-md font-medium text-muted-foreground">
@@ -831,17 +832,17 @@ export function UserSettings({ onClose }: UserSettingsProps) {
                   })()}
                 </div>
               )}
-
               {!hasConnectors && (
                 <div className="text-center py-8">
                   <p className="text-sm text-muted-foreground">
-                    No connectors available.
+                    Keine Konnektoren verfügbar.
                   </p>
                 </div>
               )}
             </div>
           </div>
         )}
+        */}
       </div>
     </div>
   );

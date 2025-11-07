@@ -39,7 +39,7 @@ export default function MessageSwitcher({
         onClick={previous}
         tertiary
         disabled={disableForStreaming}
-        tooltip={disableForStreaming ? DISABLED_MESSAGE : "Previous"}
+        tooltip={disableForStreaming ? DISABLED_MESSAGE : "Vorherige"}
       />
 
       <div className="flex flex-row items-center justify-center">
@@ -59,7 +59,7 @@ export default function MessageSwitcher({
         onClick={next}
         tertiary
         disabled={disableForStreaming}
-        tooltip={disableForStreaming ? DISABLED_MESSAGE : "Next"}
+        tooltip={disableForStreaming ? DISABLED_MESSAGE : "Nächste"}
       />
     </div>
   );

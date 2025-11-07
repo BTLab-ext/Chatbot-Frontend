@@ -10,7 +10,7 @@ import { useMarkdownRenderer } from "../markdownUtils";
 
 const THINKING_MIN_DURATION_MS = 500; // 0.5 second minimum for "Thinking" state
 
-const THINKING_STATUS = "Thinking";
+const THINKING_STATUS = "Denke nach";
 
 function constructCurrentReasoningState(packets: ReasoningPacket[]) {
   const hasStart = packets.some(

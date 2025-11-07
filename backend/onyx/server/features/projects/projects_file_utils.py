@@ -1,3 +1,4 @@
+import os
 from math import ceil
 
 from fastapi import UploadFile
@@ -18,7 +19,7 @@ from onyx.utils.logger import setup_logger
 
 
 logger = setup_logger()
-FILE_TOKEN_COUNT_THRESHOLD = 50000
+FILE_TOKEN_COUNT_THRESHOLD = int(os.environ.get("FILE_TOKEN_COUNT_THRESHOLD", default=50000))
 UNKNOWN_FILENAME = "[unknown_file]"  # More descriptive than empty string
 
 
@@ -144,6 +145,9 @@ def categorize_uploaded_files(files: list[UploadFile]) -> CategorizedFiles:
 
                 if token_count > FILE_TOKEN_COUNT_THRESHOLD:
                     results.non_accepted.append(filename)
+                    logger.warning(
+                        f"Token count ({token_count}) exceeds limit of {FILE_TOKEN_COUNT_THRESHOLD} tokens"
+                    )
                 else:
                     results.acceptable.append(upload)
                     results.acceptable_file_to_token_count[filename] = token_count

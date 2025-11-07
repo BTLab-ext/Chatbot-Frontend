@@ -10,9 +10,9 @@ export const Resubmit: React.FC<ResubmitProps> = ({ resubmit }) => {
   return (
     <div className="flex flex-col items-center justify-center gap-y-2 mt-4">
       <p className="text-sm text-neutral-700 dark:text-neutral-300">
-        There was an error with the response.
+        Leider gab es einen Fehler beim Generieren der Antwort.
       </p>
-      <Button onClick={resubmit}>Regenerate</Button>
+      <Button onClick={resubmit}>Erneut versuchen</Button>
     </div>
   );
 };
@@ -38,7 +38,7 @@ export const ErrorBanner = ({
               className="text-red-600 hover:text-red-800 cursor-pointer underline"
               onClick={showStackTrace}
             >
-              Show stack trace
+              Stacktrace anzeigen
             </span>
           )}
         </AlertDescription>

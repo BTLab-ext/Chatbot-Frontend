@@ -92,7 +92,7 @@ function SettingsPopover({
           // )),
           <div key="user-settings" data-testid="Settings/user-settings">
             <MenuButton icon={SvgUser} onClick={onUserSettingsClick}>
-              User Settings
+              Benutzereinstellungen
             </MenuButton>
           </div>,
           <MenuButton
@@ -100,7 +100,7 @@ function SettingsPopover({
             icon={SvgBell}
             onClick={onNotificationsClick}
           >
-            {`Notifications ${
+            {`Benachrichtigungen ${
               notifications && notifications.length > 0
                 ? `(${notifications.length})`
                 : ""
@@ -114,7 +114,7 @@ function SettingsPopover({
               danger
               onClick={handleLogout}
             >
-              Log out
+              Ausloggen
             </MenuButton>
           ),
         ]}
@@ -136,7 +136,7 @@ function NotificationsPopover({ onClose }: NotificationsPopoverProps) {
   return (
     <div className="w-[20rem] h-[30rem] flex flex-col">
       <div className="flex flex-row justify-between items-center p-4">
-        <Text headingH2>Notifications</Text>
+        <Text headingH2>Benachrichtigungen</Text>
         <SvgX
           className="stroke-text-05 w-[1.2rem] h-[1.2rem] hover:stroke-text-04 cursor-pointer"
           onClick={onClose}
@@ -146,7 +146,7 @@ function NotificationsPopover({ onClose }: NotificationsPopoverProps) {
       <div className="flex-1 overflow-y-auto overflow-x-hidden p-4 flex flex-col gap-2 items-center">
         {!notifications || notifications.length === 0 ? (
           <div className="w-full h-full flex flex-col justify-center items-center">
-            <Text>No notifications</Text>
+            <Text>Keine Benachrichtigungen</Text>
           </div>
         ) : (
           <div className="w-full flex flex-col gap-2">

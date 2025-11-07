@@ -343,7 +343,7 @@ export default function AdminSidebar({
           <div className="flex flex-col px-2 gap-2">
             {combinedSettings.webVersion && (
               <Text text02 secondaryBody className="px-2 pt-1">
-                {`Onyx version: ${combinedSettings.webVersion}`}
+                {`Chat.BAI version: ${combinedSettings.webVersion}`}
               </Text>
             )}
             <Settings />

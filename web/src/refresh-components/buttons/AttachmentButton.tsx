@@ -75,8 +75,8 @@ export default function AttachmentButton({
           )}
         </div>
         <div className="flex flex-col items-start justify-center min-w-0 overflow-hidden">
-          <div className="flex-1 flex flex-row items-center gap-2 min-w-0 overflow-hidden">
-            <Truncated mainUiMuted text04 nowrap className="min-w-0 flex-1 overflow-hidden">
+          <div className="flex flex-row items-center gap-2 min-w-0 overflow-hidden">
+            <Truncated mainUiMuted text04 nowrap className="flex-1 min-w-0 overflow-hidden">
               {children}
             </Truncated>
             {onView && (
@@ -88,7 +88,7 @@ export default function AttachmentButton({
               />
             )}
           </div>
-          <Truncated secondaryBody text03 className="min-w-0 w-full">
+          <Truncated secondaryBody text03>
             {description}
           </Truncated>
         </div>

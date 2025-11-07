@@ -87,7 +87,7 @@ function ProjectFolderButtonInner({ project }: ProjectFolderProps) {
       icon={SvgEdit}
       onClick={noProp(() => setIsEditing(true))}
     >
-      Rename Project
+      Projekt umbenennen
     </MenuButton>,
     null,
     <MenuButton
@@ -96,7 +96,7 @@ function ProjectFolderButtonInner({ project }: ProjectFolderProps) {
       onClick={noProp(() => setDeleteConfirmationModalOpen(true))}
       danger
     >
-      Delete Project
+      Projekt löschen
     </MenuButton>,
   ];
 
@@ -122,12 +122,11 @@ function ProjectFolderButtonInner({ project }: ProjectFolderProps) {
                 deleteProject(project.id);
               }}
             >
-              Delete
+              Löschen
             </Button>
           }
         >
-          Are you sure you want to delete this project? This action cannot be
-          undone.
+          Möchten Sie dieses Projekt wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.
         </ConfirmationModal>
       )}
 
