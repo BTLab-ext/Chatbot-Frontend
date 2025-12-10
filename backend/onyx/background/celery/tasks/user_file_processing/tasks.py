@@ -403,11 +403,13 @@ def check_for_user_file_delete(self: Task, *, tenant_id: str) -> None:
     name=OnyxCeleryTask.DELETE_SINGLE_USER_FILE,
     bind=True,
     ignore_result=True,
+    autoretry_for=(Exception,),
+    retry_kwargs={'max_retries': 3, 'countdown': 60},
 )
 def process_single_user_file_delete(
     self: Task, *, user_file_id: str, tenant_id: str
 ) -> None:
-    """Process a single user file delete."""
+    """Process a single user file delete with retry logic."""
     task_logger.info(f"process_single_user_file_delete - Starting id={user_file_id}")
     redis_client = get_redis_client(tenant_id=tenant_id)
     file_lock: RedisLock = redis_client.lock(
@@ -445,6 +447,16 @@ def process_single_user_file_delete(
                     f"process_single_user_file_delete - User file not found id={user_file_id}"
                 )
                 return None
+            
+            # Check if file is still in DELETING status
+            if user_file.status != UserFileStatus.DELETING:
+                task_logger.warning(
+                    f"process_single_user_file_delete - File {user_file_id} is not in DELETING status, "
+                    f"current status: {user_file.status}. Skipping deletion."
+                )
+                return None
+
+            # 1) Delete Vespa chunks for the document
 
             # 1) Delete Vespa chunks for the document
             chunk_count = 0
@@ -456,11 +468,23 @@ def process_single_user_file_delete(
             else:
                 chunk_count = user_file.chunk_count
 
-            retry_index.delete_single(
-                doc_id=user_file_id,
-                tenant_id=tenant_id,
-                chunk_count=chunk_count,
-            )
+            try:
+                retry_index.delete_single(
+                    doc_id=user_file_id,
+                    tenant_id=tenant_id,
+                    chunk_count=chunk_count,
+                )
+                task_logger.info(
+                    f"process_single_user_file_delete - Deleted {chunk_count} chunks from Vespa for {user_file_id}"
+                )
+            except Exception as vespa_error:
+                task_logger.error(
+                    f"process_single_user_file_delete - Failed to delete from Vespa for {user_file_id}: {vespa_error}"
+                )
+                # Re-raise to trigger Celery retry
+                raise
+
+            # 2) Delete the user-uploaded file content from filestore (blob + metadata)
 
             # 2) Delete the user-uploaded file content from filestore (blob + metadata)
             file_store = get_default_file_store()

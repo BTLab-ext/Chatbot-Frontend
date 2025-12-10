@@ -98,7 +98,7 @@ to give the hybrid search the best chance of finding relevant results.
 
 class SearchTool(Tool[SearchToolOverrideKwargs]):
     _NAME = "run_search"
-    _DISPLAY_NAME = "Internal Search"
+    _DISPLAY_NAME = "Interne Suche"
     _DESCRIPTION = SEARCH_TOOL_DESCRIPTION
 
     def __init__(

@@ -183,13 +183,13 @@ export default function TextView({
               internal
               onClick={handleDownload}
               icon={SvgDownloadCloud}
-              tooltip="Download"
+              tooltip="Herunterladen"
             />
             <IconButton
               internal
               onClick={onClose}
               icon={SvgX}
-              tooltip="Close"
+              tooltip="Schließen"
             />
           </div>
         </DialogHeader>
@@ -199,7 +199,7 @@ export default function TextView({
               <div className="flex flex-col items-center justify-center h-full">
                 <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primary"></div>
                 <p className="mt-6 text-lg font-medium text-muted-foreground">
-                  Loading document...
+                  Dokument wird geladen...
                 </p>
               </div>
             ) : (
@@ -217,7 +217,7 @@ export default function TextView({
                   <iframe
                     src={`${fileUrl}#toolbar=0`}
                     className="w-full h-full border-none"
-                    title="File Viewer"
+                    title="Dokumentenansicht"
                   />
                 ) : isMarkdownFormat(fileType) ? (
                   <div className="w-full h-full p-6 overflow-y-scroll overflow-x-hidden">
@@ -266,10 +266,10 @@ export default function TextView({
                 ) : (
                   <div className="flex flex-col items-center justify-center h-full">
                     <p className="text-lg font-medium text-muted-foreground">
-                      This file format is not supported for preview.
+                      Dieses Dateiformat wird für die Vorschau nicht unterstützt.
                     </p>
                     <Button className="mt-4" onClick={handleDownload}>
-                      Download File
+                      Dokument herunterladen
                     </Button>
                   </div>
                 )}

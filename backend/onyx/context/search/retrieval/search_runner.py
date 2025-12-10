@@ -39,6 +39,10 @@ from onyx.utils.threadpool_concurrency import wait_on_background
 from onyx.utils.timing import log_function_time
 from shared_configs.model_server_models import Embedding
 
+from onyx.db.models import UserFile
+from onyx.db.enums import UserFileStatus
+
+
 logger = setup_logger()
 
 
@@ -57,6 +61,68 @@ def _dedupe_chunks(
                 used_chunks[key] = chunk
 
     return list(used_chunks.values())
+
+
+def _filter_deleted_user_files(
+    chunks: list[InferenceChunkUncleaned],
+    db_session: Session,
+) -> list[InferenceChunkUncleaned]:
+    """
+    Filter out chunks from deleted user files.
+    
+    This is a defense-in-depth measure to prevent deleted files
+    from appearing in search results if Vespa deletion failed or was delayed.
+    """
+    # Identify chunks that might be from user files
+    # User files use UUID as document_id, connector documents use strings
+    user_file_chunks: list[tuple[InferenceChunkUncleaned, UUID]] = []
+    other_chunks: list[InferenceChunkUncleaned] = []
+    
+    for chunk in chunks:
+        # Try to parse document_id as UUID
+        # User files use UUID as document_id, connector documents use strings
+        try:
+            user_file_id = UUID(chunk.document_id)
+            user_file_chunks.append((chunk, user_file_id))
+        except (ValueError, TypeError):
+            # Not a UUID, so not a user file - keep it
+            other_chunks.append(chunk)
+    
+    # If no potential user file chunks, return all chunks
+    if not user_file_chunks:
+        return chunks
+    
+    # Batch query for all user files to check their status
+    user_file_ids = [uf_id for _, uf_id in user_file_chunks]
+    valid_user_files = (
+        db_session.query(UserFile.id)
+        .filter(
+            UserFile.id.in_(user_file_ids),
+            UserFile.status != UserFileStatus.DELETING,
+        )
+        .all()
+    )
+    valid_user_file_ids = {str(uf.id) for uf in valid_user_files}
+    
+    # Filter chunks: keep only those from valid (non-deleted) user files
+    filtered_chunks = other_chunks.copy()
+    filtered_count = 0
+    for chunk, user_file_id in user_file_chunks:
+        if str(user_file_id) in valid_user_file_ids:
+            filtered_chunks.append(chunk)
+        else:
+            filtered_count += 1
+            logger.debug(
+                f"Filtered out chunk from deleted user_file: {user_file_id} "
+                f"(document_id: {chunk.document_id})"
+            )
+    
+    if filtered_count > 0:
+        logger.info(
+            f"Filtered out {filtered_count} chunk(s) from deleted user files"
+        )
+    
+    return filtered_chunks
 
 
 def download_nltk_data() -> None:
@@ -274,7 +340,8 @@ def doc_index_retrieval(
 
     # If there are no large chunks, just return the normal chunks
     if not retrieval_requests:
-        return cleanup_chunks(normal_chunks)
+        filtered_chunks = _filter_deleted_user_files(normal_chunks, db_session)
+        return cleanup_chunks(filtered_chunks)
 
     # Retrieve and return the referenced normal chunks from the large chunks
     retrieved_inference_chunks = document_index.id_based_retrieval(
@@ -314,6 +381,8 @@ def doc_index_retrieval(
     # Deduplicate the chunks
     deduped_chunks = list(unique_chunks.values())
     deduped_chunks.sort(key=lambda chunk: chunk.score or 0, reverse=True)
+     # Filter out chunks from deleted user files (defense in depth)
+    deduped_chunks = _filter_deleted_user_files(deduped_chunks, db_session)
     return cleanup_chunks(deduped_chunks)
 
 
@@ -338,9 +407,8 @@ def retrieve_chunks(
     multilingual_expansion = get_multilingual_expansion(db_session)
     run_queries: list[tuple[Callable, tuple]] = []
 
-    source_filters = (
-        set(query.filters.source_type) if query.filters.source_type else None
-    )
+    # <--- LFST --->
+    source_filters = None
 
     # Federated retrieval
     federated_retrieval_infos = get_federated_retrieval_functions(

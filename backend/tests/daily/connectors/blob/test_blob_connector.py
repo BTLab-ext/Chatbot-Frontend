@@ -11,8 +11,9 @@ from onyx.configs.constants import BlobType
 from onyx.connectors.blob.connector import BlobStorageConnector
 from onyx.connectors.models import Document
 from onyx.connectors.models import TextSection
-from onyx.file_processing.extract_file_text import ACCEPTED_DOCUMENT_FILE_EXTENSIONS
-from onyx.file_processing.extract_file_text import ACCEPTED_PLAIN_TEXT_FILE_EXTENSIONS
+#from onyx.file_processing.extract_file_text import ACCEPTED_DOCUMENT_FILE_EXTENSIONS
+#from onyx.file_processing.extract_file_text import ACCEPTED_PLAIN_TEXT_FILE_EXTENSIONS
+from onyx.file_processing.allowed_extensions import ALLOWED_EXTENSIONS
 from onyx.file_processing.extract_file_text import get_file_ext
 
 
@@ -111,11 +112,11 @@ def test_blob_s3_connector(
         assert isinstance(section, TextSection)
 
         file_extension = get_file_ext(doc.semantic_identifier)
-        if file_extension in ACCEPTED_PLAIN_TEXT_FILE_EXTENSIONS:
+        if file_extension in ALLOWED_EXTENSIONS["plain_text"]:
             assert len(section.text) > 0
             continue
 
-        if file_extension in ACCEPTED_DOCUMENT_FILE_EXTENSIONS:
+        if file_extension in ALLOWED_EXTENSIONS["document"]:
             assert len(section.text) > 0
             continue
 

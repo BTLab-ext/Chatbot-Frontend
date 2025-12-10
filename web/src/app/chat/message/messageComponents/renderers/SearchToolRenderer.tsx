@@ -162,24 +162,24 @@ export const SearchToolRenderer: MessageRenderer<
   }, []);
 
   const status = useMemo(() => {
-    const searchType = isInternetSearch ? "the web" : "internal documents";
+    const searchType = isInternetSearch ? "Web" : "Interne Dokumente";
 
     // If we have documents to show and we're in the searched state, show "Searched"
     if (results.length > 0) {
       // If we're still showing as searching (before transition), show "Searching"
       if (shouldShowAsSearching) {
-        return `Searching ${searchType}`;
+        return `${searchType} wird durchsucht`;
       }
       // Otherwise show "Searched"
-      return `Searched ${searchType}`;
+      return `${searchType} wurde durchsucht`;
     }
 
     // Handle states based on timing
     if (shouldShowAsSearched) {
-      return `Searched ${searchType}`;
+      return `${searchType} wurde durchsucht`;
     }
     if (isSearching || isComplete || shouldShowAsSearching) {
-      return `Searching ${searchType}`;
+      return `${searchType} wird durchsucht`;
     }
     return null;
   }, [
@@ -225,7 +225,7 @@ export const SearchToolRenderer: MessageRenderer<
     content: (
       <div className="flex flex-col py-3 gap-2">
         <Text text02 secondaryBody>
-          Queries
+          Anfragen
         </Text>
         <div className="flex flex-wrap gap-2 pl-1">
           {queries.slice(0, queriesToShow).map((query, index) => (
@@ -268,7 +268,7 @@ export const SearchToolRenderer: MessageRenderer<
         {queries.length === 0 && <BlinkingDot />}
 
         <Text text02 secondaryBody>
-          {isInternetSearch ? "Results" : "Documents"}
+          {isInternetSearch ? "Ergebnisse" : "Dokumente"}
         </Text>
 
         <div className="flex flex-wrap gap-2 ml-1">

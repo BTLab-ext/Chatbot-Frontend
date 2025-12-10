@@ -106,7 +106,9 @@ def _internal_search_core(
                                 type="internal_search_tool_delta",
                                 queries=[],
                                 documents=convert_inference_sections_to_search_docs(
-                                    retrieved_sections, is_internet=False
+                                    retrieved_sections, 
+                                    is_internet=False,
+                                    db_session=search_db_session
                                 ),
                             ),
                         )

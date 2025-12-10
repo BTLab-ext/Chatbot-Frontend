@@ -250,7 +250,7 @@ export function ChatSessionMorePopup({
       </div>
       {isDeleteModalOpen && (
         <ConfirmationModal
-          title="Delete Chat"
+          title="Chat Löschen"
           icon={SvgTrash}
           onClose={() => setIsDeleteModalOpen(false)}
           submit={

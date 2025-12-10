@@ -190,13 +190,15 @@ class S3BackedFileStore(FileStore):
                     "region_name": self._aws_region_name,
                 }
 
-                # Add endpoint URL if specified (for MinIO, etc.)
                 if self._s3_endpoint_url:
+                    from onyx.configs.app_configs import S3_ADDRESSING_STYLE
+                    addressing_style = S3_ADDRESSING_STYLE 
                     client_kwargs["endpoint_url"] = self._s3_endpoint_url
                     client_kwargs["config"] = Config(
                         signature_version="s3v4",
-                        s3={"addressing_style": "path"},  # Required for MinIO
+                        s3={"addressing_style": addressing_style},  # Configurable
                     )
+
                     # Disable SSL verification if requested (for local development)
                     if not self._s3_verify_ssl:
                         import urllib3

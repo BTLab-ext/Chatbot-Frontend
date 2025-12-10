@@ -123,7 +123,7 @@ export default function ProjectChatSessionList() {
                       </div>
                     </div>
                     <Text text03 secondaryBody nowrap className="truncate">
-                      Last message {formatRelativeTime(chat.time_updated)}
+                      Letzte Nachricht {formatRelativeTime(chat.time_updated)}
                     </Text>
                   </div>
                 </div>

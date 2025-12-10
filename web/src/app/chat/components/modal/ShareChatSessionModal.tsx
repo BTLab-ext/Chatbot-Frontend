@@ -249,7 +249,7 @@ export default function ShareChatSessionModal({
             </Button>
           </div>
         )}
-      </ConfirmationModal>
+      // </ConfirmationModal> 
     </>
   );
 }

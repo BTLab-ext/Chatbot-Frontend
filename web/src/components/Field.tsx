@@ -29,7 +29,7 @@ import {
 } from "@/components/ui/tooltip";
 import ReactMarkdown from "react-markdown";
 import { FaMarkdown } from "react-icons/fa";
-import { useState, useCallback, useEffect, memo, useRef } from "react";
+import { useState, useCallback, useEffect, memo, useRef ,   ReactNode, } from "react";
 import remarkGfm from "remark-gfm";
 import Button from "@/refresh-components/buttons/Button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -240,6 +240,7 @@ export function TextFormField({
   width,
   vertical,
   className,
+  endAdornment,
 }: {
   name: string;
   removeLabel?: boolean;
@@ -267,6 +268,7 @@ export function TextFormField({
   width?: string;
   vertical?: boolean;
   className?: string;
+  endAdornment?: ReactNode;
 }) {
   let heightString = defaultHeight || "";
   if (isTextArea && !heightString) {
@@ -335,6 +337,7 @@ export function TextFormField({
             rounded-md
             border
             px-3
+            ${endAdornment ? "pr-10" : ""}
             py-2
             mt-1
             file:border-0
@@ -369,6 +372,11 @@ export function TextFormField({
           placeholder={placeholder}
           autoComplete={autoCompleteDisabled ? "off" : undefined}
         />
+        {endAdornment && (  // ← ADD THIS ENTIRE BLOCK (starts right after the />)
+  <div className="absolute inset-y-0 right-3 flex items-center">
+    {endAdornment}
+  </div>
+)}
       </div>
 
       {explanationText && (

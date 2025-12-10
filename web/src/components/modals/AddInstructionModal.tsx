@@ -41,23 +41,23 @@ export default function AddInstructionModal() {
     <Modal
       id={ModalIds.AddInstructionModal}
       icon={SvgAddLines}
-      title="Set Project Instructions"
-      description="Instruct specific behaviors, focus, tones, or formats for the response in this project."
+      title="Projektanweisungen festlegen"
+      description="Legen Sie fest, welche Verhaltensweisen, Schwerpunkte, Tonarten order Antwortformate im Projekt verwendet werden sollen."
       xs
     >
       <div className="bg-background-tint-01 p-4">
         <Textarea
           value={instructionText}
           onChange={(e) => setInstructionText(e.target.value)}
-          placeholder="Think step by step and show reasoning for complex problems. Use specific examples."
+          placeholder="Gehen Sie bei komplexen Problemen Schritt für Schritt vor und erklären Sie Ihre Lösung. Bitte verwenden Sie konkrete Beispiele."
           className="min-h-[140px] border-border-01 bg-background-neutral-00"
         />
       </div>
       <div className="flex flex-row justify-end gap-2 p-4">
         <Button secondary onClick={onClose}>
-          Cancel
+          Abbrechen
         </Button>
-        <Button onClick={handleSubmit}>Save Instructions</Button>
+        <Button onClick={handleSubmit}>Speichern</Button>
       </div>
     </Modal>
   );

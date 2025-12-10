@@ -77,23 +77,37 @@ export function getFileExtension(fileName: string): string {
 }
 
 /**
+ * LFST
  * Centralized list of image file extensions (lowercase, no leading dots)
  */
-export const IMAGE_EXTENSIONS = [
-  "png",
-  "jpg",
-  "jpeg",
-  "gif",
-  "webp",
-  "svg",
-  "bmp",
-] as const;
+// --- Upload constraints fetched from backend -----------------------
+export type UploadConstraints = {
+  plain_text: string[];
+  document: string[];
+  image: string[];
+  all: string[];
+};
 
-export type ImageExtension = (typeof IMAGE_EXTENSIONS)[number];
+let cachedConstraints: UploadConstraints | null = null;
+
+export async function fetchUploadConstraints(): Promise<UploadConstraints> {
+  if (cachedConstraints) {
+    return cachedConstraints;
+  }
+
+  const response = await fetch("/api/user/uploads/constraints");
+  if (!response.ok) {
+    throw new Error("Failed to load upload constraints");
+  }
+
+  cachedConstraints = (await response.json()) as UploadConstraints;
+  return cachedConstraints;
+}
+// -------------------------------------------------------------------
+
 
 /**
- * Checks whether a provided extension string corresponds to an image extension.
- * Accepts values with any casing and without a leading dot.
+ * LFST
  */
 export function isImageExtension(
   extension: string | null | undefined
@@ -101,6 +115,19 @@ export function isImageExtension(
   if (!extension) {
     return false;
   }
+
   const normalized = extension.toLowerCase();
-  return (IMAGE_EXTENSIONS as readonly string[]).includes(normalized);
+
+  // Check if constraints have been fetched (cachedConstraints is populated)
+  if (!cachedConstraints) {
+    console.warn(
+    "isImageExtension called before constraints were loaded. " +
+    "Ensure fetchUploadConstraints() is called first."
+    );
+    // Fallback: Return false if constraints aren't loaded yet
+    // (Ensure fetchUploadConstraints is called before using this function)
+    return false;
+  }
+
+  return cachedConstraints.image.includes(normalized);
 }

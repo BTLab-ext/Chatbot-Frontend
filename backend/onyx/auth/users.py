@@ -209,12 +209,12 @@ def verify_email_is_invited(email: str) -> None:
         return
 
     if not email:
-        raise PermissionError("Email must be specified")
+        raise PermissionError("Die E-Mail-Adresse muss angegeben werden.")
 
     try:
         email_info = validate_email(email)
     except EmailUndeliverableError:
-        raise PermissionError("Email is not valid")
+        raise PermissionError("Die E-Mail-Adresse ist ungültig.")
 
     for email_whitelist in whitelist:
         try:
@@ -243,13 +243,13 @@ def verify_email_domain(email: str) -> None:
         if email.count("@") != 1:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Email is not valid",
+                detail="Die Email-Addresse ist unglütig.",
             )
         domain = email.split("@")[-1].lower()
         if domain not in VALID_EMAIL_DOMAINS:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Email domain is not valid",
+                detail="Die Email-Domain ist unglütig.",
             )
 
 
@@ -398,29 +398,29 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
         # Validate password according to configurable security policy (defined via environment variables)
         if len(password) < PASSWORD_MIN_LENGTH:
             raise exceptions.InvalidPasswordException(
-                reason=f"Password must be at least {PASSWORD_MIN_LENGTH} characters long."
+                reason=f"Das Passwort muss mindestens {PASSWORD_MIN_LENGTH} Zeichen lang sein."
             )
         if len(password) > PASSWORD_MAX_LENGTH:
             raise exceptions.InvalidPasswordException(
-                reason=f"Password must not exceed {PASSWORD_MAX_LENGTH} characters."
+                reason=f"Das Passwort darf nicht länger als {PASSWORD_MAX_LENGTH} Zeichen sein."
             )
         if PASSWORD_REQUIRE_UPPERCASE and not any(char.isupper() for char in password):
             raise exceptions.InvalidPasswordException(
-                reason="Password must contain at least one uppercase letter."
+                reason="Das Passwort muss mindestens einen Großbuchstaben enthalten."
             )
         if PASSWORD_REQUIRE_LOWERCASE and not any(char.islower() for char in password):
             raise exceptions.InvalidPasswordException(
-                reason="Password must contain at least one lowercase letter."
+                reason="Das Passwort muss mindestens einen Kleinbuchstaben enthalten."
             )
         if PASSWORD_REQUIRE_DIGIT and not any(char.isdigit() for char in password):
             raise exceptions.InvalidPasswordException(
-                reason="Password must contain at least one number."
+                reason="Das Passwort muss mindestens eine Zahl enthalten."
             )
         if PASSWORD_REQUIRE_SPECIAL_CHAR and not any(
             char in PASSWORD_SPECIAL_CHARS for char in password
         ):
             raise exceptions.InvalidPasswordException(
-                reason="Password must contain at least one special character from the following set: "
+                reason="Das Passwort muss mindestens ein Sonderzeichen aus folgendem Zeichensatz enthalten: "
                 f"{PASSWORD_SPECIAL_CHARS}."
             )
         return

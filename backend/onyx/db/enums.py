@@ -168,11 +168,11 @@ class EmbeddingPrecision(str, PyEnum):
 
 
 class UserFileStatus(str, PyEnum):
-    PROCESSING = "PROCESSING"
-    COMPLETED = "COMPLETED"
-    FAILED = "FAILED"
-    CANCELED = "CANCELED"
-    DELETING = "DELETING"
+    PROCESSING = "Verarbeiten"
+    COMPLETED = "Abgeschlossen"
+    FAILED = "Fehlgeschlagen"
+    CANCELED = "Abgebrochen"
+    DELETING = "Löschen"
 
 
 class ThemePreference(str, PyEnum):

@@ -188,7 +188,7 @@ export default function Settings({ folded }: SettingsProps) {
                 className={cn(
                   "flex items-center justify-center bg-background-neutral-inverted-00",
                   className,
-                  "w-5 h-5"
+                  "min-width: max-content h-5"
                 )}
               >
                 <Text inverted secondaryBody>

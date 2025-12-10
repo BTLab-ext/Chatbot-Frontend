@@ -65,7 +65,8 @@ def retrieval_preprocessing(
     offset = search_request.offset
     persona = search_request.persona
 
-    preset_filters = search_request.human_selected_filters or BaseFilters()
+    # --- LFST ---
+    preset_filters = BaseFilters()
     if persona and persona.document_sets and preset_filters.document_set is None:
         preset_filters.document_set = [
             document_set.name for document_set in persona.document_sets

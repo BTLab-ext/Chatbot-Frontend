@@ -47,17 +47,14 @@ export default async function Page() {
 
           <div className="flex">
             <Text className="text-center font-medium text-lg mt-6 w-108">
-              Hey <i>{currentUser.email}</i> - it looks like you haven&apos;t
-              verified your email yet.
+              Hey <i>{currentUser.email}</i> - Ihre E-Mail-Adresse wurde noch nicht verifiziert.
               <br />
-              Check your inbox for an email from us to get started!
+              Sollten Sie keine E-Mail erhalten haben, klicken Sie{" "}
               <br />
-              <br />
-              If you don&apos;t see anything, click{" "}
               <RequestNewVerificationEmail email={currentUser.email}>
-                here
+                hier
               </RequestNewVerificationEmail>{" "}
-              to request a new email.
+              um eine neue Bestätigungs-E-Mail anzufordern.
             </Text>
           </div>
         </div>

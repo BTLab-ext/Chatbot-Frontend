@@ -29,7 +29,8 @@ from onyx.connectors.models import DocumentFailure
 from onyx.connectors.models import ImageSection
 from onyx.connectors.models import SlimDocument
 from onyx.connectors.models import TextSection
-from onyx.file_processing.extract_file_text import ALL_ACCEPTED_FILE_EXTENSIONS
+#from onyx.file_processing.extract_file_text import ALL_ACCEPTED_FILE_EXTENSIONS
+from onyx.file_processing.allowed_extensions import ALLOWED_EXTENSIONS
 from onyx.file_processing.extract_file_text import docx_to_text_and_images
 from onyx.file_processing.extract_file_text import extract_file_text
 from onyx.file_processing.extract_file_text import get_file_ext
@@ -260,7 +261,7 @@ def _download_and_extract_sections_basic(
 
     # Final attempt at extracting text
     file_ext = get_file_ext(file.get("name", ""))
-    if file_ext not in ALL_ACCEPTED_FILE_EXTENSIONS:
+    if file_ext not in ALLOWED_EXTENSIONS["all"]:
         logger.warning(f"Skipping file {file.get('name')} due to extension.")
         return []
 

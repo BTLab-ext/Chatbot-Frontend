@@ -54,7 +54,8 @@ from onyx.connectors.models import ImageSection
 from onyx.connectors.models import SlimDocument
 from onyx.connectors.models import TextSection
 from onyx.connectors.sharepoint.connector_utils import get_sharepoint_external_access
-from onyx.file_processing.extract_file_text import ACCEPTED_IMAGE_FILE_EXTENSIONS
+#from onyx.file_processing.extract_file_text import ACCEPTED_IMAGE_FILE_EXTENSIONS
+from onyx.file_processing.allowed_extensions import ALLOWED_EXTENSIONS
 from onyx.file_processing.extract_file_text import extract_text_and_images
 from onyx.file_processing.extract_file_text import get_file_ext
 from onyx.file_processing.extract_file_text import is_accepted_file_ext
@@ -386,7 +387,7 @@ def _convert_driveitem_to_document_with_permissions(
         logger.warning(
             f"Zero-length content for '{driveitem.name}'. Skipping text/image extraction."
         )
-    elif "." + file_ext in ACCEPTED_IMAGE_FILE_EXTENSIONS:
+    elif "." + file_ext in ALLOWED_EXTENSIONS["image"]:
         # NOTE: this if should use is_valid_image_type instead with mime_type
         image_section, _ = store_image_and_create_section(
             image_data=content_bytes,

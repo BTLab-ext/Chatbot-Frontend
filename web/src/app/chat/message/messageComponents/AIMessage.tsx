@@ -435,7 +435,8 @@ export default function AIMessage({
                             tooltip={copied ? "Kopiert!" : "Kopieren"}
                             data-testid="AIMessage/copy-button"
                           />
-                          <IconButton
+                          {/*
+                            <IconButton
                             icon={SvgThumbsUp}
                             onClick={() => handleFeedbackClick("like")}
                             tertiary
@@ -459,7 +460,8 @@ export default function AIMessage({
                             }
                             data-testid="AIMessage/dislike-button"
                           />
-
+                          
+                          */}
                           {chatState.regenerate && llmManager && (
                             <div data-testid="AIMessage/regenerate">
                               <LLMPopover

@@ -22,8 +22,8 @@ depends_on = None
 BUILT_IN_TOOLS = [
     {
         "name": "SearchTool",
-        "display_name": "Internal Search",
-        "description": "The Search Action allows the Assistant to search through connected knowledge to help build an answer.",
+        "display_name": "Interne Suche",
+        "description": "Die Suchfunktion ermöglicht es dem Assistenten, das vernetzte Wissen zu durchsuchen, um eine Antwort zu finden.",
         "in_code_tool_id": "SearchTool",
     },
     {

@@ -3,6 +3,8 @@ import re
 
 from langchain.schema.messages import BaseMessage
 from langchain.schema.messages import HumanMessage
+from typing import TYPE_CHECKING
+
 
 from onyx.agents.agent_search.dr.models import AggregatedDRContext
 from onyx.agents.agent_search.dr.models import IterationAnswer
@@ -17,6 +19,9 @@ from onyx.context.search.models import SearchDoc
 from onyx.tools.tool_implementations.web_search.web_search_tool import (
     WebSearchTool,
 )
+
+if TYPE_CHECKING:
+    from sqlalchemy.orm import Session
 
 
 CITATION_PREFIX = "CITE:"
@@ -264,11 +269,80 @@ def parse_plan_to_dict(plan_text: str) -> dict[str, str]:
 def convert_inference_sections_to_search_docs(
     inference_sections: list[InferenceSection],
     is_internet: bool = False,
+    db_session: "Session | None" = None,
 ) -> list[SavedSearchDoc]:
+    """
+    Convert InferenceSections to SavedSearchDoc objects.
+    
+    Optionally filters out deleted user files if db_session is provided.
+    This is a defense-in-depth measure to prevent deleted files from appearing
+    in the thinking window during search.
+    """
+    from onyx.utils.logger import setup_logger
+    
+    logger = setup_logger()
+    
     # Convert InferenceSections to SavedSearchDocs
     search_docs = SearchDoc.from_chunks_or_sections(inference_sections)
     for search_doc in search_docs:
         search_doc.is_internet = is_internet
+
+    # Filter out deleted user files if db_session is provided
+    if db_session is not None:
+        from onyx.db.models import UserFile
+        from onyx.db.enums import UserFileStatus
+        from uuid import UUID
+        
+        # Identify user file document IDs (UUIDs)
+        user_file_doc_ids: list[tuple[SearchDoc, UUID]] = []
+        other_docs: list[SearchDoc] = []
+        
+        for search_doc in search_docs:
+            # Skip internet search docs
+            if search_doc.is_internet:
+                other_docs.append(search_doc)
+                continue
+                
+            # Try to parse document_id as UUID (user files use UUID)
+            try:
+                user_file_id = UUID(search_doc.document_id)
+                user_file_doc_ids.append((search_doc, user_file_id))
+            except (ValueError, TypeError):
+                # Not a UUID, so not a user file - keep it
+                other_docs.append(search_doc)
+        
+        # If we have potential user files, validate them
+        if user_file_doc_ids:
+            user_file_ids = [uf_id for _, uf_id in user_file_doc_ids]
+            valid_user_files = (
+                db_session.query(UserFile.id)
+                .filter(
+                    UserFile.id.in_(user_file_ids),
+                    UserFile.status != UserFileStatus.DELETING,
+                )
+                .all()
+            )
+            valid_user_file_ids = {str(uf.id) for uf in valid_user_files}
+            
+            # Filter: keep only valid user files
+            filtered_docs = other_docs.copy()
+            filtered_count = 0
+            for search_doc, user_file_id in user_file_doc_ids:
+                if str(user_file_id) in valid_user_file_ids:
+                    filtered_docs.append(search_doc)
+                else:
+                    filtered_count += 1
+                    logger.debug(
+                        f"Filtered out deleted user_file from search display: {user_file_id} "
+                        f"(document_id: {search_doc.document_id})"
+                    )
+            
+            if filtered_count > 0:
+                logger.info(
+                    f"Filtered out {filtered_count} deleted user file(s) from search display"
+                )
+            
+            search_docs = filtered_docs
 
     retrieved_saved_search_docs = [
         SavedSearchDoc.from_search_doc(search_doc, db_doc_id=0)

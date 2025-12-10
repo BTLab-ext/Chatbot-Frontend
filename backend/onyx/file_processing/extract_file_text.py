@@ -39,44 +39,44 @@ logger = setup_logger()
 
 # NOTE(rkuo): Unify this with upload_files_for_chat and file_valiation.py
 TEXT_SECTION_SEPARATOR = "\n\n"
+from onyx.file_processing.allowed_extensions import ALLOWED_EXTENSIONS
+# ACCEPTED_PLAIN_TEXT_FILE_EXTENSIONS = [
+#     ".txt",
+#     ".md",
+#     ".mdx",
+#     ".conf",
+#     ".log",
+#     ".json",
+#     ".csv",
+#     ".tsv",
+#     ".xml",
+#     ".yml",
+#     ".yaml",
+#     ".sql",
+# ]
 
-ACCEPTED_PLAIN_TEXT_FILE_EXTENSIONS = [
-    ".txt",
-    ".md",
-    ".mdx",
-    ".conf",
-    ".log",
-    ".json",
-    ".csv",
-    ".tsv",
-    ".xml",
-    ".yml",
-    ".yaml",
-    ".sql",
-]
+# ACCEPTED_DOCUMENT_FILE_EXTENSIONS = [
+#     ".pdf",
+#     ".docx",
+#     ".pptx",
+#     ".xlsx",
+#     ".eml",
+#     ".epub",
+#     ".html",
+# ]
 
-ACCEPTED_DOCUMENT_FILE_EXTENSIONS = [
-    ".pdf",
-    ".docx",
-    ".pptx",
-    ".xlsx",
-    ".eml",
-    ".epub",
-    ".html",
-]
+# ACCEPTED_IMAGE_FILE_EXTENSIONS = [
+#     ".png",
+#     ".jpg",
+#     ".jpeg",
+#     ".webp",
+# ]
 
-ACCEPTED_IMAGE_FILE_EXTENSIONS = [
-    ".png",
-    ".jpg",
-    ".jpeg",
-    ".webp",
-]
-
-ALL_ACCEPTED_FILE_EXTENSIONS = (
-    ACCEPTED_PLAIN_TEXT_FILE_EXTENSIONS
-    + ACCEPTED_DOCUMENT_FILE_EXTENSIONS
-    + ACCEPTED_IMAGE_FILE_EXTENSIONS
-)
+# ALL_ACCEPTED_FILE_EXTENSIONS = (
+#     ACCEPTED_PLAIN_TEXT_FILE_EXTENSIONS
+#     + ACCEPTED_DOCUMENT_FILE_EXTENSIONS
+#     + ACCEPTED_IMAGE_FILE_EXTENSIONS
+# )
 
 IMAGE_MEDIA_TYPES = [
     "image/png",
@@ -110,7 +110,10 @@ class OnyxExtensionType(IntFlag):
 
 
 def is_text_file_extension(file_name: str) -> bool:
-    return any(file_name.endswith(ext) for ext in ACCEPTED_PLAIN_TEXT_FILE_EXTENSIONS)
+    lowered = file_name.lower()
+    return any(lowered.endswith(ext) for ext in ALLOWED_EXTENSIONS["plain_text"])
+# def is_text_file_extension(file_name: str) -> bool:
+#     return any(file_name.endswith(ext) for ext in ACCEPTED_PLAIN_TEXT_FILE_EXTENSIONS)
 
 
 def get_file_ext(file_path_or_name: str | Path) -> str:
@@ -123,19 +126,28 @@ def is_valid_media_type(media_type: str) -> bool:
 
 
 def is_accepted_file_ext(ext: str, ext_type: OnyxExtensionType) -> bool:
-    if ext_type & OnyxExtensionType.Plain:
-        if ext in ACCEPTED_PLAIN_TEXT_FILE_EXTENSIONS:
-            return True
-
-    if ext_type & OnyxExtensionType.Document:
-        if ext in ACCEPTED_DOCUMENT_FILE_EXTENSIONS:
-            return True
-
-    if ext_type & OnyxExtensionType.Multimedia:
-        if ext in ACCEPTED_IMAGE_FILE_EXTENSIONS:
-            return True
-
+    if ext_type & OnyxExtensionType.Plain and ext in ALLOWED_EXTENSIONS["plain_text"]:
+        return True
+    if ext_type & OnyxExtensionType.Document and ext in ALLOWED_EXTENSIONS["document"]:
+        return True
+    if ext_type & OnyxExtensionType.Multimedia and ext in ALLOWED_EXTENSIONS["image"]:
+        return True
     return False
+
+# def is_accepted_file_ext(ext: str, ext_type: OnyxExtensionType) -> bool:
+#     if ext_type & OnyxExtensionType.Plain:
+#         if ext in ACCEPTED_PLAIN_TEXT_FILE_EXTENSIONS:
+#             return True
+
+#     if ext_type & OnyxExtensionType.Document:
+#         if ext in ACCEPTED_DOCUMENT_FILE_EXTENSIONS:
+#             return True
+
+#     if ext_type & OnyxExtensionType.Multimedia:
+#         if ext in ACCEPTED_IMAGE_FILE_EXTENSIONS:
+#             return True
+
+#     return False
 
 
 def is_text_file(file: IO[bytes]) -> bool:

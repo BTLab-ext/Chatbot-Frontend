@@ -149,24 +149,24 @@ export const SearchToolRendererV2: MessageRenderer<SearchToolPacket, {}> = ({
   }, []);
 
   const status = useMemo(() => {
-    const searchType = isInternetSearch ? "the web" : "internal documents";
+    const searchType = isInternetSearch ? "Web" : "Interne Dokumente";
 
     // If we have documents to show and we're in the searched state, show "Searched"
     if (results.length > 0) {
       // If we're still showing as searching (before transition), show "Searching"
       if (shouldShowAsSearching) {
-        return `Searching ${searchType}`;
+        return `${searchType} wird durchsucht`;
       }
       // Otherwise show "Searched"
-      return `Searched ${searchType}`;
+      return `${searchType} wurde durchsucht`;
     }
 
     // Handle states based on timing
     if (shouldShowAsSearched) {
-      return `Searched ${searchType}`;
+      return `${searchType} wurde durchsucht`;
     }
     if (isSearching || isComplete || shouldShowAsSearching) {
-      return `Searching ${searchType}`;
+      return `${searchType} wird durchsucht`;
     }
     return null;
   }, [
@@ -196,7 +196,7 @@ export const SearchToolRendererV2: MessageRenderer<SearchToolPacket, {}> = ({
     content: (
       <div className="flex flex-col mt-1.5">
         <div className="flex flex-col">
-          <div className="text-xs font-medium mb-1 ml-1">Queries</div>
+          <div className="text-xs font-medium mb-1 ml-1">Anfragen</div>
           <div className="flex flex-wrap gap-x-2 gap-y-2 ml-1">
             {queries.slice(0, queriesToShow).map((query, index) => (
               <div
@@ -244,7 +244,7 @@ export const SearchToolRendererV2: MessageRenderer<SearchToolPacket, {}> = ({
         {/* Only show results section for internal search, not web search */}
         {!isInternetSearch && (
           <div className="flex flex-col mt-3">
-            <div className="text-xs font-medium mb-1 ml-1">Documents</div>
+            <div className="text-xs font-medium mb-1 ml-1">Dokumente</div>
             <div className="flex flex-wrap gap-x-2 gap-y-2 ml-1">
               {results.slice(0, resultsToShow).map((result, index) => (
                 <div

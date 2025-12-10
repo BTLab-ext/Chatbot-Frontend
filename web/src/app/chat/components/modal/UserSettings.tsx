@@ -123,17 +123,17 @@ export function UserSettings({ onClose }: UserSettingsProps) {
 
   const sections = useMemo(() => {
     const visibleSections: { id: SettingsSection; label: string }[] = [
-      { id: "settings", label: "Settings" },
-      { id: "personalization", label: "Personalization" },
+      { id: "settings", label: "Einstellungen" },
+      { id: "personalization", label: "Personalisierung" },
     ];
 
     if (showPasswordSection) {
-      visibleSections.push({ id: "password", label: "Password" });
+      visibleSections.push({ id: "password", label: "Passwort" });
     }
 
-    if (hasConnectors) {
+    {/*if (hasConnectors) {
       visibleSections.push({ id: "connectors", label: "Connectors" });
-    }
+    }*/}
 
     return visibleSections;
   }, [showPasswordSection, hasConnectors]);
@@ -554,7 +554,7 @@ export function UserSettings({ onClose }: UserSettingsProps) {
             </div>
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-lg font-medium">Erinnerungen vewenden</h3>
+                <h3 className="text-lg font-medium">Erinnerungen verwenden</h3>
                 <SubLabel>
                   Erlauben Sie chat.BAI in zukünftigen Chats auf alte Unterhaltungen zuzugreifen.
                 </SubLabel>
@@ -602,7 +602,7 @@ export function UserSettings({ onClose }: UserSettingsProps) {
               >
                 {isSavingPersonalization
                   ? "Personalisierung wird gespeichert..."
-                  : "Personalisierung wird gespeichert"}
+                  : "Speichern"}
               </Button>
             </div>
           </div>

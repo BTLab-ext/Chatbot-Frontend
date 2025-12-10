@@ -556,7 +556,7 @@ export default function ActionsPopover({
   const toolsView = (
     <ToggleList
       items={sourceToggleItems}
-      searchPlaceholder="Search Filters"
+      searchPlaceholder="Suchfilter"
       allDisabled={allSourcesDisabled}
       onDisableAll={disableAllSources}
       onEnableAll={enableAllSources}
@@ -592,7 +592,7 @@ export default function ActionsPopover({
               icon={SvgSliders}
               active={open}
               tertiary
-              tooltip="Aktionen Verwalten"
+              tooltip="Aktionen verwalten"
             />
           </div>
         </PopoverTrigger>

@@ -285,7 +285,7 @@ export default function MultiToolRenderer({
         onClick={() => setIsExpanded(!isExpanded)}
       >
         <Text text03 className="group-hover/StepsButton:text-text-04">
-          {toolGroups.length} steps
+          {toolGroups.length} Schritte
         </Text>
         <SvgChevronDownSmall
           className={cn(
@@ -388,7 +388,7 @@ export default function MultiToolRenderer({
                   {/* Content with padding */}
                   <div className="flex-1">
                     <div className="flex mb-1">
-                      <div className="text-sm">Done</div>
+                      <div className="text-sm">Erledigt</div>
                     </div>
                   </div>
                 </div>

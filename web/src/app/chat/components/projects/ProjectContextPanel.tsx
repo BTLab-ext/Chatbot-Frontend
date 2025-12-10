@@ -26,7 +26,8 @@ import SvgAddLines from "@/icons/add-lines";
 import SvgFiles from "@/icons/files";
 import Truncated from "@/refresh-components/texts/Truncated";
 import CreateButton from "@/refresh-components/buttons/CreateButton";
-
+import { useEffect, useState } from "react";
+import { fetchUploadConstraints, UploadConstraints } from "@/lib/utils";
 export function FileCard({
   file,
   removeFile,
@@ -159,6 +160,22 @@ export default function ProjectContextPanel({
     [currentProjectId, beginUpload]
   );
 
+  const [uploadConstraints, setUploadConstraints] = useState<UploadConstraints | null>(null);
+
+useEffect(() => {
+  fetchUploadConstraints()
+    .then(setUploadConstraints)
+    .catch(() => {
+      setUploadConstraints({
+        plain_text: [".txt", ".md"],
+        document: [".pdf", ".docx"],
+        image: [".png", ".jpg"],
+        all: [".txt", ".md", ".pdf", ".docx", ".png", ".jpg"],
+      });
+    });
+}, []);
+
+
   const totalFiles = allCurrentProjectFiles.length;
   const displayFileCount = totalFiles > 100 ? "100+" : String(totalFiles);
 
@@ -226,7 +243,7 @@ export default function ProjectContextPanel({
         <div className="flex flex-row gap-2 justify-between">
           <div>
             <Text headingH3 text04>
-              Files
+              Datei
             </Text>
             <Text text02 secondaryBody>
               Chats in diesem Projekt haben Zugriff auf diese Dateien.
@@ -255,8 +272,17 @@ export default function ProjectContextPanel({
           />
         </div>
         {/* Hidden input just to satisfy dropzone contract; we rely on FilePicker for clicks */}
-        <input {...getInputProps()} />
-
+        <input
+        {...getInputProps({
+          accept: uploadConstraints?.all.join(","),
+        })}
+        data-testid="project-context-file-input"
+      />
+              {uploadConstraints && (
+          <p className="text-xs text-text-03 mt-1">
+            Erlaubte Dateitypen: {uploadConstraints.all.join(", ")}
+          </p>
+        )}
         {allCurrentProjectFiles.length > 0 ? (
           <>
             {/* Mobile / small screens: just show a button to view files */}
@@ -273,7 +299,7 @@ export default function ProjectContextPanel({
                     <SvgFiles className="h-5 w-5 stroke-text-02" />
                   </div>
                   <Text text03 secondaryBody>
-                    {displayFileCount} files
+                    {displayFileCount} Dateien
                   </Text>
                 </div>
               </button>

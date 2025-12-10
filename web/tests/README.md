@@ -629,8 +629,8 @@ test("shows validation errors", async () => {
   await user.click(screen.getByRole("button", { name: /submit/i }));
 
   await waitFor(() => {
-    expect(screen.getByText(/email is required/i)).toBeInTheDocument();
-    expect(screen.getByText(/password is required/i)).toBeInTheDocument();
+    expect(screen.getByText(/Email ist erfordlich/i)).toBeInTheDocument();
+    expect(screen.getByText(/Passwort ist erfordlich/i)).toBeInTheDocument();
   });
 });
 
@@ -642,13 +642,13 @@ test("clears validation on valid input", async () => {
   await user.click(screen.getByRole("button", { name: /submit/i }));
 
   await waitFor(() => {
-    expect(screen.getByText(/email is required/i)).toBeInTheDocument();
+    expect(screen.getByText(/Email ist erfordlich/i)).toBeInTheDocument();
   });
 
   await user.type(screen.getByLabelText(/email/i), "valid@email.com");
 
   await waitFor(() => {
-    expect(screen.queryByText(/email is required/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Email ist erfordlich/i)).not.toBeInTheDocument();
   });
 });
 ```

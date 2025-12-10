@@ -133,6 +133,16 @@ function ChatInputBarInner({
   const { forcedToolIds, setForcedToolIds } = useAgentsContext();
   const { currentMessageFiles, setCurrentMessageFiles } = useProjectsContext();
 
+  const uploadingOrProcessingCount = useMemo(
+    () =>
+      currentMessageFiles.filter((file) =>
+        [UserFileStatus.UPLOADING, UserFileStatus.PROCESSING].includes(
+          file.status as UserFileStatus
+        )
+      ).length,
+    [currentMessageFiles]
+  );
+
   const currentIndexingFiles = useMemo(() => {
     return currentMessageFiles.filter(
       (file) => file.status === UserFileStatus.PROCESSING
@@ -277,6 +287,10 @@ function ChatInputBarInner({
 
   // Determine if we should hide processing state based on context limits
   const hideProcessingState = useMemo(() => {
+    if (uploadingOrProcessingCount > 0) {
+      // always show processing state while it blocks sending
+      return false;
+    }
     if (currentMessageFiles.length > 0 && currentIndexingFiles.length > 0) {
       const currentFilesTokenTotal = currentMessageFiles.reduce(
         (acc, file) => acc + (file.token_count || 0),
@@ -289,6 +303,7 @@ function ChatInputBarInner({
     }
     return false;
   }, [
+    uploadingOrProcessingCount,
     currentMessageFiles,
     currentSessionFileTokenCount,
     currentIndexingFiles,
@@ -444,7 +459,7 @@ function ChatInputBarInner({
               !(event.nativeEvent as any).isComposing
             ) {
               event.preventDefault();
-              if (message) {
+              if (message && uploadingOrProcessingCount === 0) {
                 onSubmit();
               }
             }
@@ -578,7 +593,14 @@ function ChatInputBarInner({
               })}
           </div>
 
-          <div className="flex flex-row items-center gap-1">
+          <div className="flex flex-row items-center gap-2">
+            {uploadingOrProcessingCount > 0 && (
+              <div className="flex items-center text-xs text-text-03 px-2 py-1 rounded bg-background-neutral-02 border border-border-01">
+                {uploadingOrProcessingCount === 1
+                  ? "1 file is processing..."
+                  : `${uploadingOrProcessingCount} files are processing...`}
+              </div>
+            )}
             <div data-testid="ChatInputBar/llm-popover-trigger">
               <LLMPopover
                 llmManager={llmManager}
@@ -588,11 +610,14 @@ function ChatInputBarInner({
             <IconButton
               id="onyx-chat-input-send-button"
               icon={chatState === "input" ? SvgArrowUp : SvgStop}
-              disabled={chatState === "input" && !message}
+              disabled={
+                (chatState === "input" && !message) ||
+                uploadingOrProcessingCount > 0
+              }
               onClick={() => {
                 if (chatState == "streaming") {
                   stopGenerating();
-                } else if (message) {
+                } else if (message && uploadingOrProcessingCount === 0) {
                   onSubmit();
                 }
               }}
@@ -608,3 +633,4 @@ const ChatInputBar = React.memo(ChatInputBarInner);
 ChatInputBar.displayName = "ChatInputBar";
 
 export default ChatInputBar;
+
