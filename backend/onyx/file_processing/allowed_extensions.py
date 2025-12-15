@@ -18,11 +18,42 @@ def _load_required(key: str) -> list[str]:
         raise RuntimeError(f"{key} resolved to an empty list. Provide at least one extension.")
     return extensions
 
+ACCEPTED_PLAIN_TEXT_FILE_EXTENSIONS = [
+    ".txt",
+    ".md",
+    ".mdx",
+    ".conf",
+    ".log",
+    ".json",
+    ".csv",
+    ".tsv",
+    ".xml",
+    ".yml",
+    ".yaml",
+    ".sql",
+]
+
+ACCEPTED_DOCUMENT_FILE_EXTENSIONS = [
+    ".pdf",
+    ".docx",
+    ".pptx",
+    ".xlsx",
+    ".eml",
+    ".epub",
+    ".html",
+]
+
+ACCEPTED_IMAGE_FILE_EXTENSIONS = [
+    ".png",
+    ".jpg",
+    ".jpeg",
+    ".webp",
+]
 
 ALLOWED_EXTENSIONS = {
-    "plain_text": _load_required("USER_FILE_ALLOWED_EXTENSIONS_PLAIN"),
-    "document": _load_required("USER_FILE_ALLOWED_EXTENSIONS_DOC"),
-    "image": _load_required("USER_FILE_ALLOWED_EXTENSIONS_IMG"),
+    "plain_text": ACCEPTED_PLAIN_TEXT_FILE_EXTENSIONS,
+    "document": ACCEPTED_DOCUMENT_FILE_EXTENSIONS,
+    "image": ACCEPTED_IMAGE_FILE_EXTENSIONS,
 }
 
 ALLOWED_EXTENSIONS["all"] = sorted(
