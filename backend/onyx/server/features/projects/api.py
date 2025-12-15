@@ -130,7 +130,9 @@ def upload_user_files(
 
 
 @router.get("/uploads/constraints")
-def get_upload_constraints():
+def get_upload_constraints(
+    user: User | None = Depends(current_user),
+):
     return ALLOWED_EXTENSIONS
 
     

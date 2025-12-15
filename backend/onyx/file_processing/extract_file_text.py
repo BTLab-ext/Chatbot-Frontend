@@ -39,44 +39,46 @@ logger = setup_logger()
 
 # NOTE(rkuo): Unify this with upload_files_for_chat and file_valiation.py
 TEXT_SECTION_SEPARATOR = "\n\n"
-from onyx.file_processing.allowed_extensions import ALLOWED_EXTENSIONS
-# ACCEPTED_PLAIN_TEXT_FILE_EXTENSIONS = [
-#     ".txt",
-#     ".md",
-#     ".mdx",
-#     ".conf",
-#     ".log",
-#     ".json",
-#     ".csv",
-#     ".tsv",
-#     ".xml",
-#     ".yml",
-#     ".yaml",
-#     ".sql",
-# ]
+from onyx.file_processing.allowed_extensions import (
+    ALLOWED_EXTENSIONS
+)
+ACCEPTED_PLAIN_TEXT_FILE_EXTENSIONS = [
+    ".txt",
+    ".md",
+    ".mdx",
+    ".conf",
+    ".log",
+    ".json",
+    ".csv",
+    ".tsv",
+    ".xml",
+    ".yml",
+    ".yaml",
+    ".sql",
+]
 
-# ACCEPTED_DOCUMENT_FILE_EXTENSIONS = [
-#     ".pdf",
-#     ".docx",
-#     ".pptx",
-#     ".xlsx",
-#     ".eml",
-#     ".epub",
-#     ".html",
-# ]
+ACCEPTED_DOCUMENT_FILE_EXTENSIONS = [
+    ".pdf",
+    ".docx",
+    ".pptx",
+    ".xlsx",
+    ".eml",
+    ".epub",
+    ".html",
+]
 
-# ACCEPTED_IMAGE_FILE_EXTENSIONS = [
-#     ".png",
-#     ".jpg",
-#     ".jpeg",
-#     ".webp",
-# ]
+ACCEPTED_IMAGE_FILE_EXTENSIONS = [
+    ".png",
+    ".jpg",
+    ".jpeg",
+    ".webp",
+]
 
-# ALL_ACCEPTED_FILE_EXTENSIONS = (
-#     ACCEPTED_PLAIN_TEXT_FILE_EXTENSIONS
-#     + ACCEPTED_DOCUMENT_FILE_EXTENSIONS
-#     + ACCEPTED_IMAGE_FILE_EXTENSIONS
-# )
+ALL_ACCEPTED_FILE_EXTENSIONS = (
+     ACCEPTED_PLAIN_TEXT_FILE_EXTENSIONS
+     + ACCEPTED_DOCUMENT_FILE_EXTENSIONS
+     + ACCEPTED_IMAGE_FILE_EXTENSIONS
+ )
 
 IMAGE_MEDIA_TYPES = [
     "image/png",
