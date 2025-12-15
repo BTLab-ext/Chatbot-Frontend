@@ -83,7 +83,7 @@ export default function ToggleList({
           type="button"
           onClick={allDisabled ? onEnableAll : onDisableAll}
         >
-          {allDisabled ? "Enable All" : "Disable All"}
+          {allDisabled ? "Alle aktivieren" : "Alle deaktivieren"}
         </LineItem>,
 
         ...filteredItems.map((item) => {

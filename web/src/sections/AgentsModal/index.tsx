@@ -13,7 +13,7 @@ import {
   useChatModal,
 } from "@/refresh-components/contexts/ChatModalContext";
 import SvgFilter from "@/icons/filter";
-import SvgOnyxOctagon from "@/icons/onyx-octagon";
+import OnyxLogo from "@/icons/onyx-logo";
 import Button from "@/refresh-components/buttons/Button";
 import InputTypeIn from "@/refresh-components/inputs/InputTypeIn";
 
@@ -68,10 +68,10 @@ function AgentBadgeSelector({
 }
 
 export enum AgentFilter {
-  Pinned = "Pinned",
-  Public = "Public",
+  Pinned = "Angeheftet",
+  Public = "Öffentlich",
   Private = "Private",
-  Mine = "Mine",
+  Mine = "Eigene",
 }
 
 function useAgentFilters() {
@@ -143,42 +143,45 @@ export default function AgentsModal() {
 
   return (
     <div data-testid="AgentsModal/container" aria-label="Agents Modal">
-      <Modal id={ModalIds.AgentsModal} icon={SvgOnyxOctagon} title="Agents" sm>
+      <Modal id={ModalIds.AgentsModal} icon={OnyxLogo} title="Antwortprofile" sm>
         <div className="flex flex-col sticky top-[0rem] z-10 bg-background-tint-01 p-4">
           <div className="flex flex-row items-center gap-2">
             <InputTypeIn
-              placeholder="Search..."
+              placeholder="Suchen..."
               value={searchQuery}
               onChange={(event) => setSearchQuery(event.target.value)}
             />
+            {/*
             <Button
               href="/assistants/new"
               onClick={() => toggleModal(ModalIds.AgentsModal, false)}
             >
-              Create
+              Erstellen
             </Button>
+            */}
           </div>
 
           <div className="py-6 flex items-center gap-2 flex-wrap">
             <SvgFilter className="w-[1.2rem] h-[1.2rem] stroke-text-05" />
             <AgentBadgeSelector
-              text="Pinned"
+              text="Angeheftet"
               selected={agentFilters[AgentFilter.Pinned]}
               toggleFilter={() => toggleAgentFilter(AgentFilter.Pinned)}
             />
-
+            {/*eCard
             <AgentBadgeSelector
-              text="Mine"
+              text="Eigene"
               selected={agentFilters[AgentFilter.Mine]}
               toggleFilter={() => toggleAgentFilter(AgentFilter.Mine)}
             />
+            {/*
             <AgentBadgeSelector
-              text="Private"
+              text="Privat"
               selected={agentFilters[AgentFilter.Private]}
               toggleFilter={() => toggleAgentFilter(AgentFilter.Private)}
-            />
+            /> */}
             <AgentBadgeSelector
-              text="Public"
+              text="Öffentlich"
               selected={agentFilters[AgentFilter.Public]}
               toggleFilter={() => toggleAgentFilter(AgentFilter.Public)}
             />
@@ -188,17 +191,17 @@ export default function AgentsModal() {
         <div className="flex-1 w-full p-4 overflow-y-auto">
           {featuredAgents.length === 0 && allAgents.length === 0 ? (
             <Text className="w-full h-full flex flex-col items-center justify-center">
-              No Agents configured yet...
+              Keine Antwortprofile verfügbar ...
             </Text>
           ) : (
             <>
               <AgentsSection
-                title="Featured Agents"
+                title="Empfohlene Antwortprofile"
                 agents={featuredAgents}
                 pinnedAgents={pinnedAgents}
               />
               <AgentsSection
-                title="All Agents"
+                title="Alle Antwortprofile"
                 agents={allAgents}
                 pinnedAgents={pinnedAgents}
               />

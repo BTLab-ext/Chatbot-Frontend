@@ -26,8 +26,8 @@ function MainContent({
   return (
     <div>
       <Text className="mb-2">
-        Assistants are a way to build custom search/question-answering
-        experiences for different use cases.
+        Antwortprofile sind eine Möglichkeit, benutzerdefinierte Such-/Frage-Antwort-Erfahrungen 
+        für verschiedene Anwendungsfälle zu erstellen.
       </Text>
       <Text className="mt-2">They allow you to customize:</Text>
       <div className="text-sm">
@@ -42,21 +42,21 @@ function MainContent({
       <div>
         <Separator />
 
-        <Title>Create an Assistant</Title>
+        <Title>Create an Antwortprofile</Title>
         <CreateButton href="/assistants/new?admin=true">
-          New Assistant
+          Neues Antwortprofile
         </CreateButton>
 
         <Separator />
 
-        <Title>Existing Assistants</Title>
+        <Title>Bestehende Antwortprofile</Title>
         {customPersonas.length > 0 ? (
           <>
             <SubLabel>
-              Assistants will be displayed as options on the Chat / Search
-              interfaces in the order they are displayed below. Assistants
-              marked as hidden will not be displayed. Editable assistants are
-              shown at the top.
+              Antwortprofile werden als Optionen auf den Chat-/Suchoberflächen 
+              in der unten angegebenen Reihenfolge angezeigt. 
+              Als versteckt markierte Antwortprofile werden nicht angezeigt. 
+              Bearbeitbare Antwortprofile werden oben angezeigt.
             </SubLabel>
             <PersonasTable
               personas={customPersonas}
@@ -66,10 +66,10 @@ function MainContent({
         ) : (
           <div className="mt-6 p-8 border border-border rounded-lg bg-background-weak text-center">
             <Text className="text-lg font-medium mb-2">
-              No custom assistants yet
+              Noch keine benutzerdefinierten Antwortprofile
             </Text>
             <Text className="text-subtle mb-3">
-              Create your first assistant to:
+              Create your first to:
             </Text>
             <ul className="text-subtle text-sm list-disc text-left inline-block mb-3">
               <li>Build department-specific knowledge bases</li>
@@ -80,7 +80,7 @@ function MainContent({
               ...and so much more!
             </Text>
             <CreateButton href="/assistants/new?admin=true">
-              Create Your First Assistant
+              Erstelle dein erstes Antwortprofil
             </CreateButton>
             <div className="mt-6 pt-6 border-t border-border">
               <Text className="text-subtle text-sm">

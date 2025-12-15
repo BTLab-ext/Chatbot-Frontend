@@ -70,10 +70,10 @@ export const timestampToReadableDate = (timestamp: string) => {
 
 export const buildDateString = (date: Date | null) => {
   return date
-    ? `${Math.round(
+    ? `Vor ${Math.round(
         (new Date().getTime() - date.getTime()) / (1000 * 60 * 60 * 24)
-      )} days ago`
-    : "Select a time range";
+      )} Tagen`
+    : "Zeitraum auswählen";
 };
 
 export const getFormattedDateRangeString = (

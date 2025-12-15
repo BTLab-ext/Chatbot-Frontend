@@ -239,7 +239,7 @@ export default function FilePickerPopover({
             message += " und ";
           }
           if (assistants) {
-            message += `Assistenten: ${assistants}`;
+            message += `Antwortprofile: ${assistants}`;
           }
           message += ` eingebunden.`;
           setPopup({

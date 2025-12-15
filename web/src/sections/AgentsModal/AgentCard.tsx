@@ -51,12 +51,12 @@ export default function AgentCard({
       await refreshAgents();
       setDeleteConfirmationModalOpen(false);
       setPopup({
-        message: `${agent.name} has been successfully deleted.`,
+        message: `${agent.name} wurde erfolgreich gelöscht.`,
         type: "success",
       });
     } else {
       setPopup({
-        message: `Failed to delete agent - ${await response.text()}`,
+        message: `Löschen des Antwortprofils fehlgeschlagen - ${await response.text()}`,
         type: "error",
       });
     }
@@ -66,17 +66,16 @@ export default function AgentCard({
     <>
       {deleteConfirmationModalOpen && (
         <ConfirmationModal
-          title="Delete Agent"
+          title="Antwortprofil löschen"
           icon={SvgTrash}
           onClose={() => setDeleteConfirmationModalOpen(false)}
           submit={
             <Button danger onClick={confirmDelete}>
-              Delete
+              Löschen
             </Button>
           }
         >
-          Are you sure you want to delete this agent? This action cannot be
-          undone.
+          Möchten Sie dieses Antwortprofil wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.
         </ConfirmationModal>
       )}
 
@@ -109,7 +108,7 @@ export default function AgentCard({
                             icon={SvgEditBig}
                             href={`/assistants/edit/${agent.id}`}
                           >
-                            Edit
+                            Ändern
                           </MenuButton>
                         </div>,
                         isPaidEnterpriseFeaturesEnabled ? (
@@ -131,7 +130,7 @@ export default function AgentCard({
                           }}
                           danger
                         >
-                          Delete
+                          Löschen
                         </MenuButton>,
                       ]}
                     </PopoverMenu>
@@ -147,7 +146,7 @@ export default function AgentCard({
             <div className="flex flex-row items-center gap-2">
               <div className="max-w-[33%]">
                 <Truncated secondaryBody text02>
-                  By {agent.owner?.email || "Onyx"}
+                  By {agent.owner?.email || "chat.BAI"}
                 </Truncated>
               </div>
               <Text secondaryBody text01>
@@ -158,13 +157,13 @@ export default function AgentCard({
                   ? `${agent.tools.length} Action${
                       agent.tools.length > 1 ? "s" : ""
                     }`
-                  : "No Actions"}
+                  : "Keine Aktionen"}
               </Text>
               <Text secondaryBody text01>
                 •
               </Text>
               <Text secondaryBody text02>
-                {agent.is_public ? "Public" : "Private"}
+                {agent.is_public ? "Öffentlich" : "Privat"}
               </Text>
             </div>
 
@@ -176,13 +175,13 @@ export default function AgentCard({
                 }}
                 secondary
               >
-                Start Chat
+                Chat starten
               </Button>
               <Button
                 onClick={() => togglePinnedAgent(agent, !pinned)}
                 secondary
               >
-                {pinned ? "Unpin Agent" : "Pin Agent"}
+                {pinned ? "Antwortprofil entfernen" : "Antwortprofil anpinnen"}
               </Button>
             </div>
           </div>

@@ -79,28 +79,30 @@ export function getFileExtension(fileName: string): string {
 /**
  * Centralized list of image file extensions (lowercase, no leading dots)
  */
-export const IMAGE_EXTENSIONS = [
-  "png",
-  "jpg",
-  "jpeg",
-  "gif",
-  "webp",
-  "svg",
-  "bmp",
-] as const;
-
-export type ImageExtension = (typeof IMAGE_EXTENSIONS)[number];
-
 /**
- * Checks whether a provided extension string corresponds to an image extension.
- * Accepts values with any casing and without a leading dot.
+ * 
  */
-export function isImageExtension(
-  extension: string | null | undefined
-): boolean {
-  if (!extension) {
-    return false;
+// --- Upload constraints fetched from backend -----------------------
+export type UploadConstraints = {
+  plain_text: string[];
+  document: string[];
+  image: string[];
+  all: string[];
+};
+
+let cachedConstraints: UploadConstraints | null = null;
+
+export async function fetchUploadConstraints(): Promise<UploadConstraints> {
+  if (cachedConstraints) {
+    return cachedConstraints;
   }
-  const normalized = extension.toLowerCase();
-  return (IMAGE_EXTENSIONS as readonly string[]).includes(normalized);
+
+  const response = await fetch("/api/user/uploads/constraints");
+  if (!response.ok) {
+    throw new Error("Failed to load upload constraints");
+  }
+
+  cachedConstraints = (await response.json()) as UploadConstraints;
+  return cachedConstraints;
 }
+// -------------------------------------------------------------------

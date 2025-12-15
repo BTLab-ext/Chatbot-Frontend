@@ -93,7 +93,7 @@ export default function ActionLineItem({
                     !disabled && "invisible group-hover/LineItem:visible"
                   )}
                   active={disabled}
-                  tooltip={disabled ? "Enable" : "Disable"}
+                  tooltip={disabled ? "Aktivieren" : "Deaktivieren"}
                 />
               )}
 
@@ -112,7 +112,7 @@ export default function ActionLineItem({
                     isSearchToolWithNoConnectors &&
                       "invisible grouop-hover/LineItem:visible"
                   )}
-                  tooltip={isSearchToolWithNoConnectors ? "Settings" : "More"}
+                  tooltip={isSearchToolWithNoConnectors ? "Einstellungen" : "Mehr"}
                 />
               )}
             </div>

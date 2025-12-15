@@ -10,7 +10,7 @@ import SvgX from "@/icons/x";
 import { SvgProps } from "@/icons";
 import SvgFileText from "@/icons/file-text";
 import SvgImage from "@/icons/image";
-import { getFileExtension, isImageExtension } from "@/lib/utils";
+import { getFileExtension } from "@/lib/utils";
 import { UserFileStatus } from "@/app/chat/projects/projectsService";
 import CreateButton from "@/refresh-components/buttons/CreateButton";
 import VerticalShadowScroller from "@/refresh-components/VerticalShadowScroller";
@@ -24,7 +24,7 @@ function getIcon(
 ): React.FunctionComponent<SvgProps> {
   if (isProcessing) return SimpleLoader;
   const ext = getFileExtension(file.name).toLowerCase();
-  if (isImageExtension(ext)) return SvgImage;
+  //if (isImageExtension(ext)) return SvgImage;
   return SvgFileText;
 }
 

@@ -58,7 +58,7 @@ export default function ConfirmationModal({
       <div className="flex flex-row w-full items-center justify-end p-4 gap-2">
         {!hideCancel && (
           <Button secondary onClick={onClose}>
-            Cancel
+            Abbrechen
           </Button>
         )}
         {submit}

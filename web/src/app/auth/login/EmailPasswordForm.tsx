@@ -12,6 +12,7 @@ import { Spinner } from "@/components/Spinner";
 import Link from "next/link";
 import { useUser } from "@/components/user/UserProvider";
 import { validateInternalRedirect } from "@/lib/auth/redirectValidation";
+import { FiEye, FiEyeOff } from "react-icons/fi"; 
 
 interface EmailPasswordFormProps {
   isSignup?: boolean;
@@ -33,6 +34,10 @@ export default function EmailPasswordForm({
   const { user } = useUser();
   const { popup, setPopup } = usePopup();
   const [isWorking, setIsWorking] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);  
+  const togglePasswordVisibility = () => { 
+    setShowPassword((prev) => !prev);
+  };
 
   return (
     <>
@@ -144,11 +149,21 @@ export default function EmailPasswordForm({
             />
 
             <TextFormField
-              name="password"
-              label="Password"
-              type="password"
-              placeholder="**************"
-              data-testid="password"
+            name="password"
+            label="Password"
+            type={showPassword ? "text" : "password"}  // ← CHANGE THIS LINE (replace "password" with the conditional)
+            placeholder="**************"
+            data-testid="password"
+            endAdornment={  // ← ADD THIS ENTIRE BLOCK (add before the closing />)
+            <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+                className="text-text-03 hover:text-text-04 focus:outline-none"
+              >
+                {showPassword ? <FiEyeOff size={16} /> : <FiEye size={16} />}
+            </button>
+            }
             />
 
             <Button type="submit" className="w-full" disabled={isSubmitting}>

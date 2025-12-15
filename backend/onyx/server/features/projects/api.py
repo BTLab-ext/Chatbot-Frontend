@@ -32,7 +32,7 @@ from onyx.server.features.projects.models import UserFileSnapshot
 from onyx.server.features.projects.models import UserProjectSnapshot
 from onyx.utils.logger import setup_logger
 from shared_configs.contextvars import get_current_tenant_id
-
+from onyx.file_processing.allowed_extensions import ALLOWED_EXTENSIONS
 logger = setup_logger()
 
 
@@ -71,6 +71,17 @@ def create_project(
     db_session.commit()
     return UserProjectSnapshot.from_model(project)
 
+def _validate_extension(filename: str) -> None:
+    ext = f".{filename.rsplit('.', 1)[-1].lower()}" if "." in filename else ""
+    if ext not in ALLOWED_EXTENSIONS["all"]:
+        allowed_str = ", ".join(ALLOWED_EXTENSIONS["all"])
+        raise HTTPException(
+            status_code=400,
+            detail=f"File type '{ext or 'unknown'}' is not allowed. Allowed: {allowed_str}",
+        )
+
+
+
 
 @router.post("/file/upload")
 def upload_user_files(
@@ -93,6 +104,9 @@ def upload_user_files(
             except json.JSONDecodeError:
                 parsed_temp_id_map = None
 
+
+        for upload_file in files: 
+            _validate_extension(upload_file.filename)
         # Use our consolidated function that handles indexing properly
         categorized_files_result = upload_files_to_user_files_with_indexing(
             files=files,
@@ -113,6 +127,13 @@ def upload_user_files(
         )
 
 
+
+
+@router.get("/uploads/constraints")
+def get_upload_constraints():
+    return ALLOWED_EXTENSIONS
+
+    
 @router.get("/{project_id}")
 def get_project(
     project_id: int,

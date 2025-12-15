@@ -144,7 +144,7 @@ HTML_EMAIL_TEMPLATE = """\
     </tr>
     <tr>
       <td class="footer">
-        © {year} {application_name}. All rights reserved.
+        © {year} {application_name}. Rechte vorbehalten.
         {community_link_fragment}
       </td>
     </tr>
@@ -163,7 +163,7 @@ def build_html_email(
 ) -> str:
     community_link_fragment = ""
     if application_name == ONYX_DEFAULT_APPLICATION_NAME:
-        community_link_fragment = f'<br>Falls Sie weitere Fragen haben, finden Sie vielleicht eine Antwort im Wiki <a href="{ONYX_DISCORD_URL}">here</a>.'
+        community_link_fragment = f'<br>Falls Sie weitere Fragen haben, finden Sie vielleicht eine Antwort im Wiki <a href="{ONYX_DISCORD_URL}">hier</a>.'
 
     if cta_text and cta_link:
         cta_block = f'<a class="cta-button" href="{cta_link}">{cta_text}</a>'
@@ -291,7 +291,7 @@ def send_email_with_smtplib(
 
     with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as s:
         s.starttls()
-        s.login(SMTP_USER, SMTP_PASS)
+        #s.login(SMTP_USER, SMTP_PASS)
         s.send_message(msg)
 
 
@@ -346,25 +346,25 @@ def build_user_email_invite(
     heading = "Sie wurden soeben eingeladen!"
 
     # the exact action taken by the user, and thus the message, depends on the auth type
-    message = f"<p>Sie wurden von {from_email} eingeladen, einer Gruppe im {application_name} beizutreten.</p>"
+    message = f"<p>Sie wurden von {from_email} eingeladen, {application_name} zu nutzen.</p>"
     if auth_type == AuthType.CLOUD:
         message += (
-            "<p>Um der Gruppe  beizutreten, klicken Sie bitte auf den Button um ein Passwort festzulegen "
+            "<p>Um die Applikation zu nutzen, klicken Sie bitte auf den Button um ein Passwort festzulegen "
         )
     elif auth_type == AuthType.BASIC:
         message += (
-            "<p>Um der Gruppe  beizutreten, klicken Sie bitte auf den Button um ein Passwort festzulegen "
+            "<p>Um die Applikation zu nutzen, klicken Sie bitte auf den Button um ein Passwort festzulegen "
             "und Ihre Registrierung abzuschließen.</p>"
         )
     elif auth_type == AuthType.OIDC or auth_type == AuthType.SAML:
         message += (
-            "<p>Um der Gruppe  beizutreten, klicken Sie bitte auf den Button um ein Passwort festzulegen"
+            "<p>Um die Applikation zu nutzen, klicken Sie bitte auf den Button um ein Passwort festzulegen"
             " und Ihre Registrierung abzuschließen.</p>"
         )
     else:
         raise ValueError(f"Invalid auth type: {auth_type}")
 
-    cta_text = "Gruppe beitreten"
+    cta_text = "Account erstellen"
     cta_link = f"{WEB_DOMAIN}/auth/signup?email={to_email}"
 
     html_content = build_html_email(
@@ -378,8 +378,8 @@ def build_user_email_invite(
     # text content is the fallback for clients that don't support HTML
     # not as critical, so not having special cases for each auth type
     text_content = (
-        f"Sie wurden von {from_email} eingeladen, einer Gruppe in {application_name} beizutreten.\n"
-        "Um der Gruppe beizutreten, klicken Sie bitte auf den folgenden Link:\n"
+        f"Sie wurden von {from_email} eingeladen, {application_name} zu nutzen.\n"
+        "Um die Applikation zu nutzen, klicken Sie bitte auf den folgenden Link:\n"
         f"{WEB_DOMAIN}/auth/signup?email={to_email}\n"
     )
     if auth_type == AuthType.CLOUD:
@@ -402,7 +402,7 @@ def send_user_email_invite(
 
     onyx_file = OnyxRuntime.get_emailable_logo()
 
-    subject = f"Einladung, einer Gruppe in {application_name} beizutreten"
+    subject = f"Einladung, {application_name} zu nutzen"
 
     text_content, html_content = build_user_email_invite(
         current_user.email, user_email, application_name, auth_type

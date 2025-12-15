@@ -41,7 +41,7 @@ export default function CreateProjectModal() {
       id={ModalIds.CreateProjectModal}
       icon={SvgFolderPlus}
       title="Neues Projekt erstellen"
-      description="Nutzen Sie Projekte, um Dateien und Chathistorien an einem Ort zu organsisieren. Sie können außerdem eigene Richtlinien definieren."
+      description="Nutzen Sie Projekte, um Dateien und Chathistorien an einem Ort zu organisieren. Sie können außerdem eigene Richtlinien definieren."
       xs
     >
       <div className="flex flex-col p-4 bg-background-tint-01">

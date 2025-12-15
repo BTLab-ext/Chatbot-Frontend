@@ -111,7 +111,7 @@ function ProjectFolderButtonInner({ project }: ProjectFolderProps) {
       {/* Confirmation Modal (only for deletion) */}
       {deleteConfirmationModalOpen && (
         <ConfirmationModal
-          title="Delete Project"
+          title="Projekt Löschen"
           icon={SvgTrash}
           onClose={() => setDeleteConfirmationModalOpen(false)}
           submit={

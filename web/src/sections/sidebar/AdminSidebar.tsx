@@ -81,7 +81,7 @@ const custom_assistants_items = (
 ) => {
   const items = [
     {
-      name: "Assistants",
+      name: "Antwortprofile",
       icon: AssistantsIconSkeleton,
       link: "/admin/assistants",
     },
@@ -136,7 +136,7 @@ const collections = (
     items: document_management_items(),
   },
   {
-    name: "Benutzerdefinierte Assistants",
+    name: "Antwortprofile",
     items: custom_assistants_items(isCurator, enableEnterprise),
   },
   ...(isCurator

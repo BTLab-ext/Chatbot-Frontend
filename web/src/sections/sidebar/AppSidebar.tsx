@@ -272,7 +272,7 @@ function AppSidebarInner() {
         } catch (error) {
           showErrorNotification(
             setPopup,
-            "Failed to move chat. Please try again."
+            "Das Verschieben des Chats ist fehlgeschlagen. Bitte versuchen Sie es erneut."
           );
         }
       }
@@ -402,7 +402,7 @@ function AppSidebarInner() {
                 active={isOpen(ModalIds.AgentsModal)}
                 folded
               >
-                Agenten
+                Antwortprofile
               </SidebarTab>
               <SidebarTab
                 leftIcon={SvgFolderPlus}
@@ -422,13 +422,12 @@ function AppSidebarInner() {
               footer={settingsButton}
             >
               <>
-                {/* Agents 
                 <DndContext
                   sensors={sensors}
                   collisionDetection={closestCenter}
                   onDragEnd={handleAgentDragEnd}
                 >
-                  <SidebarSection title="Agenten">
+                  <SidebarSection title="Antwortprofile">
                     <SortableContext
                       items={visibleAgentIds}
                       strategy={verticalListSortingStrategy}
@@ -446,12 +445,11 @@ function AppSidebarInner() {
                         onClick={() => toggleModal(ModalIds.AgentsModal, true)}
                         lowlight
                       >
-                        Mehr Agenten
+                        Mehr Antwortprofile
                       </SidebarTab>
                     </div>
                   </SidebarSection>
                 </DndContext>
-                */}
                 {/* Wrap Projects and Recents in a shared DndContext for chat-to-project drag */}
                 <DndContext
                   sensors={sensors}

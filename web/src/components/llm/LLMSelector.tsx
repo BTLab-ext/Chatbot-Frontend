@@ -121,13 +121,13 @@ export const LLMSelector: React.FC<LLMSelectorProps> = ({
           {currentLlmName
             ? getDisplayNameForModel(currentLlmName)
             : userSettings
-              ? "System Default"
-              : "User Default"}
+              ? "Systemstandard"
+              : "Benutzerstandard"}
         </SelectValue>
       </SelectTrigger>
       <SelectContent className="z-[99999]">
         <SelectItem className="flex" hideCheck value="default">
-          <span>{userSettings ? "System Default" : "User Default"}</span>
+          <span>{userSettings ? "Systemstandard" : "Benutzerstandard"}</span>
           {userSettings && (
             <span className=" my-auto font-normal ml-1">
               ({defaultModelDisplayName})

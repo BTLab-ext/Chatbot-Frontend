@@ -54,7 +54,7 @@ class OnyxRuntime:
 
     @staticmethod
     def get_logo() -> FileWithMimeType:
-        STATIC_FILENAME = "static/images/logo.png"
+        STATIC_FILENAME = "static/images/Logo_BAI.png"
 
         db_filename: str | None = fetch_ee_implementation_or_noop(
             "onyx.server.enterprise_settings.store", "get_logo_filename", None

@@ -132,7 +132,7 @@ export default function LLMPopover({
                   className="w-full"
                 />
                 <div className="flex flex-row items-center justify-between">
-                  <Text secondaryBody>Temperature (creativity)</Text>
+                  <Text secondaryBody>Temperatur (Kreativität)</Text>
                   <Text secondaryBody>{localTemperature.toFixed(1)}</Text>
                 </div>
               </div>
